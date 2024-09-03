@@ -1,0 +1,6 @@
+
+identify docker image
+  Ubuntu 22.04.04 jammy -> https://hub.docker.com/_/ubuntu
+Build Docker image
+  docker build -t ubuntu:22.04.04-jammy .
+

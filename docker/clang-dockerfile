@@ -1,0 +1,29 @@
+FROM ubuntu:jammy-20240427@sha256:a6d2b38300ce017add71440577d5b0a90460d0e57fd7aec21dd0d1b0761bbfb2
+
+LABEL Description="CLANG++ build environment on Ubuntu"
+
+ENV HOME /root
+
+RUN apt-get -y update && apt-get -y --no-install-recommends install \
+  cmake \
+  wget 
+
+RUN  apt-get -y --no-install-recommends install \
+    lsb-release \
+    software-properties-common \
+    gnupg
+
+RUN cd /root && \
+  wget --no-check-certificate https://apt.llvm.org/llvm.sh && \
+  chmod +x llvm.sh && \
+  ./llvm.sh 18
+
+RUN ln -s /usr/bin/clang++-18 /usr/bin/clang++
+
+RUN mkdir /src
+
+COPY . /src
+
+RUN cd /src && clang++ main.cpp
+
+CMD ["/src/a.out"]
