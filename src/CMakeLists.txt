@@ -4,6 +4,11 @@ cmake_minimum_required(VERSION 3.22.1)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Wpedantic")
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY bin )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY bin )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY bin )
+
 #pass option
 set(CMAKE_CXX_FLAGS "")
 
@@ -21,7 +26,5 @@ add_subdirectory(lib/googletest)
 
 # Enable CMake's testing framework
 enable_testing()
-
-# Optionally define where to install the project
 
 install(TARGETS main adt log DESTINATION bin)

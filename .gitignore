@@ -48,3 +48,7 @@ CMakeUserPresets.json
 
 
 src/lib/
+
+src/adt/bin/
+
+src/main/bin/
