@@ -4,3 +4,4 @@ identify docker image
 Build Docker image
   docker build -t ubuntu:22.04.04-jammy .
 
+test
