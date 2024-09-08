@@ -46,5 +46,3 @@ CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
 
-
-src/lib/
