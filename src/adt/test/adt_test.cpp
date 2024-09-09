@@ -9,4 +9,7 @@ TEST(adtTest, Print_adt_message) {
   std::string output = testing::internal::GetCapturedStdout();
   EXPECT_EQ(output, "Hello from ADT!\n");
 }
-
+TEST(adtTest, CppCheckIntegrationTest) {
+  char a[10];
+  a[10] = 0;
+}

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22.1)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 23)
@@ -11,6 +11,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY bin )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY bin )
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY bin )
+
+find_program(CMAKE_CXX_CPPCHECK NAMES cppcheck)
+if (CMAKE_CXX_CPPCHECK)
+    list(
+        APPEND CMAKE_CXX_CPPCHECK 
+            "--enable=warning"
+            "--inconclusive"
+            "--force" 
+            "--inline-suppr"
+            "--suppressions-list=${CMAKE_SOURCE_DIR}/CppCheckSuppressions.txt"
+    )
+endif()
 
 # set the project name
 project(adt-parent VERSION 0.0.1 DESCRIPTION "c++ experimental project")  
