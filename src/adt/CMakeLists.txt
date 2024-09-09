@@ -11,12 +11,14 @@ endif()
 
 add_library(adt SHARED 
   src/list/list.cpp
+  src/tree/tree.cpp
   src/node/node.cpp
   src/common/common.cpp
 )
 
 add_library(adt-static 
   src/list/list.cpp
+  src/tree/tree.cpp
   src/node/node.cpp
   src/common/common.cpp
 )
