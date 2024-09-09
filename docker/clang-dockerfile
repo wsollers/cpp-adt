@@ -11,7 +11,8 @@ RUN apt-get -y update && apt-get -y --no-install-recommends install \
 RUN  apt-get -y --no-install-recommends install \
     lsb-release \
     software-properties-common \
-    gnupg
+    gnupg \
+    cmake
 
 RUN cd /root && \
   wget --no-check-certificate https://apt.llvm.org/llvm.sh && \
@@ -24,6 +25,12 @@ RUN mkdir /src
 
 COPY . /src
 
-RUN cd /src && clang++ main.cpp
+RUN rm -rf /src/build/*
 
-CMD ["/src/a.out"]
+run cmake --version
+
+RUN cd /src/build && cmake --build /src/build --target clean
+
+RUN cd /src && make clean all test
+
+CMD ["/src/adt/bin/adt_test_static"]
