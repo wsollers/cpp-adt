@@ -93,3 +93,74 @@ TEST (adtTest, PrintListTwoStringElements) {
   std::string output = testing::internal::GetCapturedStdout();
   EXPECT_EQ(output, "Hello World \n");
 }
+
+
+
+
+
+
+
+
+
+TEST (adtTest, ConstructListString2) {
+  DoublyLinkedList<std::string> list;
+  EXPECT_EQ(list.getSize(), 0);
+}
+
+TEST (adtTest, PrintEmptyList2) {
+  DoublyLinkedList<std::string> list;
+  testing::internal::CaptureStdout();
+  list.print();
+  std::string output = testing::internal::GetCapturedStdout();
+  EXPECT_EQ(output, "\n");
+}
+
+TEST (adtTest, AddOneElement2) {
+  DoublyLinkedList<int> list;
+  list.add(1);
+  EXPECT_EQ(list.getSize(), 1);
+}
+
+TEST (adtTest, AddTwoElements2) {
+  DoublyLinkedList<int> list;
+  list.add(1);
+  list.add(2);
+  EXPECT_EQ(list.getSize(), 2);
+}
+
+TEST (adtTest, AddAndRemoveElement2) {
+  DoublyLinkedList<int> list;
+  list.add(1);
+  list.remove(1);
+  EXPECT_EQ(list.getSize(), 0);
+}
+
+TEST (adtTest, AddTwoElementsAndRemoveBoth2) {
+  DoublyLinkedList<int> list;
+  list.add(1);
+  list.add(2);
+  list.remove(1);
+  list.remove(2);
+  EXPECT_EQ(list.getSize(), 0);
+}
+
+TEST (adtTest, PrintListOneStringElement2) {
+  DoublyLinkedList<std::string> list;
+  testing::internal::CaptureStdout();
+  list.add("Hello");
+  list.print();
+  std::string output = testing::internal::GetCapturedStdout();
+  EXPECT_EQ(output, "Hello \n");
+}
+
+TEST (adtTest, PrintListTwoStringElements2) {
+  DoublyLinkedList<std::string> list;
+  testing::internal::CaptureStdout();
+  list.add("Hello");
+  list.add("World");
+  list.print();
+  std::string output = testing::internal::GetCapturedStdout();
+  EXPECT_EQ(output, "Hello World \n");
+}
+
+

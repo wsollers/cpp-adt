@@ -45,6 +45,71 @@ template <typename T> SingleLinkNode<T>::~SingleLinkNode() {
 }
 
 
+template <typename T> class DoubleLinkNode : public Node<T> {
+public:
+  DoubleLinkNode(T data);
+  DoubleLinkNode<T> *getNext();
+  DoubleLinkNode<T> *getPrev();
+  void setNext(DoubleLinkNode<T> *next);
+  void setPrev(DoubleLinkNode<T> *next);
+  virtual ~DoubleLinkNode();
+private:
+  DoubleLinkNode<T> *next;
+  DoubleLinkNode<T> *prev;
+};
+
+
+template <typename T> DoubleLinkNode<T>::DoubleLinkNode(T data) : Node<T>(data), next(nullptr), prev(nullptr) {}
+
+template <typename T> DoubleLinkNode<T> *DoubleLinkNode<T>::getNext() {
+  return next;
+}
+
+template <typename T> DoubleLinkNode<T> *DoubleLinkNode<T>::getPrev() {
+  return prev;
+}
+
+template <typename T> void DoubleLinkNode<T>::setNext(DoubleLinkNode<T> *next) {
+  if (this->next != nullptr) {
+    delete this->next;
+  }
+  this->next = next;
+}
+
+template <typename T> void DoubleLinkNode<T>::setPrev(DoubleLinkNode<T> *prev) {
+  if (this->prev != nullptr) {
+    delete this->prev;
+  }
+  this->prev = prev;
+}
+
+template <typename T> DoubleLinkNode<T>::~DoubleLinkNode() {
+  //delete next;
+  //delete prev;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //force compiler to generate the class for the types we need
 //template class Node<int>;
 //template class Node<std::string>;
