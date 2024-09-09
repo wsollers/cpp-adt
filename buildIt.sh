@@ -1,11 +1,31 @@
 #!/bin/bash
 
-currentDir=$(pwd)
-# Purge stuff not in source control
-git clean -d -f -x
+# Initialize variables
+clean=0
 
-# put the build dir back
-mkdir build
+# Parse command line options
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --clean) clean=1 ;;
+        *) echo "Unknown option: $1" ;;
+    esac
+    shift
+done
+
+
+currentDir=$(pwd)
+#
+# If --clean was provided, run git clean
+if [[ "$clean" -eq 1 ]]; then
+    echo "Running git clean..."
+    # Purge stuff not in source control
+    git clean -d -f -x
+    # put the build dir back
+    mkdir build
+else
+    echo "Skipping git clean..."
+fi
+
 
 cd build || exit
 
