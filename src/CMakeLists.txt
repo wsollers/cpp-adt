@@ -1,5 +1,13 @@
 cmake_minimum_required(VERSION 3.22.1)
 
+#https://github.com/bilke/cmake-modules/blob/master/CodeCoverage.cmake
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+include(CodeCoverage)
+
+#append_coverage_compiler_flags()
+set(COVERAGE_EXCLUDES '${PROJECT_SOURCE_DIR}/lib/*')
+
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # specify the C++ standard
