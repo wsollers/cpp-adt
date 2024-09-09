@@ -19,12 +19,17 @@ enable_testing()
 #install(TARGETS adt DESTINATION lib)
 #install(FILES adt.h DESTINATION include)
 
-set(CMAKE_VERBOSE_MAKEFILE OFF)
+#
+# Testing as dynamic library
+#
 add_executable(adt_test test/adt_test.cpp
 )
 target_link_libraries(adt_test PRIVATE adt gtest gtest_main)
 add_test(NAME adt_test COMMAND bin/adt_test)
 
+#
+# Testing as static library
+#
 add_executable(adt_test_static test/list_test.cpp
 )
 target_include_directories(adt_test_static PRIVATE src/list src/node src/common)
@@ -33,6 +38,21 @@ target_link_libraries(adt_test_static PRIVATE  gtest gtest_main)
 add_test(NAME adt_test_static COMMAND bin/adt_test_static)
 
 
+#
+# Fuzz Testing 
+#
+add_executable(fuzz_tester test/fuzz_test.cpp)
+target_link_libraries(
+  fuzz_tester
+  PRIVATE myproject_options
+          myproject_warnings
+          -coverage
+          -fsanitize=fuzzer)
+target_compile_options(fuzz_tester PRIVATE -fsanitize=fuzzer)
 
+# Allow short runs during automated testing to see if something new breaks
+set(FUZZ_RUNTIME
+    10
+    CACHE STRING "Number of seconds to run fuzz tests during ctest run") # Default of 10 seconds
 
-
+add_test(NAME fuzz_tester_run COMMAND fuzz_tester -max_total_time=${FUZZ_RUNTIME})
