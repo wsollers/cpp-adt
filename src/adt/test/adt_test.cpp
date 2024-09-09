@@ -10,6 +10,7 @@ TEST(adtTest, Print_adt_message) {
   EXPECT_EQ(output, "Hello from ADT!\n");
 }
 TEST(adtTest, CppCheckIntegrationTest) {
-  char a[10];
+  //char a[10];
+  char a[11];
   a[10] = 0;
 }
