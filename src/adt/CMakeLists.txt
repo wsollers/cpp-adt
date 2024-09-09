@@ -42,10 +42,11 @@ add_test(NAME adt_test_static COMMAND bin/adt_test_static)
 # Fuzz Testing 
 #
 add_executable(fuzz_tester test/fuzz_test.cpp)
+#  PRIVATE myproject_options
+#          myproject_warnings
 target_link_libraries(
   fuzz_tester
-  PRIVATE myproject_options
-          myproject_warnings
+  PRIVATE 
           -coverage
           -fsanitize=fuzzer)
 target_compile_options(fuzz_tester PRIVATE -fsanitize=fuzzer)

@@ -1,6 +1,11 @@
 #!/bin/bash
 
 currentDir=$(pwd)
+# Purge stuff not in source control
+git clean -d -f -x
+
+# put the build dir back
+mkdir build
 
 cd build || exit
 
