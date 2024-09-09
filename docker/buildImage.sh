@@ -10,8 +10,8 @@ fi
 
 currentDir=$(pwd)
 
-cd ../src || exit
+cd .. || exit
 
-docker buildx build -f ../docker/clang-dockerfile -t wsollers/cpp-adt:0.0.1 .
+docker buildx build -f docker/clang-dockerfile -t wsollers/cpp-adt:0.0.1 .
 
 cd "$currentDir"

@@ -12,7 +12,9 @@ RUN  apt-get -y --no-install-recommends install \
     lsb-release \
     software-properties-common \
     gnupg \
-    cmake
+    cmake \
+    git \
+    make
 
 RUN cd /root && \
   wget --no-check-certificate https://apt.llvm.org/llvm.sh && \
@@ -25,12 +27,14 @@ RUN mkdir /src
 
 COPY . /src
 
-RUN rm -rf /src/build/*
+RUN cd /src && git clean -d -f -x
 
-run cmake --version
+RUN mkdir /src/build
 
-RUN cd /src/build && cmake --build /src/build --target clean
+RUN echo 'alias CC+"echo /usr/bin/clang++"' >> ~/.bashrc
 
-RUN cd /src && make clean all test
+RUN cd /src/build && cmake -DCMAKE_C_COMPILER=/usr/bin/clang-18 -DCMAKE_CPP_COMPILER=/usr/bin/clang++ ../src/CMakeLists.txt
 
-CMD ["/src/adt/bin/adt_test_static"]
+RUN cd /src/src && make clean all test
+
+CMD ["/src/src/adt/bin/adt_test_static"]
