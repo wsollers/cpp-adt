@@ -5,7 +5,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(CodeCoverage)
 
-#append_coverage_compiler_flags()
+append_coverage_compiler_flags()
 set(COVERAGE_EXCLUDES '${PROJECT_SOURCE_DIR}/lib/*')
 
 #set(CMAKE_VERBOSE_MAKEFILE ON)
