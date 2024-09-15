@@ -50,6 +50,7 @@ target_link_libraries(adt_test_static PRIVATE  gtest gtest_main)
 add_test(NAME adt_test_static COMMAND bin/adt_test_static)
 
 
+
 #
 # Fuzz Testing 
 #
@@ -69,3 +70,12 @@ set(FUZZ_RUNTIME
     CACHE STRING "Number of seconds to run fuzz tests during ctest run") # Default of 10 seconds
 
 add_test(NAME fuzz_tester_run COMMAND fuzz_tester -max_total_time=${FUZZ_RUNTIME})
+
+#
+# Benchmarking`
+#
+add_executable(base_benchmark test/benchmark_test.cpp)
+set_property(TARGET ${base_benchmark} PROPERTY CXX_EXTENSIONS ON)
+target_include_directories(adt_test_static PRIVATE src/list src/node src/common)
+#target_link_libraries(adt_test_static PRIVATE  gtest gtest_main)
+target_link_libraries(base_benchmark benchmark::benchmark)

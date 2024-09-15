@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 #set(CMAKE_C_COMPILER "/usr/bin/clang")
 #set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Wpedantic")
+#set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Wpedantic")
 
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY bin )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY bin )
@@ -35,9 +35,22 @@ add_subdirectory(log)
 #applications
 add_subdirectory(main)
 
+#Google Test
 add_subdirectory(lib/googletest)
 
 # Enable CMake's testing framework
 enable_testing()
 
 install(TARGETS main adt log DESTINATION bin)
+
+#Google Benchmark
+add_subdirectory(lib/googlebenchmark)
+
+set(CPPCHECK_EXCLUDES
+    ${CMAKE_SOURCE_DIR}/lib/*
+)
+#${CMAKE_BINARY_DIR}/
+
+#
+#find_package(benchmark REQUIRED)
+

@@ -3,7 +3,7 @@
 
 template <typename T> class Node {
 public:
-  Node(T data);
+  explicit Node(T data);
   T getData();
   virtual ~Node() = default;
 private:
@@ -19,7 +19,7 @@ template <typename T> T Node<T>::getData() {
 
 template <typename T> class SingleLinkNode : public Node<T> {
 public:
-  SingleLinkNode(T data);
+  explicit SingleLinkNode(T data);
   SingleLinkNode<T> *getNext();
   void setNext(SingleLinkNode<T> *next);
   virtual ~SingleLinkNode();
@@ -47,7 +47,7 @@ template <typename T> SingleLinkNode<T>::~SingleLinkNode() {
 
 template <typename T> class DoubleLinkNode : public Node<T> {
 public:
-  DoubleLinkNode(T data);
+  explicit DoubleLinkNode(T data);
   DoubleLinkNode<T> *getNext();
   DoubleLinkNode<T> *getPrev();
   void setNext(DoubleLinkNode<T> *next);
@@ -95,7 +95,7 @@ template <typename T> DoubleLinkNode<T>::~DoubleLinkNode() {
 
 template <typename T> class BinaryTreeNode : public Node<T> {
 public:
-  BinaryTreeNode(T data);
+  explicit BinaryTreeNode(T data);
   BinaryTreeNode<T> *getLeft();
   BinaryTreeNode<T> *getRight();
   void setLeft(BinaryTreeNode<T> *left);
