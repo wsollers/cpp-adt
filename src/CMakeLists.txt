@@ -44,7 +44,7 @@ enable_testing()
 install(TARGETS main adt log DESTINATION bin)
 
 #Google Benchmark
-add_subdirectory(lib/googlebenchmark)
+#add_subdirectory(lib/benchmark)
 
 set(CPPCHECK_EXCLUDES
     ${CMAKE_SOURCE_DIR}/lib/*
@@ -52,5 +52,6 @@ set(CPPCHECK_EXCLUDES
 #${CMAKE_BINARY_DIR}/
 
 #
-#find_package(benchmark REQUIRED)
+find_package(benchmark REQUIRED PATHS /usr/local/lib/libbenchmark.a)
+find_package(benchmark REQUIRED PATHS /usr/local/lib/libbenchmark_main.a)
 
