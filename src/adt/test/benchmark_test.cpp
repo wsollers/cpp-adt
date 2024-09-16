@@ -18,4 +18,12 @@ static void BM_StringCopy(benchmark::State& state) {
 }
 BENCHMARK(BM_StringCopy);
 
+
+static void insert_into_list(benchmark::State& state) {
+  SinglyLinkedList<int> list;
+  for (auto _ : state) {
+    list.add(999);
+  }
+}
+
 BENCHMARK_MAIN();
