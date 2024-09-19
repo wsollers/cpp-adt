@@ -23,7 +23,6 @@ TEST (adtTest, ConstructListInt) {
   SinglyLinkedList<int> list;
   EXPECT_EQ(list.getSize(), 0);
 }
-/*
 //not sure this is a good test
 TEST (adtTest, CanDestroyList) {
   {
@@ -31,7 +30,6 @@ TEST (adtTest, CanDestroyList) {
     list.getSize();
   }
 }
-*/
 
 TEST (adtTest, ConstructListString) {
   SinglyLinkedList<std::string> list;
@@ -94,12 +92,30 @@ TEST (adtTest, PrintListTwoStringElements) {
   EXPECT_EQ(output, "Hello World \n");
 }
 
+TEST (adtTest, ContainsElement) {
+  SinglyLinkedList<int> list;
+  list.add(1);
+  list.add(2);
+  EXPECT_TRUE(list.contains(2));
+}
 
 
+TEST (adtTest, ContainsElementPostRemove) {
+  SinglyLinkedList<int> list;
+  list.add(1);
+  list.add(2);
+  list.remove(1);
+  EXPECT_TRUE(list.contains(2));
+}
 
 
-
-
+TEST (adtTest, DoesNotContainElementsPostRemove) {
+  SinglyLinkedList<int> list;
+  list.add(1);
+  list.add(2);
+  list.remove(1);
+  EXPECT_FALSE(list.contains(1));
+}
 
 
 TEST (adtTest, ConstructListString2) {

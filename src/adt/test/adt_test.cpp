@@ -14,3 +14,11 @@ TEST(adtTest, CppCheckIntegrationTest) {
   char a[11];
   a[10] = 0;
 }
+
+/*
+TEST(adtTest, CreateSingleLinkList) {
+  ListAdt<int>* list = createSingleLinkList<int>();
+  EXPECT_EQ(list->isEmpty(), true);
+  EXPECT_EQ(list->getSize(), 0);
+}
+*/

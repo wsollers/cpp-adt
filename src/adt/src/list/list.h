@@ -2,7 +2,6 @@
 #define LIST_H
 
 #include <iostream>
-
 #include "../node/node.h"
 
 struct oogabooga {
@@ -10,19 +9,62 @@ struct oogabooga {
   int b;
 };
 
-template <typename T> class SinglyLinkedList {
+template <typename T> class ListAdt {
+public:
+  virtual void add(T data) = 0;
+  virtual void insertAtFront(T data) = 0;
+  virtual void insertAtEnd(T data) = 0;
+
+  virtual void remove(T data) = 0;
+  virtual void removeFromFront(T data) = 0;
+  virtual void removeFromEnd(T data) = 0;
+
+  virtual bool contains(T data) const = 0;
+
+  virtual void print() const = 0;
+
+  virtual size_t getSize() const = 0;
+  virtual bool isEmpty() const = 0;
+
+  virtual void clear() = 0;
+};
+
+template <typename T>
+ListAdt<T>* createSingleLinkList();
+
+template <typename T> class SinglyLinkedList : public ListAdt<T> {
 private:
   SingleLinkNode<T> *head;
-  int size;
+  size_t size;
 
 public:
   SinglyLinkedList();
-  ~SinglyLinkedList();
-  void add(T data);
-  void remove(T data);
-  void print();
-  int getSize();
+  virtual ~SinglyLinkedList();
+
+  //from ListAdt<T>
+  void add(T data) override;
+  void insertAtFront(T data) override;
+  void insertAtEnd(T data) override;
+
+  void remove(T data) override;
+  void removeFromFront(T data) override;
+  void removeFromEnd(T data) override;
+
+  bool contains(T data) const override;
+
+  void print() const override;
+
+  size_t getSize() const override;
+  bool isEmpty() const override;
+
+
+  void clear() override;
 };
+
+template <typename T>
+ListAdt<T>* createSingleLinkList() {
+  return new SinglyLinkedList<T>();
+}
 
 
 template <typename T> SinglyLinkedList<T>::SinglyLinkedList() : head(nullptr), size(0) {}
@@ -42,7 +84,7 @@ template <typename T> SinglyLinkedList<T>::~SinglyLinkedList() {
 //template class SinglyLinkedList<int>;
 //template class SinglyLinkedList<std::string>;
 
-template <typename T> void SinglyLinkedList<T>::add(T data) {
+template <typename T> void SinglyLinkedList<T>::add(T data)  {
   SingleLinkNode<T> *newNode = new SingleLinkNode<T>(data);
   if (head == nullptr) {
     head = newNode;
@@ -54,6 +96,30 @@ template <typename T> void SinglyLinkedList<T>::add(T data) {
     current->setNext(newNode);
   }
   size++;
+}
+
+template <typename T>  void SinglyLinkedList<T>::insertAtFront(T data) {
+  SingleLinkNode<T> *newNode = new SingleLinkNode<T>(data);
+  if (head == nullptr) {
+    head = newNode;
+  } else {
+    newNode->setNext(head);
+    head = newNode;
+  }
+  size++;
+}
+
+template <typename T>  void SinglyLinkedList<T>::insertAtEnd(T data) {
+  SingleLinkNode<T> *newNode = new SingleLinkNode<T>(data);
+  if (head == nullptr) {
+    head = newNode;
+  } else {
+    SingleLinkNode<T> *current = head;
+    while (current->getNext() != nullptr) {
+      current = current->getNext();
+    }
+    current->setNext(newNode);
+  }
 }
 
 template <typename T> void SinglyLinkedList<T>::remove(T data) {
@@ -75,7 +141,7 @@ template <typename T> void SinglyLinkedList<T>::remove(T data) {
   }
 }
 
-template <typename T> void SinglyLinkedList<T>::print() {
+template <typename T> void SinglyLinkedList<T>::print() const {
   SingleLinkNode<T> *current = head;
   while (current != nullptr) {
     std::cout << current->getData() << " ";
@@ -84,14 +150,61 @@ template <typename T> void SinglyLinkedList<T>::print() {
   std::cout << std::endl;
 }
 
-template <typename T> int SinglyLinkedList<T>::getSize() {
+template <typename T> size_t SinglyLinkedList<T>::getSize() const {
   return size;
 }
+
+template <typename T> bool SinglyLinkedList<T>::isEmpty() const {
+  return head == nullptr;
+}
+
+template <typename T> void SinglyLinkedList<T>::clear() {
+  SingleLinkNode<T> *current = head;
+  SingleLinkNode<T> *next = nullptr;
+  while (current != nullptr) {
+    next = current->getNext();
+    delete current;
+    current = next;
+  }
+  head = nullptr;
+  size = 0;
+}
+
+template <typename T>  void SinglyLinkedList<T>::removeFromFront(T data) {
+  remove(data);
+}
+
+template <typename T>  void SinglyLinkedList<T>::removeFromEnd(T data) {
+  remove(data);
+}
+
+template <typename T>  bool SinglyLinkedList<T>::contains(T data) const {
+  SingleLinkNode<T> *current = head;
+  while (current != nullptr) {
+    if (current->getData() == data) {
+      return true;
+    }
+    current = current->getNext();
+  }
+  return false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 template <typename T> class DoublyLinkedList {
 private:
   DoubleLinkNode<T> *head;
-  int size;
+  size_t size;
 
 public:
   DoublyLinkedList();
@@ -99,7 +212,7 @@ public:
   void add(T data);
   void remove(T data);
   void print();
-  int getSize();
+  size_t getSize() const;
 };
 
 template <typename T> DoublyLinkedList<T>::DoublyLinkedList() : head(nullptr), size(0) {}
@@ -158,7 +271,7 @@ template <typename T> void DoublyLinkedList<T>::print() {
   std::cout << std::endl;
 }
 
-template <typename T> int DoublyLinkedList<T>::getSize() {
+template <typename T> size_t DoublyLinkedList<T>::getSize() const {
   return size;
 }
 
