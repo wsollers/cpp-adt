@@ -40,16 +40,25 @@ target_link_libraries(adt_test PRIVATE adt gtest gtest_main)
 add_test(NAME adt_test COMMAND bin/adt_test)
 
 #
-# Testing as static library
+# Testing SLL as static library
 #
-add_executable(adt_test_static test/list_test.cpp
+add_executable(adt_sll_test_static test/single_link_list_test.cpp
 )
-target_include_directories(adt_test_static PRIVATE src/list src/node src/common)
+target_include_directories(adt_sll_test_static PRIVATE src/list src/node src/common)
 #target_link_libraries(adt_test_static PRIVATE  adt-static gtest gtest_main)
-target_link_libraries(adt_test_static PRIVATE  gtest gtest_main)
-add_test(NAME adt_test_static COMMAND bin/adt_test_static)
+target_link_libraries(adt_sll_test_static PRIVATE  gtest gtest_main)
+add_test(NAME adt_sll_test_static COMMAND bin/adt_test_static)
 
 
+#
+# Testing DLL as static library
+#
+add_executable(adt_dll_test_static test/double_link_list_test.cpp
+)
+target_include_directories(adt_dll_test_static PRIVATE src/list src/node src/common)
+#target_link_libraries(adt_dll_test_static PRIVATE  adt-static gtest gtest_main)
+target_link_libraries(adt_dll_test_static PRIVATE  gtest gtest_main)
+add_test(NAME adt_dll_test_static COMMAND bin/adt_test_static)
 
 #
 # Fuzz Testing 
@@ -76,7 +85,7 @@ add_test(NAME fuzz_tester_run COMMAND fuzz_tester -max_total_time=${FUZZ_RUNTIME
 #
 add_executable(base_benchmark test/benchmark_test.cpp)
 set_property(TARGET ${base_benchmark} PROPERTY CXX_EXTENSIONS ON)
-target_include_directories(adt_test_static PRIVATE src/list src/node src/common)
+target_include_directories(base_benchmark PRIVATE src/list src/node src/common)
 #target_link_libraries(adt_test_static PRIVATE  gtest gtest_main)
 target_link_libraries(base_benchmark /usr/local/lib/libbenchmark.a /usr/local/lib/libbenchmark_main.a)
 add_test(NAME base_benchmark_run COMMAND base_benchmark)
