@@ -1,6 +1,8 @@
 #ifndef NODE_H
 #define NODE_H
 
+namespace Nodes {
+
 template <typename T> class Node {
 public:
   explicit Node(T data);
@@ -136,6 +138,7 @@ template <typename T> BinaryTreeNode<T>::~BinaryTreeNode() {
   //delete prev;
 }
 
+}
 
 
 

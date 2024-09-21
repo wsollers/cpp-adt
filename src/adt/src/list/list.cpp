@@ -3,6 +3,10 @@
 
 #include "list.h"
 
+namespace Lists{
+
+}
+
 /*
 template <typename T> class SinglyLinkedList {
 private:

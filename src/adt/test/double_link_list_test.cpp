@@ -20,12 +20,12 @@ TEST (adtTest, SmokeTest) {
 }
 
 TEST (adtTest, ConstructListString2) {
-  DoublyLinkedList<std::string> list;
+  Lists::DoublyLinkedList<std::string> list;
   EXPECT_EQ(list.getSize(), 0);
 }
 
 TEST (adtTest, PrintEmptyList2) {
-  DoublyLinkedList<std::string> list;
+  Lists::DoublyLinkedList<std::string> list;
   testing::internal::CaptureStdout();
   list.print();
   std::string output = testing::internal::GetCapturedStdout();
@@ -33,27 +33,27 @@ TEST (adtTest, PrintEmptyList2) {
 }
 
 TEST (adtTest, AddOneElement2) {
-  DoublyLinkedList<int> list;
+  Lists::DoublyLinkedList<int> list;
   list.add(1);
   EXPECT_EQ(list.getSize(), 1);
 }
 
 TEST (adtTest, AddTwoElements2) {
-  DoublyLinkedList<int> list;
+  Lists::DoublyLinkedList<int> list;
   list.add(1);
   list.add(2);
   EXPECT_EQ(list.getSize(), 2);
 }
 
 TEST (adtTest, AddAndRemoveElement2) {
-  DoublyLinkedList<int> list;
+  Lists::DoublyLinkedList<int> list;
   list.add(1);
   list.remove(1);
   EXPECT_EQ(list.getSize(), 0);
 }
 
 TEST (adtTest, AddTwoElementsAndRemoveBoth2) {
-  DoublyLinkedList<int> list;
+  Lists::DoublyLinkedList<int> list;
   list.add(1);
   list.add(2);
   list.remove(1);
@@ -62,7 +62,7 @@ TEST (adtTest, AddTwoElementsAndRemoveBoth2) {
 }
 
 TEST (adtTest, PrintListOneStringElement2) {
-  DoublyLinkedList<std::string> list;
+  Lists::DoublyLinkedList<std::string> list;
   testing::internal::CaptureStdout();
   list.add("Hello");
   list.print();
@@ -71,7 +71,7 @@ TEST (adtTest, PrintListOneStringElement2) {
 }
 
 TEST (adtTest, PrintListTwoStringElements2) {
-  DoublyLinkedList<std::string> list;
+  Lists::DoublyLinkedList<std::string> list;
   testing::internal::CaptureStdout();
   list.add("Hello");
   list.add("World");

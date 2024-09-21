@@ -20,24 +20,24 @@ TEST (adtTest, SmokeTest) {
 }
 
 TEST (adtTest, ConstructListInt) {
-  SinglyLinkedList<int> list;
+  Lists::SinglyLinkedList<int> list;
   EXPECT_EQ(list.getSize(), 0);
 }
 //not sure this is a good test
 TEST (adtTest, CanDestroyList) {
   {
-    SinglyLinkedList<int> list;
+    Lists::SinglyLinkedList<int> list;
     list.getSize();
   }
 }
 
 TEST (adtTest, ConstructListString) {
-  SinglyLinkedList<std::string> list;
+  Lists::SinglyLinkedList<std::string> list;
   EXPECT_EQ(list.getSize(), 0);
 }
 
 TEST (adtTest, PrintEmptyList) {
-  SinglyLinkedList<std::string> list;
+  Lists::SinglyLinkedList<std::string> list;
   testing::internal::CaptureStdout();
   list.print();
   std::string output = testing::internal::GetCapturedStdout();
@@ -45,27 +45,27 @@ TEST (adtTest, PrintEmptyList) {
 }
 
 TEST (adtTest, AddOneElement) {
-  SinglyLinkedList<int> list;
+  Lists::SinglyLinkedList<int> list;
   list.add(1);
   EXPECT_EQ(list.getSize(), 1);
 }
 
 TEST (adtTest, AddTwoElements) {
-  SinglyLinkedList<int> list;
+  Lists::SinglyLinkedList<int> list;
   list.add(1);
   list.add(2);
   EXPECT_EQ(list.getSize(), 2);
 }
 
 TEST (adtTest, AddAndRemoveElement) {
-  SinglyLinkedList<int> list;
+  Lists::SinglyLinkedList<int> list;
   list.add(1);
   list.remove(1);
   EXPECT_EQ(list.getSize(), 0);
 }
 
 TEST (adtTest, AddTwoElementsAndRemoveBoth) {
-  SinglyLinkedList<int> list;
+  Lists::SinglyLinkedList<int> list;
   list.add(1);
   list.add(2);
   list.remove(1);
@@ -74,7 +74,7 @@ TEST (adtTest, AddTwoElementsAndRemoveBoth) {
 }
 
 TEST (adtTest, PrintListOneStringElement) {
-  SinglyLinkedList<std::string> list;
+  Lists::SinglyLinkedList<std::string> list;
   testing::internal::CaptureStdout();
   list.add("Hello");
   list.print();
@@ -83,7 +83,7 @@ TEST (adtTest, PrintListOneStringElement) {
 }
 
 TEST (adtTest, PrintListTwoStringElements) {
-  SinglyLinkedList<std::string> list;
+  Lists::SinglyLinkedList<std::string> list;
   testing::internal::CaptureStdout();
   list.add("Hello");
   list.add("World");
@@ -93,7 +93,7 @@ TEST (adtTest, PrintListTwoStringElements) {
 }
 
 TEST (adtTest, ContainsElement) {
-  SinglyLinkedList<int> list;
+  Lists::SinglyLinkedList<int> list;
   list.add(1);
   list.add(2);
   EXPECT_TRUE(list.contains(2));
@@ -101,7 +101,7 @@ TEST (adtTest, ContainsElement) {
 
 
 TEST (adtTest, ContainsElementPostRemove) {
-  SinglyLinkedList<int> list;
+  Lists::SinglyLinkedList<int> list;
   list.add(1);
   list.add(2);
   list.remove(1);
@@ -110,7 +110,7 @@ TEST (adtTest, ContainsElementPostRemove) {
 
 
 TEST (adtTest, DoesNotContainElementsPostRemove) {
-  SinglyLinkedList<int> list;
+  Lists::SinglyLinkedList<int> list;
   list.add(1);
   list.add(2);
   list.remove(1);
