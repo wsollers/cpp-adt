@@ -31,8 +31,6 @@ public:
   virtual void clear() = 0;
 };
 
-template <typename T> ListAdt<T> *createSingleLinkList();
-
 template <typename T> class SinglyLinkedList : public ListAdt<T> {
 private:
   Nodes::SingleLinkNode<T> *head;
@@ -185,6 +183,12 @@ template <typename T> bool SinglyLinkedList<T>::contains(T data) const {
     current = current->getNext();
   }
   return false;
+}
+
+//template <typename T> ListAdt<T> *createDoublyLinkedList();
+
+template <typename T> ListAdt<T> *createDoublyLinkedList() {
+  return new SinglyLinkedList<T>();
 }
 
 template <typename T> class DoublyLinkedList {
