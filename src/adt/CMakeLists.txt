@@ -61,6 +61,16 @@ target_link_libraries(adt_dll_test_static PRIVATE  gtest gtest_main)
 add_test(NAME adt_dll_test_static COMMAND bin/adt_test_static)
 
 #
+# Testing CLL as static library
+#
+add_executable(adt_cll_test_static test/double_link_list_test.cpp
+)
+target_include_directories(adt_cll_test_static PRIVATE src/list src/node src/common)
+#target_link_libraries(adt_cll_test_static PRIVATE  adt-static gtest gtest_main)
+target_link_libraries(adt_cll_test_static PRIVATE  gtest gtest_main)
+add_test(NAME adt_cll_test_static COMMAND bin/adt_test_static)
+
+#
 # Fuzz Testing 
 #
 add_executable(fuzz_tester test/fuzz_test.cpp)

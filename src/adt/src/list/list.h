@@ -185,13 +185,14 @@ template <typename T> bool SinglyLinkedList<T>::contains(T data) const {
   return false;
 }
 
-//template <typename T> ListAdt<T> *createDoublyLinkedList();
 
-template <typename T> ListAdt<T> *createDoublyLinkedList() {
-  return new SinglyLinkedList<T>();
-}
 
-template <typename T> class DoublyLinkedList {
+
+
+/*
+ * DoublyLinkedList
+ */
+template <typename T> class DoublyLinkedList : public ListAdt<T> {
 private:
   Nodes::DoubleLinkNode<T> *head;
   size_t size;
@@ -199,62 +200,150 @@ private:
 public:
   DoublyLinkedList();
   ~DoublyLinkedList();
-  void add(T data);
-  void remove(T data);
-  void print();
-  size_t getSize() const;
+
+  // from ListAdt<T>
+  void add(T data) override;
+  void insertAtFront(T data) override;
+  void insertAtEnd(T data) override;
+
+  void remove(T data) override;
+  void removeFromFront(T data) override;
+  void removeFromEnd(T data) override;
+
+  bool contains(T data) const override;
+
+  void print() const override;
+
+  size_t getSize() const override;
+  bool isEmpty() const override;
+
+  void clear() override;
 };
 
-template <typename T>
-DoublyLinkedList<T>::DoublyLinkedList() : head(nullptr), size(0) {}
+//template <typename T> ListAdt<T> *createDoublyLinkedList();
 
-template <typename T> DoublyLinkedList<T>::~DoublyLinkedList() {
-  Nodes::DoubleLinkNode<T> *current = head;
-  Nodes::DoubleLinkNode<T> *next = nullptr;
-  while (current != nullptr) {
-    next = current->getNext();
-    delete current;
-    current = next;
-  }
+template <typename T> ListAdt<T> *createDoublyLinkedList() {
+  return new DoublyLinkedList<T>();
 }
 
-template <typename T> void DoublyLinkedList<T>::add(T data) {
-  Nodes::DoubleLinkNode<T> *newNode = new Nodes::DoubleLinkNode<T>(data);
-  if (head == nullptr) {
+template <typename T> 
+DoublyLinkedList<T>::DoublyLinkedList() : head(nullptr), size(0) {}
+
+template <typename T> 
+DoublyLinkedList<T>::~DoublyLinkedList() {
+  Lists::DoublyLinkedList<T>::clear();
+}
+
+template <typename T> 
+void DoublyLinkedList<T>::add(T data) {
+  insertAtEnd(data);
+}
+
+template <typename T> 
+void DoublyLinkedList<T>::insertAtFront(T data) {
+  Nodes::DoubleLinkNode<T>* newNode = new Nodes::DoubleLinkNode<T>(data);
+
+  if (isEmpty()) {
     head = newNode;
   } else {
-    Nodes::DoubleLinkNode<T> *current = head;
-    while (current->getNext() != nullptr) {
-      current = current->getNext();
-    }
-    current->setNext(newNode);
-    newNode->setPrev(current);
+    newNode->setNext(head);
+    head->setPrev(newNode);
+    head = newNode;
   }
   size++;
 }
 
-template <typename T> void DoublyLinkedList<T>::remove(T data) {
-  Nodes::DoubleLinkNode<T> *current = head;
-  Nodes::DoubleLinkNode<T> *prev = nullptr;
+template <typename T> 
+void DoublyLinkedList<T>::insertAtEnd(T data) {
+  Nodes::DoubleLinkNode<T>* newNode = new Nodes::DoubleLinkNode<T>(data);
+
+  if (isEmpty()) {
+    head = newNode;
+  } else {
+    Nodes::DoubleLinkNode<T>* tail = head;
+    while (tail->getNext() != nullptr) {
+      tail = tail->getNext();
+    }
+    tail->setNext(newNode);
+    newNode->setPrev(tail);
+  }
+  size++;
+}
+
+template <typename T> 
+void DoublyLinkedList<T>::remove(T data) {
+  if (isEmpty()) {
+    return;
+  }
+
+  Nodes::DoubleLinkNode<T>* current = head;
   while (current != nullptr) {
     if (current->getData() == data) {
-      if (prev == nullptr) {
-        head = current->getNext();
+      Nodes::DoubleLinkNode<T>* prev = current->getPrev();
+      Nodes::DoubleLinkNode<T>* next = current->getNext();
+
+      if (prev != nullptr) {
+        prev->setNext(next);
       } else {
-        prev->setNext(current->getNext());
-        current->getNext()->setPrev(prev);
+        head = next; // Removing the head
       }
+
+      if (next != nullptr) {
+        next->setPrev(prev);
+      }
+
       delete current;
       size--;
       return;
     }
-    prev = current;
     current = current->getNext();
   }
 }
 
-template <typename T> void DoublyLinkedList<T>::print() {
-  Nodes::DoubleLinkNode<T> *current = head;
+template <typename T> 
+void DoublyLinkedList<T>::removeFromFront(T data) {
+  if (!isEmpty()) {
+    remove(head->getData());
+  }
+}
+
+template <typename T> 
+void DoublyLinkedList<T>::removeFromEnd(T data) {
+  if (isEmpty()) {
+    return;
+  }
+
+  Nodes::DoubleLinkNode<T>* tail = head;
+  while (tail->getNext() != nullptr) {
+    tail = tail->getNext();
+  }
+  remove(tail->getData());
+}
+
+template <typename T> 
+bool DoublyLinkedList<T>::contains(T data) const {
+  if (isEmpty()) {
+    return false;
+  }
+
+  Nodes::DoubleLinkNode<T>* current = head;
+  while (current != nullptr) {
+    if (current->getData() == data) {
+      return true;
+    }
+    current = current->getNext();
+  }
+  return false;
+}
+
+template <typename T> 
+void DoublyLinkedList<T>::print() const {
+  if (isEmpty()) {
+    std::cout << "List is empty." << std::endl;
+    return;
+  }
+
+  Nodes::DoubleLinkNode<T>* current = head;
   while (current != nullptr) {
     std::cout << current->getData() << " ";
     current = current->getNext();
@@ -262,8 +351,213 @@ template <typename T> void DoublyLinkedList<T>::print() {
   std::cout << std::endl;
 }
 
-template <typename T> size_t DoublyLinkedList<T>::getSize() const {
+template <typename T> 
+size_t DoublyLinkedList<T>::getSize() const {
   return size;
+}
+
+template <typename T> 
+bool DoublyLinkedList<T>::isEmpty() const {
+  return size == 0;
+}
+
+template <typename T> 
+void DoublyLinkedList<T>::clear() {
+  while (!isEmpty()) {
+    removeFromFront(head->getData());
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * CircularLinkedList
+ */
+template <typename T> class CircularLinkedList : public ListAdt<T> {
+private:
+  Nodes::DoubleLinkNode<T> *head;
+  size_t size;
+public:
+  CircularLinkedList();
+  virtual ~CircularLinkedList();
+
+  // from ListAdt<T>
+  void add(T data) override;
+  void insertAtFront(T data) override;
+  void insertAtEnd(T data) override;
+
+  void remove(T data) override;
+  void removeFromFront(T data) override;
+  void removeFromEnd(T data) override;
+
+  bool contains(T data) const override;
+
+  void print() const override;
+
+  size_t getSize() const override;
+  bool isEmpty() const override;
+
+  void clear() override;
+};
+
+template <typename T> ListAdt<T> *createCircularLinkedList() {
+  return new CircularLinkedList<T>();
+}
+
+template <typename T> 
+CircularLinkedList<T>::CircularLinkedList() : head(nullptr), size(0) {}
+
+template <typename T> 
+CircularLinkedList<T>::~CircularLinkedList() {
+  //Invocation of virtual destructor is ok if resolved properly
+  Lists::CircularLinkedList<T>::clear();
+}
+
+template <typename T> 
+void CircularLinkedList<T>::add(T data) {
+  insertAtEnd(data);
+}
+
+template <typename T> 
+void CircularLinkedList<T>::insertAtFront(T data) {
+  Nodes::DoubleLinkNode<T>* newNode = new Nodes::DoubleLinkNode<T>(data);
+
+  if (isEmpty()) {
+    head = newNode;
+    head->setNext(head);
+    head->setPrev(head);
+  } else {
+    Nodes::DoubleLinkNode<T>* tail = head->getPrev();
+    newNode->setNext(head);
+    newNode->setPrev(tail);
+    tail->setNext(newNode);
+    head->setPrev(newNode);
+    head = newNode;
+  }
+  size++;
+}
+
+template <typename T> 
+void CircularLinkedList<T>::insertAtEnd(T data) {
+  Nodes::DoubleLinkNode<T>* newNode = new Nodes::DoubleLinkNode<T>(data);
+
+  if (isEmpty()) {
+    head = newNode;
+    head->setNext(head);
+    head->setPrev(head);
+  } else {
+    Nodes::DoubleLinkNode<T>* tail = head->getPrev();
+    newNode->setNext(head);
+    newNode->setPrev(tail);
+    tail->setNext(newNode);
+    head->setPrev(newNode);
+  }
+  size++;
+}
+
+template <typename T> 
+void CircularLinkedList<T>::remove(T data) {
+  if (isEmpty()) {
+    return;
+  }
+
+  Nodes::DoubleLinkNode<T>* current = head;
+  do {
+    if (current->getData() == data) {
+      Nodes::DoubleLinkNode<T>* prev = current->getPrev();
+      Nodes::DoubleLinkNode<T>* next = current->getNext();
+
+      if (current == head && size == 1) {
+        head = nullptr;
+      } else {
+        prev->setNext(next);
+        next->setPrev(prev);
+        if (current == head) {
+          head = next;
+        }
+      }
+
+      delete current;
+      size--;
+      return;
+    }
+    current = current->getNext();
+  } while (current != head);
+}
+
+template <typename T> 
+void CircularLinkedList<T>::removeFromFront(T data) {
+  if (!isEmpty()) {
+    remove(head->getData());
+  }
+}
+
+template <typename T> 
+void CircularLinkedList<T>::removeFromEnd(T data) {
+  if (!isEmpty()) {
+    Nodes::DoubleLinkNode<T>* tail = head->getPrev();
+    remove(tail->getData());
+  }
+}
+
+template <typename T> 
+bool CircularLinkedList<T>::contains(T data) const {
+  if (isEmpty()) {
+    return false;
+  }
+
+  Nodes::DoubleLinkNode<T>* current = head;
+  do {
+    if (current->getData() == data) {
+      return true;
+    }
+    current = current->getNext();
+  } while (current != head);
+
+  return false;
+}
+
+template <typename T> 
+void CircularLinkedList<T>::print() const {
+  if (isEmpty()) {
+    std::cout << "List is empty." << std::endl;
+    return;
+  }
+
+  Nodes::DoubleLinkNode<T>* current = head;
+  do {
+    std::cout << current->getData() << " ";
+    current = current->getNext();
+  } while (current != head);
+  std::cout << std::endl;
+}
+
+template <typename T> 
+size_t CircularLinkedList<T>::getSize() const {
+  return size;
+}
+
+template <typename T> 
+bool CircularLinkedList<T>::isEmpty() const {
+  return size == 0;
+}
+
+template <typename T> 
+void CircularLinkedList<T>::clear() {
+  while (!isEmpty()) {
+    removeFromFront(head->getData());
+  }
 }
 
 } // namespace Lists

@@ -22,3 +22,14 @@ TEST(adtTest, CreateSingleLinkList) {
   EXPECT_EQ(list->getSize(), 0);
 }
 
+TEST(adtTest, DoublySingleLinkList) {
+  Lists::ListAdt<int>* list = Lists::createDoublyLinkedList<int>();
+  EXPECT_EQ(list->isEmpty(), true);
+  EXPECT_EQ(list->getSize(), 0);
+}
+
+TEST(adtTest, CircularLinkList) {
+  Lists::ListAdt<int>* list = Lists::createCircularLinkedList<int>();
+  EXPECT_EQ(list->isEmpty(), true);
+  EXPECT_EQ(list->getSize(), 0);
+}
