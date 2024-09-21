@@ -3,4 +3,8 @@
 
 #include "../node/node.h"
 
+namespace Trees {
+
+}
+
 #endif  

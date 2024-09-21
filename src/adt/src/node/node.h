@@ -7,6 +7,7 @@ template <typename T> class Node {
 public:
   explicit Node(T data);
   T getData();
+  void setData(T data);
   virtual ~Node() = default;
 private:
   T data;
@@ -17,6 +18,10 @@ template <typename T> Node<T>::Node(T data) : data(data) {}
 
 template <typename T> T Node<T>::getData() {
   return data;
+}
+
+template <typename T> void Node<T>::setData(T data) {
+  this->data = data;
 }
 
 template <typename T> class SingleLinkNode : public Node<T> {
