@@ -1,10 +1,10 @@
 #include <benchmark/benchmark.h>
 #include "../src/list/list.h"
 
-// Benchmark for adding elements to the end of the DoublyLinkedList
+// Benchmark for adding elements to the end of the CircularLinkedList
 static void BM_AddElementsToEnd(benchmark::State& state) {
     for (auto _ : state) {
-        Lists::DoublyLinkedList<int> list;
+        Lists::CircularLinkedList<int> list;
         for (int i = 0; i < state.range(0); ++i) {
             list.add(i);
         }
@@ -12,10 +12,10 @@ static void BM_AddElementsToEnd(benchmark::State& state) {
 }
 BENCHMARK(BM_AddElementsToEnd)->Range(8, 8 << 10);
 
-//Benchmark for adding elements at a specific index in the DoublyLinkedList
+// Benchmark for adding elements at a specific index in the CircularLinkedList
 static void BM_AddElementsAtIndex(benchmark::State& state) {
     for (auto _ : state) {
-        Lists::DoublyLinkedList<int> list;
+        Lists::CircularLinkedList<int> list;
         for (int i = 0; i < state.range(0); ++i) {
             list.add(i / 2, i);  // Add in the middle of the list
         }
@@ -23,49 +23,49 @@ static void BM_AddElementsAtIndex(benchmark::State& state) {
 }
 BENCHMARK(BM_AddElementsAtIndex)->Range(8, 8 << 10);
 
-// Benchmark for removing elements by index from the DoublyLinkedList
+// Benchmark for removing elements by index from the CircularLinkedList
 static void BM_RemoveElementsByIndex(benchmark::State& state) {
     for (auto _ : state) {
-        Lists::DoublyLinkedList<int> list;
+        Lists::CircularLinkedList<int> list;
         for (int i = 0; i < state.range(0); ++i) {
             list.add(i);
         }
-        for (int i = state.range(0) - 1; i >= 0; --i) {
-            list.remove(i);  // Remove elements from the end
+        for (int i = state.range(0) - 1; i > 1; --i) {
+            list.remove(i/2);  
         }
     }
 }
 BENCHMARK(BM_RemoveElementsByIndex)->Range(8, 8 << 10);
 
-// Benchmark for removing elements by value from the DoublyLinkedList
+// Benchmark for removing elements by value from the CircularLinkedList
 static void BM_RemoveElementsByValue(benchmark::State& state) {
     for (auto _ : state) {
-        Lists::DoublyLinkedList<int> list;
+        Lists::CircularLinkedList<int> list;
         for (int i = 0; i < state.range(0); ++i) {
             list.add(i);
         }
         for (int i = 0; i < state.range(0); ++i) {
-            list.remove(i);  // Remove by value
+            list.remove((int)list.getSize());  // Remove by value
         }
     }
 }
 BENCHMARK(BM_RemoveElementsByValue)->Range(8, 8 << 10);
 
-// Benchmark for accessing elements by index from the DoublyLinkedList
+// Benchmark for accessing elements by index from the CircularLinkedList
 static void BM_GetElementsByIndex(benchmark::State& state) {
-    Lists::DoublyLinkedList<int> list;
+    Lists::CircularLinkedList<int> list;
     for (int i = 0; i < state.range(0); ++i) {
         list.add(i);
     }
     for (auto _ : state) {
-        list.get(state.range(0) / 2);  // Access the middle element
+        list.get(list.getSize() / 2);  // Access the middle element
     }
 }
 BENCHMARK(BM_GetElementsByIndex)->Range(8, 8 << 10);
 
-// Benchmark for setting elements by index in the DoublyLinkedList
+// Benchmark for setting elements by index in the CircularLinkedList
 static void BM_SetElementsByIndex(benchmark::State& state) {
-    Lists::DoublyLinkedList<int> list;
+    Lists::CircularLinkedList<int> list;
     for (int i = 0; i < state.range(0); ++i) {
         list.add(i);
     }
@@ -75,9 +75,9 @@ static void BM_SetElementsByIndex(benchmark::State& state) {
 }
 BENCHMARK(BM_SetElementsByIndex)->Range(8, 8 << 10);
 
-// Benchmark for checking if a DoublyLinkedList contains an element
+// Benchmark for checking if a CircularLinkedList contains an element
 static void BM_ContainsElement(benchmark::State& state) {
-    Lists::DoublyLinkedList<int> list;
+    Lists::CircularLinkedList<int> list;
     for (int i = 0; i < state.range(0); ++i) {
         list.add(i);
     }
@@ -87,9 +87,9 @@ static void BM_ContainsElement(benchmark::State& state) {
 }
 BENCHMARK(BM_ContainsElement)->Range(8, 8 << 10);
 
-// Benchmark for finding the index of an element in the DoublyLinkedList
+// Benchmark for finding the index of an element in the CircularLinkedList
 static void BM_IndexOfElement(benchmark::State& state) {
-    Lists::DoublyLinkedList<int> list;
+    Lists::CircularLinkedList<int> list;
     for (int i = 0; i < state.range(0); ++i) {
         list.add(i);
     }
@@ -99,10 +99,10 @@ static void BM_IndexOfElement(benchmark::State& state) {
 }
 BENCHMARK(BM_IndexOfElement)->Range(8, 8 << 10);
 
-// Benchmark for clearing the DoublyLinkedList
+// Benchmark for clearing the CircularLinkedList
 static void BM_ClearList(benchmark::State& state) {
     for (auto _ : state) {
-        Lists::DoublyLinkedList<int> list;
+        Lists::CircularLinkedList<int> list;
         for (int i = 0; i < state.range(0); ++i) {
             list.add(i);
         }

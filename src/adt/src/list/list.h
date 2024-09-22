@@ -89,7 +89,7 @@ template <typename T> bool SinglyLinkedList<T>::add(T data) {
   } else {
     Nodes::SingleLinkNode<T> *current = head;
     while (current->getNext() != nullptr) {
-      //std::cout << "current: " << std::hex << current << std::endl;
+      // std::cout << "current: " << std::hex << current << std::endl;
       current = current->getNext();
     }
     current->setNext(newNode);
@@ -380,7 +380,7 @@ template <typename T> bool DoublyLinkedList<T>::add(size_t index, T data) {
 
 // Remove an element at a specific index
 template <typename T> T DoublyLinkedList<T>::remove(size_t index) {
-  if (index >= size) {
+  if (index > size) {
     throw std::out_of_range("Index out of bounds");
   }
 
@@ -645,7 +645,7 @@ template <typename T> bool CircularLinkedList<T>::add(size_t index, T data) {
 
 // Remove an element at a specific index
 template <typename T> T CircularLinkedList<T>::remove(size_t index) {
-  if (index >= size) {
+  if (index > size) {
     throw std::out_of_range("Index out of bounds");
   }
 

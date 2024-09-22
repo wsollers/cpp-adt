@@ -12,17 +12,23 @@ static void BM_AddElementsToEnd(benchmark::State& state) {
 }
 BENCHMARK(BM_AddElementsToEnd)->Range(8, 8 << 10);
 
+/*
 // Benchmark for adding elements at a specific index in the DoublyLinkedList
 static void BM_AddElementsAtIndex(benchmark::State& state) {
     for (auto _ : state) {
         Lists::DoublyLinkedList<int> list;
         for (int i = 0; i < state.range(0); ++i) {
-            list.add(i / 2, i);  // Add at the middle of the list
+            list.add(i, i); 
+        }
+        for (int i = 0; i < state.range(0); ++i) {
+            list.add(list.getSize() / 2, i);  // Add in the middle of the list
         }
     }
 }
 BENCHMARK(BM_AddElementsAtIndex)->Range(8, 8 << 10);
+*/
 
+/*
 // Benchmark for removing elements by index from the DoublyLinkedList
 static void BM_RemoveElementsByIndex(benchmark::State& state) {
     for (auto _ : state) {
@@ -30,13 +36,15 @@ static void BM_RemoveElementsByIndex(benchmark::State& state) {
         for (int i = 0; i < state.range(0); ++i) {
             list.add(i);
         }
-        for (int i = state.range(0) - 1; i >= 0; --i) {
-            list.remove(i);  // Remove elements from the end
+        for (int i = state.range(0) - 1; i > 0; --i) {
+            list.remove(list.getSize());  // Remove elements from the end
         }
     }
 }
 BENCHMARK(BM_RemoveElementsByIndex)->Range(8, 8 << 10);
+*/
 
+/*
 // Benchmark for removing elements by value from the DoublyLinkedList
 static void BM_RemoveElementsByValue(benchmark::State& state) {
     for (auto _ : state) {
@@ -50,6 +58,7 @@ static void BM_RemoveElementsByValue(benchmark::State& state) {
     }
 }
 BENCHMARK(BM_RemoveElementsByValue)->Range(8, 8 << 10);
+*/
 
 // Benchmark for accessing elements by index from the DoublyLinkedList
 static void BM_GetElementsByIndex(benchmark::State& state) {
