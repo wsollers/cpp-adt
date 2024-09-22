@@ -41,9 +41,7 @@ template <typename T> SingleLinkNode<T> *SingleLinkNode<T>::getNext() {
 }
 
 template <typename T> void SingleLinkNode<T>::setNext(SingleLinkNode<T> *next) {
-  if (this->next != nullptr) {
-    delete this->next;
-  }
+  //Do we need to delete the next node?
   this->next = next;
 }
 

@@ -16,5 +16,9 @@ int main(int argc, char *argv[]) {
 
   print_log_message();
 
+  Lists::SinglyLinkedList<int> list;
+  list.add(1);
+  std::cout << "List size: " << list.getSize() << std::endl;
+
   return EXIT_SUCCESS;
 }

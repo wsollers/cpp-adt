@@ -12,7 +12,7 @@ static void BM_AddElementsToEnd(benchmark::State& state) {
 }
 BENCHMARK(BM_AddElementsToEnd)->Range(8, 8 << 10);
 
-// Benchmark for adding elements at a specific index in the DoublyLinkedList
+//Benchmark for adding elements at a specific index in the DoublyLinkedList
 static void BM_AddElementsAtIndex(benchmark::State& state) {
     for (auto _ : state) {
         Lists::DoublyLinkedList<int> list;
