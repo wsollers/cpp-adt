@@ -186,11 +186,27 @@ TEST(SinglyLinkedListTest, AddRemoveSingleElement) {
   EXPECT_THROW(list.get(0), std::out_of_range); // List is now empty
 }
 
+TEST(IteratorTest, IterateOverList) {
+  Lists::SinglyLinkedList<int> list;
+  list.add(1);
+  list.add(2);
+  list.add(3);
+
+  auto it = list.begin();
+  EXPECT_EQ(*it, 1);
+  ++it;
+  EXPECT_EQ(*it, 2);
+  ++it;
+  EXPECT_EQ(*it, 3);
+  ++it;
+  EXPECT_EQ(it, list.end());
+}
+
 TEST(SinglyLinkedListTest, ConstructFromStdRange) {
   auto range = std::views::iota(0, 1025); // Generates values from 0 to 1024 (inclusive)
 
-  //Lists::SinglyLinkedList<int> list(range); // Pass the range to your constructor
+  Lists::SinglyLinkedList<int> list(range); // Pass the range to your constructor
 
-  //EXPECT_EQ(list.getSize(), 1024);
-  //EXPECT_EQ(list.remove(0), 0); // Remove the only element
+  EXPECT_EQ(list.getSize(), 1024);
+  EXPECT_EQ(list.remove(0), 0); // Remove the only element
 }

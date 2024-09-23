@@ -2,8 +2,10 @@
 #define LIST_H
 
 #include "../node/node.h"
+#include <cstddef> // For std::ptrdiff_t
 #include <ios>
 #include <iostream>
+#include <iterator> // For std::forward_iterator_tag
 #include <ranges>
 #include <stdexcept> // std::out_of_range
 
@@ -39,6 +41,8 @@ public:
   virtual size_t getSize() const = 0;
   virtual void clear() = 0;
 };
+// Forward Declaration
+// template <typename T> class SinglyLinkedListForwardIterator;
 
 template <typename T> class SinglyLinkedList : public ListAdt<T> {
 private:
@@ -47,7 +51,7 @@ private:
 
 public:
   SinglyLinkedList();
-  explicit SinglyLinkedList(std::ranges::input_range auto &&range); 
+  explicit SinglyLinkedList(std::ranges::input_range auto &&range);
 
   ~SinglyLinkedList();
 
@@ -68,6 +72,52 @@ public:
   bool isEmpty() const override;
   size_t getSize() const override;
   void clear() override;
+
+  class SinglyLinkedListForwardIterator {
+
+  public:
+    using iterator_category = std::forward_iterator_tag;
+    using value_type = T;
+    using difference_type = std::ptrdiff_t;
+    using pointer = T *;
+    using reference = T &;
+
+    explicit SinglyLinkedListForwardIterator(Nodes::SingleLinkNode<T> *node)
+        : current(node) {}
+
+    reference operator*() const { return current->data; }
+
+    pointer operator->() { return &current->data; }
+
+    SinglyLinkedListForwardIterator &operator++() {
+      current = current->getNext();
+      return *this;
+    }
+
+    SinglyLinkedListForwardIterator operator++(int) {
+      SinglyLinkedListForwardIterator iterator = *this;
+      ++(*this);
+      return iterator;
+    }
+
+    bool operator==(const SinglyLinkedListForwardIterator &iterator) const {
+      return current == iterator.current;
+    }
+
+    bool operator!=(const SinglyLinkedListForwardIterator &iterator) const {
+      return !(*this == iterator);
+    }
+
+  private:
+    Nodes::SingleLinkNode<T> *current;
+  };
+
+  SinglyLinkedListForwardIterator begin() {
+    return SinglyLinkedListForwardIterator{head};
+  }
+  SinglyLinkedListForwardIterator end() {
+    return SinglyLinkedListForwardIterator(nullptr);
+  }
 };
 
 template <typename T> ListAdt<T> *createSingleLinkList() {
@@ -79,7 +129,8 @@ template <typename T>
 SinglyLinkedList<T>::SinglyLinkedList() : head(nullptr), size(0) {}
 
 template <typename T>
-SinglyLinkedList<T>::SinglyLinkedList(std::ranges::input_range auto &&range) : head(nullptr), size(0) {
+SinglyLinkedList<T>::SinglyLinkedList(std::ranges::input_range auto &&range)
+    : head(nullptr), size(0) {
   for (auto &&item : range) {
     // process the item
     this->add(item);
@@ -838,5 +889,12 @@ template <typename T> void CircularLinkedList<T>::clear() {
 }
 
 } // namespace Lists
+
+/*
+ *
+ * Iterators
+ *
+ *
+ */
 
 #endif // LIST_H

@@ -9,7 +9,8 @@ public:
   T getData();
   void setData(T data);
   virtual ~Node() = default;
-private:
+
+public:
   T data;
 };
 
