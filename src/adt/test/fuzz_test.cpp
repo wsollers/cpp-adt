@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <iterator>
 #include <cstdio>
 #include <utility>

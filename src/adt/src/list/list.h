@@ -4,6 +4,7 @@
 #include "../node/node.h"
 #include <ios>
 #include <iostream>
+#include <ranges>
 #include <stdexcept> // std::out_of_range
 
 struct oogabooga {
@@ -46,6 +47,8 @@ private:
 
 public:
   SinglyLinkedList();
+  explicit SinglyLinkedList(std::ranges::input_range auto &&range); 
+
   ~SinglyLinkedList();
 
   bool add(T data) override;
@@ -74,6 +77,14 @@ template <typename T> ListAdt<T> *createSingleLinkList() {
 // Constructor
 template <typename T>
 SinglyLinkedList<T>::SinglyLinkedList() : head(nullptr), size(0) {}
+
+template <typename T>
+SinglyLinkedList<T>::SinglyLinkedList(std::ranges::input_range auto &&range) : head(nullptr), size(0) {
+  for (auto &&item : range) {
+    // process the item
+    this->add(item);
+  }
+}
 
 // Destructor
 template <typename T> SinglyLinkedList<T>::~SinglyLinkedList() {
