@@ -1,8 +1,8 @@
-#include <cstdlib>
-#include <iostream>
-#include <algorithm>
 #include "../adt/include/adt.h"
 #include "../log/include/log.h"
+#include <algorithm>
+#include <cstdlib>
+#include <iostream>
 
 int main(int argc, char *argv[]) {
 
@@ -20,11 +20,17 @@ int main(int argc, char *argv[]) {
   list.add(2);
   list.add(1);
 
+  std::cout << "Unsorted list: " << std::endl;
+
+  for (auto it = list.begin(); it != list.end(); ++it) {
+    std::cout << *it << std::endl;
+  }
+
   auto begin = list.rand_begin();
-  auto end = list.rand_begin();
+  auto end = list.rand_end();
   std::sort(begin, end);
 
-std::cout << "Sorted list: " << std::endl;
+  std::cout << "Sorted list: " << std::endl;
 
   for (auto it = list.begin(); it != list.end(); ++it) {
     std::cout << *it << std::endl;
