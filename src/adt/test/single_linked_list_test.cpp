@@ -186,7 +186,7 @@ TEST(SinglyLinkedListTest, AddRemoveSingleElement) {
   EXPECT_THROW(list.get(0), std::out_of_range); // List is now empty
 }
 
-TEST(IteratorTest, IterateOverList) {
+TEST(SinglyLinkedListTest, IterateOverList) {
   Lists::SinglyLinkedList<int> list;
   list.add(1);
   list.add(2);
@@ -202,6 +202,17 @@ TEST(IteratorTest, IterateOverList) {
   EXPECT_EQ(it, list.end());
 }
 
+TEST(SinglyLinkedListTest, SortList) {
+  Lists::SinglyLinkedList<int> list;
+  list.add(3);
+  list.add(2);
+  list.add(1);
+
+  auto begin = list.rand_begin();
+  auto end = list.rand_begin();
+  std::sort(begin, end);
+  EXPECT_EQ(list.get(0), 1);
+}
 TEST(SinglyLinkedListTest, ConstructFromStdRange) {
   auto range = std::views::iota(0, 1025); // Generates values from 0 to 1024 (inclusive)
 

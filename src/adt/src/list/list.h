@@ -44,6 +44,10 @@ public:
 // Forward Declaration
 // template <typename T> class SinglyLinkedListForwardIterator;
 
+// forward declaration
+template <typename T> class SinglyLinkedListForwardIterator;
+template <typename T> class SinglyLinkedListRandomAccessIterator;
+
 template <typename T> class SinglyLinkedList : public ListAdt<T> {
 private:
   Nodes::SingleLinkNode<T> *head;
@@ -73,50 +77,23 @@ public:
   size_t getSize() const override;
   void clear() override;
 
-  class SinglyLinkedListForwardIterator {
+  friend class SinglyLinkedListForwardIterator<T>;
+  friend class SinglyLinkedListRandomAccessIterator<T>;
 
-  public:
-    using iterator_category = std::forward_iterator_tag;
-    using value_type = T;
-    using difference_type = std::ptrdiff_t;
-    using pointer = T *;
-    using reference = T &;
-
-    explicit SinglyLinkedListForwardIterator(Nodes::SingleLinkNode<T> *node)
-        : current(node) {}
-
-    reference operator*() const { return current->data; }
-
-    pointer operator->() { return &current->data; }
-
-    SinglyLinkedListForwardIterator &operator++() {
-      current = current->getNext();
-      return *this;
-    }
-
-    SinglyLinkedListForwardIterator operator++(int) {
-      SinglyLinkedListForwardIterator iterator = *this;
-      ++(*this);
-      return iterator;
-    }
-
-    bool operator==(const SinglyLinkedListForwardIterator &iterator) const {
-      return current == iterator.current;
-    }
-
-    bool operator!=(const SinglyLinkedListForwardIterator &iterator) const {
-      return !(*this == iterator);
-    }
-
-  private:
-    Nodes::SingleLinkNode<T> *current;
-  };
-
-  SinglyLinkedListForwardIterator begin() {
-    return SinglyLinkedListForwardIterator{head};
+  SinglyLinkedListForwardIterator<T> begin() {
+    return SinglyLinkedListForwardIterator<T>{head};
   }
-  SinglyLinkedListForwardIterator end() {
-    return SinglyLinkedListForwardIterator(nullptr);
+
+  SinglyLinkedListForwardIterator<T> end() {
+    return SinglyLinkedListForwardIterator<T>(nullptr);
+  }
+
+  SinglyLinkedListRandomAccessIterator<T> rand_begin() {
+    return SinglyLinkedListRandomAccessIterator<T>{head};
+  }
+
+  SinglyLinkedListRandomAccessIterator<T> rand_end() {
+    return SinglyLinkedListRandomAccessIterator<T>(nullptr);
   }
 };
 
@@ -888,13 +865,159 @@ template <typename T> void CircularLinkedList<T>::clear() {
   size = 0;
 }
 
-} // namespace Lists
-
 /*
  *
  * Iterators
  *
  *
  */
+template <typename T> class SinglyLinkedListForwardIterator {
 
+public:
+  using iterator_category = std::forward_iterator_tag;
+  using value_type = T;
+  using difference_type = std::ptrdiff_t;
+  using pointer = T *;
+  using reference = T &;
+
+  explicit SinglyLinkedListForwardIterator(Nodes::SingleLinkNode<T> *node)
+      : current(node) {}
+
+  reference operator*() const { return current->data; }
+
+  pointer operator->() { return &current->data; }
+
+  SinglyLinkedListForwardIterator &operator++() {
+    current = current->getNext();
+    return *this;
+  }
+
+  SinglyLinkedListForwardIterator operator++(int) {
+    SinglyLinkedListForwardIterator iterator = *this;
+    ++(*this);
+    return iterator;
+  }
+
+  bool operator==(const SinglyLinkedListForwardIterator &iterator) const {
+    return current == iterator.current;
+  }
+
+  bool operator!=(const SinglyLinkedListForwardIterator &iterator) const {
+    return !(*this == iterator);
+  }
+
+private:
+  Nodes::SingleLinkNode<T> *current;
+};
+
+template <typename T> class SinglyLinkedListRandomAccessIterator {
+public:
+  using iterator_category = std::random_access_iterator_tag;
+  using value_type = T;
+  using difference_type = std::ptrdiff_t;
+  using pointer = T *;
+  using reference = T &;
+
+  explicit SinglyLinkedListRandomAccessIterator(Nodes::SingleLinkNode<T> *node)
+      : current(node) {}
+
+  reference operator*() const { return current->data; }
+
+  pointer operator->() { return &current->data; }
+
+  SinglyLinkedListRandomAccessIterator &operator++() {
+    current = current->getNext();
+    return *this;
+  }
+
+  SinglyLinkedListRandomAccessIterator operator++(int) {
+    SinglyLinkedListRandomAccessIterator iterator = *this;
+    ++(*this);
+    return iterator;
+  }
+
+  SinglyLinkedListRandomAccessIterator &operator--() {
+    // current =
+    auto temp = current;
+    while (temp->getNext() != current) {
+      temp = temp->getNext();
+    }
+    current = temp;
+    return *this;
+  }
+
+  SinglyLinkedListRandomAccessIterator operator--(int) {
+    SinglyLinkedListRandomAccessIterator iterator = *this;
+    --(*this);
+    return iterator;
+  }
+
+  bool operator==(const SinglyLinkedListRandomAccessIterator &iterator) const {
+    return current == iterator.current;
+  }
+
+  bool operator!=(const SinglyLinkedListRandomAccessIterator &iterator) const {
+    return !(*this == iterator);
+  }
+
+  bool operator<(const SinglyLinkedListRandomAccessIterator &iterator) const {
+    return current < iterator.current;
+  }
+
+  bool operator>(const SinglyLinkedListRandomAccessIterator &iterator) const {
+    return current > iterator.current;
+  }
+
+  SinglyLinkedListRandomAccessIterator &operator+=(difference_type n) {
+    for (difference_type i = 0; i < n; ++i) {
+      current = current->getNext();
+    }
+    return *this;
+  }
+
+  SinglyLinkedListRandomAccessIterator operator+(difference_type n) const {
+    SinglyLinkedListRandomAccessIterator iterator = *this;
+    iterator += n;
+    return iterator;
+  }
+
+  friend SinglyLinkedListRandomAccessIterator
+  operator+(difference_type n,
+            const SinglyLinkedListRandomAccessIterator &iterator) {
+    return iterator + n;
+  }
+
+  SinglyLinkedListRandomAccessIterator &operator-=(difference_type n) {
+    for (difference_type i = 0; i < n; ++i) {
+      auto temp = current;
+      while (temp->getNext() != current) {
+        temp = temp->getNext();
+      }
+      current = temp;
+    }
+    return *this;
+  }
+
+  SinglyLinkedListRandomAccessIterator operator-(difference_type n) const {
+    SinglyLinkedListRandomAccessIterator iterator = *this;
+    iterator -= n;
+    return iterator;
+  }
+
+  difference_type
+  operator-(const SinglyLinkedListRandomAccessIterator &iterator) const {
+    difference_type count = 0;
+    Nodes::SingleLinkNode<T> *temp = iterator.current;
+    while (temp != current) {
+      temp = temp->getNext();
+      count++;
+    }
+    return count;
+  }
+
+private:
+  Nodes::SingleLinkNode<T> *current;
+};
+
+} // namespace Lists
 #endif // LIST_H

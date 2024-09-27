@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <iostream>
-
+#include <algorithm>
 #include "../adt/include/adt.h"
 #include "../log/include/log.h"
 
@@ -15,10 +15,27 @@ int main(int argc, char *argv[]) {
   print_adt_message();
 
   print_log_message();
+  Lists::SinglyLinkedList<int> list;
+  list.add(3);
+  list.add(2);
+  list.add(1);
+
+  auto begin = list.rand_begin();
+  auto end = list.rand_begin();
+  std::sort(begin, end);
+
+std::cout << "Sorted list: " << std::endl;
+
+  for (auto it = list.begin(); it != list.end(); ++it) {
+    std::cout << *it << std::endl;
+  }
+
+  /*
   Lists::DoublyLinkedList<int> list;
   for (int i = 0; i < 100; ++i) {
     list.add(i);
   }
+  */
   /*
   for (int i = 50; i > 1; --i) {
     std::cout << "Index " << i << " Value " << i << std::endl;
