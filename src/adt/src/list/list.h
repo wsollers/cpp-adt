@@ -1,18 +1,28 @@
 #ifndef LIST_H
 #define LIST_H
 
+#warning "C Preprocessor got here!"
+#warning __cplusplus 
+
 #include "../node/node.h"
+#include "../common/common.h"
 #include <cstddef> // For std::ptrdiff_t
 #include <ios>
 #include <iostream>
 #include <iterator> // For std::forward_iterator_tag
 #include <ranges>
 #include <stdexcept> // std::out_of_range
+#include <optional>
+//#include <experimental/source_location>
+//#include <expected>
+
+
 
 struct oogabooga {
   int a;
   int b;
 };
+
 
 /*
  */
@@ -26,13 +36,13 @@ public:
   virtual bool add(T data) = 0;
   virtual bool add(size_t index, T data) = 0;
 
-  virtual T remove(size_t index) = 0;
+  virtual std::optional<T> remove(size_t index) = 0;
   virtual bool remove(T data) = 0;
 
   virtual bool contains(T data) const = 0;
 
-  virtual T get(size_t index) const = 0;
-  virtual T set(size_t index, T data) = 0;
+  virtual std::optional<T> get(size_t index) const = 0;
+  virtual std::optional<T> set(size_t index, T data) = 0;
 
   virtual size_t indexOf(T data) const = 0;
   virtual size_t lastIndexOf(T data) const = 0;
@@ -62,13 +72,13 @@ public:
   bool add(T data) override;
   bool add(size_t index, T data) override;
 
-  T remove(size_t index) override;
+  std::optional<T> remove(size_t index) override;
   bool remove(T data) override;
 
   bool contains(T data) const override;
 
-  T get(size_t index) const override;
-  T set(size_t index, T data) override;
+  std::optional<T> get(size_t index) const override;
+  std::optional<T> set(size_t index, T data) override;
 
   size_t indexOf(T data) const override;
   size_t lastIndexOf(T data) const override;
@@ -81,7 +91,7 @@ public:
   friend class SinglyLinkedListRandomAccessIterator<T>;
 
   SinglyLinkedListForwardIterator<T> begin() {
-    return SinglyLinkedListForwardIterator<T>{head};
+    return SinglyLinkedListForwardIterator<T>(head);
   }
 
   SinglyLinkedListForwardIterator<T> end() {
@@ -89,11 +99,24 @@ public:
   }
 
   SinglyLinkedListRandomAccessIterator<T> rand_begin() {
-    return SinglyLinkedListRandomAccessIterator<T>{head};
+    return SinglyLinkedListRandomAccessIterator<T>(head, head);
   }
 
   SinglyLinkedListRandomAccessIterator<T> rand_end() {
-    return SinglyLinkedListRandomAccessIterator<T>(nullptr);
+    return SinglyLinkedListRandomAccessIterator<T>(nullptr, head);
+  }
+
+  // XXX
+  void printList() {
+    Nodes::SingleLinkNode<T> *current = head;
+    std::cout << "List: this: " << std::hex << this << " Head: " << std::hex
+              << head << std::endl;
+    while (current != nullptr) {
+      std::cout << "Data: " << current->getData() << " current: " << std::hex
+                << current << " next " << std::hex << current->getNext()
+                << std::endl;
+      current = current->getNext();
+    }
   }
 };
 
@@ -141,7 +164,10 @@ template <typename T> bool SinglyLinkedList<T>::add(T data) {
 // Add an element at a specific index
 template <typename T> bool SinglyLinkedList<T>::add(size_t index, T data) {
   if (index > size) {
-    throw std::out_of_range("Index out of bounds"); // maybe not do this
+    //throw std::out_of_range("Index out of bounds"); // maybe not do this
+    //Error e = {"Index out of bounds", std::experimental::source_location::current()};
+    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    return false;
   }
 
   Nodes::SingleLinkNode<T> *newNode = new Nodes::SingleLinkNode<T>(data);
@@ -163,9 +189,10 @@ template <typename T> bool SinglyLinkedList<T>::add(size_t index, T data) {
 }
 
 // Remove an element at a specific index
-template <typename T> T SinglyLinkedList<T>::remove(size_t index) {
+template <typename T> std::optional<T> SinglyLinkedList<T>::remove(size_t index) {
   if (index >= size) {
-    throw std::out_of_range("Index out of bounds");
+    //throw std::out_of_range("Index out of bounds");
+    return std::nullopt;
   }
 
   std::cout << " destructor: " << std::endl;
@@ -234,9 +261,11 @@ template <typename T> bool SinglyLinkedList<T>::contains(T data) const {
 }
 
 // Get the element at a specific index
-template <typename T> T SinglyLinkedList<T>::get(size_t index) const {
+template <typename T> std::optional<T> SinglyLinkedList<T>::get(size_t index) const {
   if (index >= size) {
-    throw std::out_of_range("Index out of bounds");
+    //throw std::out_of_range("Index out of bounds");o
+    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    return std::nullopt;
   }
 
   Nodes::SingleLinkNode<T> *current = head;
@@ -248,9 +277,11 @@ template <typename T> T SinglyLinkedList<T>::get(size_t index) const {
 }
 
 // Set the element at a specific index and return the old value
-template <typename T> T SinglyLinkedList<T>::set(size_t index, T data) {
+template <typename T> std::optional<T> SinglyLinkedList<T>::set(size_t index, T data) {
   if (index >= size) {
-    throw std::out_of_range("Index out of bounds");
+    //throw std::out_of_range("Index out of bounds");
+    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    return std::nullopt;
   }
 
   Nodes::SingleLinkNode<T> *current = head;
@@ -918,105 +949,199 @@ public:
   using pointer = T *;
   using reference = T &;
 
-  explicit SinglyLinkedListRandomAccessIterator(Nodes::SingleLinkNode<T> *node)
-      : current(node) {}
+  explicit SinglyLinkedListRandomAccessIterator(Nodes::SingleLinkNode<T> *node,
+                                                Nodes::SingleLinkNode<T> *head)
+      : current(node), head(head) {
+    std::cout << "constructor: current " << std::hex << current << std::endl;
+    std::cout << "constructor: head " << std::hex << head << std::endl;
+  }
 
-  reference operator*() const { return current->data; }
+  // dereference operator at current position of iterator
+  reference operator*() const {
+    std::cout << "operator*: " << std::endl;
+    if (current == nullptr) {
+      std::cout << "operator*: current is nullptr" << std::endl;
+      throw std::out_of_range("Index out of bounds");
+    }
+    std::cout << "operator*: current: " << std::hex << current << std::endl;
+    std::cout << "operator*: current->data: " << current->data << std::endl;
+    return current->data;
+  }
 
-  pointer operator->() { return &current->data; }
+  // member access operator at current position of iterator
+  pointer operator->() {
+    std::cout << "operator->: " << std::endl;
+    if (current == nullptr) {
+      std::cout << "operator->: current is nullptr" << std::endl;
+      throw std::out_of_range("Index out of bounds");
+    }
+    std::cout << "operator->: current: " << std::hex << current << std::endl;
+    std::cout << "operator->: current->data: " << current->data << std::endl;
+    return &current->data;
+  }
 
+  // pre-increment operator, move iterator to next position
   SinglyLinkedListRandomAccessIterator &operator++() {
+    std::cout << "operator++: " << std::endl;
     current = current->getNext();
     return *this;
   }
 
+  // post-increment operator, store copy of iterator, move iterator to next
+  // position, return copy
   SinglyLinkedListRandomAccessIterator operator++(int) {
+    std::cout << "operator++(int): " << std::endl;
     SinglyLinkedListRandomAccessIterator iterator = *this;
     ++(*this);
     return iterator;
   }
 
+  // pre-decrement operator, move iterator to previous position
   SinglyLinkedListRandomAccessIterator &operator--() {
-    // current =
-    auto temp = current;
-    while (temp->getNext() != current) {
-      temp = temp->getNext();
+    std::cout << "operator--[top]: " << std::endl;
+    std::cout << "operator--[top] current: " << std::hex << current
+              << std::endl;
+    std::cout << "operator--[top] head: " << std::hex << current << std::endl;
+    Nodes::SingleLinkNode<T> *temp = head;
+    while (temp && temp != current) {
+      temp = temp->next;
+      std::cout << "operator--[loop] temp: " << std::hex << temp << std::endl;
     }
     current = temp;
     return *this;
   }
 
   SinglyLinkedListRandomAccessIterator operator--(int) {
+    std::cout << "operator--(int)[top]: " << std::endl;
     SinglyLinkedListRandomAccessIterator iterator = *this;
     --(*this);
+    std::cout << "operator--(int)[bottom]: " << std::endl;
     return iterator;
   }
 
   bool operator==(const SinglyLinkedListRandomAccessIterator &iterator) const {
-    return current == iterator.current;
+    std::cout << "operator==: " << std::endl;
+    std::cout << "operator==: current " << std::hex << current << std::endl;
+    std::cout << "operator==: iterator.current " << std::hex << iterator.current
+              << std::endl;
+    bool result = current == iterator.current;
+    std::cout << "operator==: result " << std::boolalpha << result << std::endl;
+    return result;
   }
 
   bool operator!=(const SinglyLinkedListRandomAccessIterator &iterator) const {
-    return !(*this == iterator);
+    std::cout << "operator!=: " << std::endl;
+    std::cout << "operator!=: current " << std::hex << current << std::endl;
+    std::cout << "operator!=: iterator.current " << std::hex << iterator.current
+              << std::endl;
+
+    bool result = current != iterator.current;
+
+    std::cout << "operator!=: result " << std::boolalpha << result << std::endl;
+    return result;
   }
 
   bool operator<(const SinglyLinkedListRandomAccessIterator &iterator) const {
+    std::cout << "operator<: " << std::endl;
     return current < iterator.current;
   }
 
   bool operator>(const SinglyLinkedListRandomAccessIterator &iterator) const {
+    std::cout << "operator>: " << std::endl;
     return current > iterator.current;
   }
 
   SinglyLinkedListRandomAccessIterator &operator+=(difference_type n) {
+    std::cout << "operator+=[top]: += n " << n << std::endl;
     for (difference_type i = 0; i < n; ++i) {
       current = current->getNext();
+      std::cout << "operator+=[loop]: " << std::endl;
     }
     return *this;
   }
 
-  SinglyLinkedListRandomAccessIterator operator+(difference_type n) const {
-    SinglyLinkedListRandomAccessIterator iterator = *this;
-    iterator += n;
-    return iterator;
+  SinglyLinkedListRandomAccessIterator operator+(difference_type n) {
+    std::cout << "operator+: + n " << n << std::endl;
+    for (difference_type i = 0; i < n; ++i) {
+      current = current->getNext();
+      std::cout << "operator+[loop]: " << std::hex << current<< std::endl;
+    }
+    return *this;
   }
 
   friend SinglyLinkedListRandomAccessIterator
   operator+(difference_type n,
             const SinglyLinkedListRandomAccessIterator &iterator) {
-    return iterator + n;
-  }
-
-  SinglyLinkedListRandomAccessIterator &operator-=(difference_type n) {
+    std::cout << "operator+ friend: + n " << n << std::endl;
     for (difference_type i = 0; i < n; ++i) {
-      auto temp = current;
-      while (temp->getNext() != current) {
-        temp = temp->getNext();
-      }
-      current = temp;
+      iterator.current = iterator.current->getNext();
+      std::cout << "operator+friend[loop]: " << std::hex << iterator.current<< std::endl;
     }
-    return *this;
-  }
-
-  SinglyLinkedListRandomAccessIterator operator-(difference_type n) const {
-    SinglyLinkedListRandomAccessIterator iterator = *this;
-    iterator -= n;
     return iterator;
   }
 
+  SinglyLinkedListRandomAccessIterator &operator-=(difference_type n) {
+    std::cout << "operator-=: Top " << std::endl;
+    std::cout << "operator-=: "
+              << " Difference " << n << std::endl;
+    for (difference_type i = 0; i < n; ++i) {
+      auto temp = head;
+      while (temp->getNext() != current) {
+        temp = temp->getNext();
+        std::cout << "operator-=: Loop " << std::endl;
+      }
+      current = temp;
+    }
+    std::cout << "operator-=: Bottom " << std::endl;
+    std::cout << "operator-=: "
+              << "Current: " << std::hex << current << std::endl;
+    return *this;
+  }
+
+  SinglyLinkedListRandomAccessIterator operator-(difference_type n) {
+    std::cout << "operator-1: " << std::endl;
+    std::cout << "operator-1: "
+              << " Difference " << n << std::endl;
+    for (difference_type i = 0; i < n; ++i) {
+      auto temp = head;
+      while (temp->getNext() != current) {
+        temp = temp->getNext();
+        std::cout << "operator-1: Loop " << std::endl;
+      }
+      current = temp;
+    }
+    std::cout << "operator-1: Bottom " << std::endl;
+    std::cout << "operator-1: "
+              << "Current: " << std::hex << current << std::endl;
+    std::cout << "operator-1: "
+              << "Head: " << std::hex << head << std::endl;
+    return *this;
+  }
+
   difference_type
-  operator-(const SinglyLinkedListRandomAccessIterator &iterator) const {
+  operator-(const SinglyLinkedListRandomAccessIterator &iterator) {
+    std::cout << "operator-(refT) Top: " << std::endl;
+    std::cout << "operator-(refT): current " << current << std::endl;
+    std::cout << "operator-(refT): iterator.current " << iterator.current
+              << std::endl;
     difference_type count = 0;
-    Nodes::SingleLinkNode<T> *temp = iterator.current;
-    while (temp != current) {
+    Nodes::SingleLinkNode<T> *temp = current;
+    while (temp != nullptr && temp != iterator.current) {
+      std::cout << "operator-(refT) Loop: " << std::endl;
+      std::cout << "operator-(refT) loop: current " << std::hex << current << std::endl;
+      std::cout << "operator-(refT) loop: iterator.current " << std::hex << iterator.current
+                << std::endl;
       temp = temp->getNext();
       count++;
     }
+    std::cout << "operator-(refT) bottom: " << std::endl;
+    std::cout << "operator-(refT) bottom: Count " << count << std::endl;
     return count;
   }
 
 private:
   Nodes::SingleLinkNode<T> *current;
+  Nodes::SingleLinkNode<T> *head;
 };
 
 } // namespace Lists

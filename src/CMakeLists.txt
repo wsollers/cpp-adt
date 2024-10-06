@@ -14,8 +14,14 @@ set(COVERAGE_EXCLUDES '${PROJECT_SOURCE_DIR}/lib/*')
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23 -stdlib=libc++")
+set(CMAKE_EXE_LINKER_FLAGS "-lc++abi")
+
 set(CMAKE_C_COMPILER "/usr/bin/clang")
 set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+
+#set(CMAKE_C_COMPILER "/usr/bin/gcc")
+#set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 
 #set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Wpedantic")
 

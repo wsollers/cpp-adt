@@ -10,7 +10,7 @@ public:
   void setData(T data);
   virtual ~Node() = default;
 
-public:
+ public:
   T data;
 };
 
@@ -31,9 +31,10 @@ public:
   SingleLinkNode<T> *getNext();
   void setNext(SingleLinkNode<T> *next);
   virtual ~SingleLinkNode();
-private:
+public:
   SingleLinkNode<T> *next;
 };
+
 
 template <typename T> SingleLinkNode<T>::SingleLinkNode(T data) : Node<T>(data), next(nullptr) {}
 

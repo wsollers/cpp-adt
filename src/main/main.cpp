@@ -26,9 +26,14 @@ int main(int argc, char *argv[]) {
     std::cout << *it << std::endl;
   }
 
+
+  list.printList();
+
   auto begin = list.rand_begin();
   auto end = list.rand_end();
   std::sort(begin, end);
+
+  list.printList();
 
   std::cout << "Sorted list: " << std::endl;
 
