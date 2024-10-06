@@ -364,13 +364,13 @@ public:
   bool add(T data) override;
   bool add(size_t index, T data) override;
 
-  T remove(size_t index) override;
+  std::optional<T> remove(size_t index) override;
   bool remove(T data) override;
 
   bool contains(T data) const override;
 
-  T get(size_t index) const override;
-  T set(size_t index, T data) override;
+  std::optional<T> get(size_t index) const override;
+  std::optional<T> set(size_t index, T data) override;
 
   size_t indexOf(T data) const override;
   size_t lastIndexOf(T data) const override;
@@ -449,9 +449,11 @@ template <typename T> bool DoublyLinkedList<T>::add(size_t index, T data) {
 }
 
 // Remove an element at a specific index
-template <typename T> T DoublyLinkedList<T>::remove(size_t index) {
+template <typename T> std::optional<T> DoublyLinkedList<T>::remove(size_t index) {
   if (index > size) {
-    throw std::out_of_range("Index out of bounds");
+    //throw std::out_of_range("Index out of bounds");
+    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    return std::nullopt;
   }
 
   Nodes::DoubleLinkNode<T> *nodeToRemove = head;
@@ -532,9 +534,11 @@ template <typename T> bool DoublyLinkedList<T>::contains(T data) const {
 }
 
 // Get the element at a specific index
-template <typename T> T DoublyLinkedList<T>::get(size_t index) const {
+template <typename T> std::optional<T> DoublyLinkedList<T>::get(size_t index) const {
   if (index >= size) {
-    throw std::out_of_range("Index out of bounds");
+    //throw std::out_of_range("Index out of bounds");
+    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    return std::nullopt;
   }
 
   Nodes::DoubleLinkNode<T> *current = head;
@@ -546,9 +550,11 @@ template <typename T> T DoublyLinkedList<T>::get(size_t index) const {
 }
 
 // Set the element at a specific index and return the old value
-template <typename T> T DoublyLinkedList<T>::set(size_t index, T data) {
+template <typename T> std::optional<T> DoublyLinkedList<T>::set(size_t index, T data) {
   if (index >= size) {
-    throw std::out_of_range("Index out of bounds");
+    //throw std::out_of_range("Index out of bounds");
+    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    return std::nullopt;
   }
 
   Nodes::DoubleLinkNode<T> *current = head;
@@ -630,13 +636,13 @@ public:
   bool add(T data) override;
   bool add(size_t index, T data) override;
 
-  T remove(size_t index) override;
+  std::optional<T> remove(size_t index) override;
   bool remove(T data) override;
 
   bool contains(T data) const override;
 
-  T get(size_t index) const override;
-  T set(size_t index, T data) override;
+  std::optional<T> get(size_t index) const override;
+  std::optional<T> set(size_t index, T data) override;
 
   size_t indexOf(T data) const override;
   size_t lastIndexOf(T data) const override;
@@ -714,9 +720,11 @@ template <typename T> bool CircularLinkedList<T>::add(size_t index, T data) {
 }
 
 // Remove an element at a specific index
-template <typename T> T CircularLinkedList<T>::remove(size_t index) {
+template <typename T> std::optional<T> CircularLinkedList<T>::remove(size_t index) {
   if (index > size) {
-    throw std::out_of_range("Index out of bounds");
+    //throw std::out_of_range("Index out of bounds");
+    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    return std::nullopt;
   }
 
   Nodes::SingleLinkNode<T> *nodeToRemove = head;
@@ -796,9 +804,11 @@ template <typename T> bool CircularLinkedList<T>::contains(T data) const {
 }
 
 // Get the element at a specific index
-template <typename T> T CircularLinkedList<T>::get(size_t index) const {
+template <typename T> std::optional<T> CircularLinkedList<T>::get(size_t index) const {
   if (index >= size) {
-    throw std::out_of_range("Index out of bounds");
+    //throw std::out_of_range("Index out of bounds");
+    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    return std::nullopt;
   }
 
   Nodes::SingleLinkNode<T> *current = head;
@@ -810,9 +820,11 @@ template <typename T> T CircularLinkedList<T>::get(size_t index) const {
 }
 
 // Set the element at a specific index and return the old value
-template <typename T> T CircularLinkedList<T>::set(size_t index, T data) {
+template <typename T> std::optional<T> CircularLinkedList<T>::set(size_t index, T data) {
   if (index >= size) {
-    throw std::out_of_range("Index out of bounds");
+    //throw std::out_of_range("Index out of bounds");
+    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    return std::nullopt;
   }
 
   Nodes::SingleLinkNode<T> *current = head;
