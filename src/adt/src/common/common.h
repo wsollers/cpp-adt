@@ -11,4 +11,9 @@ struct Error {
   std::size_t line;
   //std::experimental::source_location src;
 };
-#endif
+
+void report_error(const Error& error);
+
+void test_common();
+
+#endif // COMMON_H

@@ -14,6 +14,11 @@ add_library(adt SHARED
   src/tree/tree.cpp
   src/node/node.cpp
   src/common/common.cpp
+  src/graph/graph.cpp
+  src/map/map.cpp
+  src/set/set.cpp
+  src/queue/queue.cpp
+  src/stack/stack.cpp
 )
 
 add_library(adt-static 
@@ -21,6 +26,11 @@ add_library(adt-static
   src/tree/tree.cpp
   src/node/node.cpp
   src/common/common.cpp
+  src/graph/graph.cpp
+  src/map/map.cpp
+  src/set/set.cpp
+  src/queue/queue.cpp
+  src/stack/stack.cpp
 )
 #target_include_directories(lib2 PUBLIC include)
 
@@ -46,7 +56,7 @@ add_executable(adt_sll_test_static test/single_linked_list_test.cpp
 )
 target_include_directories(adt_sll_test_static PRIVATE src/list src/node src/common)
 #target_link_libraries(adt_test_static PRIVATE  adt-static gtest gtest_main)
-target_link_libraries(adt_sll_test_static PRIVATE  gtest gtest_main)
+target_link_libraries(adt_sll_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
 add_test(NAME adt_sll_test_static COMMAND bin/adt_test_static)
 
 
@@ -57,7 +67,7 @@ add_executable(adt_dll_test_static test/double_linked_list_test.cpp
 )
 target_include_directories(adt_dll_test_static PRIVATE src/list src/node src/common)
 #target_link_libraries(adt_dll_test_static PRIVATE  adt-static gtest gtest_main)
-target_link_libraries(adt_dll_test_static PRIVATE  gtest gtest_main)
+target_link_libraries(adt_dll_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
 add_test(NAME adt_dll_test_static COMMAND bin/adt_test_static)
 
 #
@@ -67,7 +77,7 @@ add_executable(adt_cll_test_static test/double_linked_list_test.cpp
 )
 target_include_directories(adt_cll_test_static PRIVATE src/list src/node src/common)
 #target_link_libraries(adt_cll_test_static PRIVATE  adt-static gtest gtest_main)
-target_link_libraries(adt_cll_test_static PRIVATE  gtest gtest_main)
+target_link_libraries(adt_cll_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
 add_test(NAME adt_cll_test_static COMMAND bin/adt_test_static)
 
 #
@@ -97,21 +107,21 @@ add_test(NAME fuzz_tester_run COMMAND fuzz_tester -max_total_time=${FUZZ_RUNTIME
 add_executable(sll_benchmark test/single_linked_list_benchmark.cpp)
 set_property(TARGET ${sll_benchmark} PROPERTY CXX_EXTENSIONS ON)
 target_include_directories(sll_benchmark PRIVATE src/list src/node src/common)
-target_link_libraries(sll_benchmark /usr/local/lib/libbenchmark.a /usr/local/lib/libbenchmark_main.a)
+target_link_libraries(sll_benchmark PRIVATE /usr/local/lib/libbenchmark.a /usr/local/lib/libbenchmark_main.a PUBLIC adt-static)
 add_test(NAME sll_benchmark_run COMMAND sll_benchmark)
 
 
 add_executable(dll_benchmark test/double_linked_list_benchmark.cpp)
 set_property(TARGET ${dll_benchmark} PROPERTY CXX_EXTENSIONS ON)
 target_include_directories(dll_benchmark PRIVATE src/list src/node src/common)
-target_link_libraries(dll_benchmark /usr/local/lib/libbenchmark.a /usr/local/lib/libbenchmark_main.a)
+target_link_libraries(dll_benchmark PRIVATE /usr/local/lib/libbenchmark.a /usr/local/lib/libbenchmark_main.a PUBLIC adt-static)
 add_test(NAME dll_benchmark_run COMMAND dll_benchmark)
 
 
 add_executable(cll_benchmark test/circular_linked_list_benchmark.cpp)
 set_property(TARGET ${cll_benchmark} PROPERTY CXX_EXTENSIONS ON)
 target_include_directories(cll_benchmark PRIVATE src/list src/node src/common)
-target_link_libraries(cll_benchmark /usr/local/lib/libbenchmark.a /usr/local/lib/libbenchmark_main.a)
+target_link_libraries(cll_benchmark PRIVATE /usr/local/lib/libbenchmark.a /usr/local/lib/libbenchmark_main.a PUBLIC adt-static)
 add_test(NAME cll_benchmark_run COMMAND cll_benchmark)
 
 

@@ -1,9 +1,6 @@
 #ifndef LIST_H
 #define LIST_H
 
-#warning "C Preprocessor got here!"
-#warning __cplusplus 
-
 #include "../node/node.h"
 #include "../common/common.h"
 #include <cstddef> // For std::ptrdiff_t
@@ -121,6 +118,7 @@ public:
 };
 
 template <typename T> ListAdt<T> *createSingleLinkList() {
+  test_common();
   return new SinglyLinkedList<T>();
 }
 
@@ -167,6 +165,7 @@ template <typename T> bool SinglyLinkedList<T>::add(size_t index, T data) {
     //throw std::out_of_range("Index out of bounds"); // maybe not do this
     //Error e = {"Index out of bounds", std::experimental::source_location::current()};
     Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    report_error(e);
     return false;
   }
 
@@ -265,6 +264,7 @@ template <typename T> std::optional<T> SinglyLinkedList<T>::get(size_t index) co
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");o
     Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    report_error(e);
     return std::nullopt;
   }
 
@@ -281,6 +281,7 @@ template <typename T> std::optional<T> SinglyLinkedList<T>::set(size_t index, T 
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");
     Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    report_error(e);
     return std::nullopt;
   }
 
@@ -453,6 +454,7 @@ template <typename T> std::optional<T> DoublyLinkedList<T>::remove(size_t index)
   if (index > size) {
     //throw std::out_of_range("Index out of bounds");
     Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    report_error(e);
     return std::nullopt;
   }
 
@@ -538,6 +540,7 @@ template <typename T> std::optional<T> DoublyLinkedList<T>::get(size_t index) co
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");
     Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    report_error(e);
     return std::nullopt;
   }
 
@@ -554,6 +557,7 @@ template <typename T> std::optional<T> DoublyLinkedList<T>::set(size_t index, T 
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");
     Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    report_error(e);
     return std::nullopt;
   }
 
@@ -724,6 +728,7 @@ template <typename T> std::optional<T> CircularLinkedList<T>::remove(size_t inde
   if (index > size) {
     //throw std::out_of_range("Index out of bounds");
     Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    report_error(e);
     return std::nullopt;
   }
 
@@ -808,6 +813,7 @@ template <typename T> std::optional<T> CircularLinkedList<T>::get(size_t index) 
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");
     Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    report_error(e);
     return std::nullopt;
   }
 
@@ -824,6 +830,7 @@ template <typename T> std::optional<T> CircularLinkedList<T>::set(size_t index, 
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");
     Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    report_error(e);
     return std::nullopt;
   }
 

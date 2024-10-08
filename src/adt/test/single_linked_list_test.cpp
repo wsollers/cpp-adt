@@ -17,6 +17,9 @@ TEST_F(SkipFixture, SkipAllTests) { FAIL() << "This test should not be run"; }
 
 // Test the constructor and isEmpty() method
 TEST(SinglyLinkedListTest, ConstructAndIsEmpty) {
+  Error error = {"Error message", "file", "function", 1};
+  report_error(error);
+  test_common();
   Lists::SinglyLinkedList<int> list;
   EXPECT_TRUE(list.isEmpty());
   EXPECT_EQ(list.getSize(), 0);

@@ -5,6 +5,7 @@
 #include <string>
 
 #include "../src/list/list.h"
+#include "../src/common/common.h"
 
 extern "C" {
   void print_adt_message();
