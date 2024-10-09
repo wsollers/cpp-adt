@@ -17,7 +17,7 @@ jobs:
       run: bash buildIt.sh
       #run: ./buildIt.sh
     - name: make
-      run: make all
+      run: make clean all
     - name: make check
       run: make check
     - name: make distcheck
