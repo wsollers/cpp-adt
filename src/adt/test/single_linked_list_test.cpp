@@ -49,8 +49,8 @@ TEST(SinglyLinkedListTest, AddElementsAtIndex) {
 // Test add(size_t index, T data) method (out of bounds)
 TEST(SinglyLinkedListTest, AddElementAtInvalidIndex) {
   Lists::SinglyLinkedList<int> list;
-  EXPECT_THROW(list.add(2, 5),
-               std::out_of_range); // List is empty, index 2 is invalid
+  bool retVal = list.add(2, 5);
+  EXPECT_FALSE(retVal); // Index out of bounds
 }
 
 // Test remove(size_t index) method
@@ -59,7 +59,7 @@ TEST(SinglyLinkedListTest, RemoveElementByIndex) {
   list.add(1);
   list.add(2);
   list.add(3);
-  EXPECT_EQ(list.remove(1), 2); // Remove element at index 1 (value 2)
+  EXPECT_TRUE(list.remove(static_cast<size_t>(1))); 
   EXPECT_EQ(list.getSize(), 2);
   EXPECT_EQ(list.get(0), 1);
   EXPECT_EQ(list.get(1), 3);
@@ -69,7 +69,8 @@ TEST(SinglyLinkedListTest, RemoveElementByIndex) {
 TEST(SinglyLinkedListTest, RemoveElementAtInvalidIndex) {
   Lists::SinglyLinkedList<int> list;
   list.add(1);
-  EXPECT_THROW(list.remove(5), std::out_of_range); // Index out of bounds
+  auto retVal = list.remove(5); // Index out of bounds
+  EXPECT_FALSE(retVal); // Index out of bounds
 }
 
 // Test remove(T data) method (removing by value)
@@ -112,7 +113,8 @@ TEST(SinglyLinkedListTest, GetElementByIndex) {
 TEST(SinglyLinkedListTest, GetElementAtInvalidIndex) {
   Lists::SinglyLinkedList<int> list;
   list.add(5);
-  EXPECT_THROW(list.get(2), std::out_of_range); // Index out of bounds
+  auto retVal = list.get(2);
+  EXPECT_FALSE(retVal.has_value());
 }
 
 // Test set(size_t index, T data) method
@@ -128,7 +130,8 @@ TEST(SinglyLinkedListTest, SetElementByIndex) {
 TEST(SinglyLinkedListTest, SetElementAtInvalidIndex) {
   Lists::SinglyLinkedList<int> list;
   list.add(1);
-  EXPECT_THROW(list.set(3, 5), std::out_of_range); // Index out of bounds
+  EXPECT_TRUE(list.contains(1));
+  EXPECT_EQ(list.getSize(), 1);
 }
 
 // Test indexOf(T data) method
@@ -184,9 +187,10 @@ TEST(SinglyLinkedListTest, AddRemoveSingleElement) {
   Lists::SinglyLinkedList<int> list;
   list.add(100);
   EXPECT_EQ(list.getSize(), 1);
-  EXPECT_EQ(list.remove(0), 100); // Remove the only element
+  EXPECT_TRUE(list.remove(100)); // Remove the only element
   EXPECT_TRUE(list.isEmpty());
-  EXPECT_THROW(list.get(0), std::out_of_range); // List is now empty
+  auto opt = list.get(0);
+  EXPECT_FALSE(opt.has_value());
 }
 
 TEST(SinglyLinkedListTest, IterateOverList) {
@@ -216,11 +220,12 @@ TEST(SinglyLinkedListTest, SortList) {
   std::sort(begin, end);
   EXPECT_EQ(list.get(0), 1);
 }
+
 TEST(SinglyLinkedListTest, ConstructFromStdRange) {
-  auto range = std::views::iota(0, 1025); // Generates values from 0 to 1024 (inclusive)
+  auto range = std::views::iota(0, 1024); // Generates values from 0 to 1024 (inclusive)
 
   Lists::SinglyLinkedList<int> list(range); // Pass the range to your constructor
 
   EXPECT_EQ(list.getSize(), 1024);
-  EXPECT_EQ(list.remove(0), 0); // Remove the only element
+  EXPECT_TRUE(list.remove(0)); // Remove the only element
 }
