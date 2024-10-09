@@ -81,6 +81,18 @@ target_link_libraries(adt_cll_test_static PRIVATE  gtest gtest_main PUBLIC adt-s
 add_test(NAME adt_cll_test_static COMMAND bin/adt_test_static)
 
 #
+# Testing stack as static library
+#
+add_executable(adt_stack_test_static test/stack_tests.cpp)
+target_include_directories(adt_stack_test_static PRIVATE src/stack src/node src/common)
+target_link_libraries(adt_stack_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
+add_test(NAME adt_stack_test_static COMMAND bin/adt_test_static)
+
+
+
+
+
+#
 # Fuzz Testing 
 #
 add_executable(fuzz_tester test/fuzz_test.cpp)

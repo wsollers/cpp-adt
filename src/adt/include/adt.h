@@ -4,8 +4,9 @@
 #include <cstdlib>
 #include <string>
 
-#include "../src/list/list.h"
 #include "../src/common/common.h"
+#include "../src/list/list.h"
+#include "../src/stack/stack.h"
 
 extern "C" {
   void print_adt_message();
