@@ -14,8 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: configure
-      #run: ./configure
-      run: ./buildIt.sh
+      run: ./configure
+      #run: ./buildIt.sh
     - name: make
       run: make
     - name: make check
