@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
   print_adt_message();
 
   print_log_message();
+  /*
   Lists::SinglyLinkedList<int> list;
   list.add(3);
   list.add(2);
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]) {
   for (auto it = list.begin(); it != list.end(); ++it) {
     std::cout << *it << std::endl;
   }
-
+*/
   /*
   Lists::DoublyLinkedList<int> list;
   for (int i = 0; i < 100; ++i) {
@@ -62,13 +63,21 @@ int main(int argc, char *argv[]) {
     std::cout << "Removing element: " << i << std::endl;
     list.remove(i/2); // Remove elements from the end
   }
-  */
   std::cout << "List size: " << list.getSize() << std::endl;
+  */
   /*
     Lists::SinglyLinkedList<int> list;
     list.add(1);
     list.remove(1);
     std::cout << "List size: " << list.getSize() << std::endl;
   */
+
+  Error e = {"Test error", "main.cpp", "main", 20}; 
+  report_error(e);
   return EXIT_SUCCESS;
 }
+
+
+
+
+
