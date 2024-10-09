@@ -26,7 +26,7 @@ else
     echo "Skipping git clean..."
 fi
 
-
+mkdir build
 cd build || exit
 
 export CC=/usr/bin/clang
