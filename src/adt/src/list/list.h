@@ -25,7 +25,9 @@ struct oogabooga {
  */
 namespace Lists {
 
-template <typename T> class ListAdt {
+template <typename T>
+requires Common::stl_container_storable<T>
+class ListAdt {
 public:
   ListAdt() {}
   virtual ~ListAdt() {}

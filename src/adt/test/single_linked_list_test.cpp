@@ -1,6 +1,8 @@
 #include <ranges>
 
 #include "../src/list/list.h"
+#include "../src/common/common.h"
+
 
 #include <gtest/gtest.h>
 
@@ -228,4 +230,15 @@ TEST(SinglyLinkedListTest, ConstructFromStdRange) {
 
   EXPECT_EQ(list.getSize(), 1024);
   EXPECT_TRUE(list.remove(0)); // Remove the only element
+}
+
+TEST(SinglyLinkedListTest, Destructor) {
+  struct non_copyable {
+    non_copyable() = default;
+    ~non_copyable() = delete;
+    non_copyable(const non_copyable &) = delete;
+    non_copyable(non_copyable &&) = default;
+  };
+
+  Lists::SinglyLinkedList<non_copyable> list;
 }
