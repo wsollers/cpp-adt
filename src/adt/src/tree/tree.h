@@ -3,35 +3,42 @@
 
 #include "../node/node.h"
 
+#include <cstdlib>
+
 namespace Trees {
 
-template <typename T> class BinaryTree {
+template <typename T> class BinarySearchTree {
 public:
-  explicit BinaryTree();
-  explicit BinaryTree(T data);
-  virtual ~BinaryTree();
+  explicit BinarySearchTree();
+  explicit BinarySearchTree(T data);
+  virtual ~BinarySearchTree();
 
   void insert(T data);
   void remove(T data);
   bool isEmpty();
-  bool contains(const T& data);
+  bool contains(const T &data);
 
   bool isRoot(Nodes::BinaryTreeNode<T> *node);
   bool isLeaf(Nodes::BinaryTreeNode<T> *node);
   Nodes::BinaryTreeNode<T> *search(T data);
 
+  size_t getSize();
+
 private:
   Nodes::BinaryTreeNode<T> *root;
+  size_t size;
 };
 
-template <typename T> BinaryTree<T>::BinaryTree() : root(nullptr) {}
+template <typename T>
+BinarySearchTree<T>::BinarySearchTree() : root(nullptr), size(0) {}
 
-template <typename T> BinaryTree<T>::BinaryTree(T data) : root(new Nodes::BinaryTreeNode<T>(data)) {}
+template <typename T>
+BinarySearchTree<T>::BinarySearchTree(T data)
+    : root(new Nodes::BinaryTreeNode<T>(data)), size(0) {}
 
-template <typename T> BinaryTree<T>::~BinaryTree() {
-}
+template <typename T> BinarySearchTree<T>::~BinarySearchTree() {}
 
-template <typename T> void BinaryTree<T>::insert(T data) {
+template <typename T> void BinarySearchTree<T>::insert(T data) {
   if (root == nullptr) {
     root = new Nodes::BinaryTreeNode<T>(data);
   } else {
@@ -51,23 +58,27 @@ template <typename T> void BinaryTree<T>::insert(T data) {
       parent->right = new Nodes::BinaryTreeNode<T>(data);
     }
   }
+  size++;
 }
 
-template <typename T> void BinaryTree<T>::remove(T data) {
-}
+template <typename T> void BinarySearchTree<T>::remove(T data) { size--; }
 
-template <typename T> bool BinaryTree<T>::isEmpty() {
+template <typename T> bool BinarySearchTree<T>::isEmpty() {
   return root == nullptr;
 }
 
-template <typename T> bool BinaryTree<T>::isRoot(Nodes::BinaryTreeNode<T> *node) {
+template <typename T>
+bool BinarySearchTree<T>::isRoot(Nodes::BinaryTreeNode<T> *node) {
   return root == node;
 }
 
-template <typename T> bool BinaryTree<T>::isLeaf(Nodes::BinaryTreeNode<T> *node) {
+template <typename T>
+bool BinarySearchTree<T>::isLeaf(Nodes::BinaryTreeNode<T> *node) {
   return node->left == nullptr && node->right == nullptr;
 }
 
+template <typename T> size_t BinarySearchTree<T>::getSize() { return size; }
+
 } // namespace Trees
 
-#endif // TREE_H 
+#endif // TREE_H
