@@ -1,9 +1,13 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include "../common/common.h"
+
 namespace Nodes {
 
-template <typename T> class Node {
+template <typename T> 
+requires Common::stl_container_storable<T>
+class Node {
 public:
   explicit Node(T data);
   T getData();
@@ -15,13 +19,19 @@ public:
 };
 
 
-template <typename T> Node<T>::Node(T data) : data(data) {}
+template <typename T>
+requires Common::stl_container_storable<T> 
+Node<T>::Node(T data) : data(data) {}
 
-template <typename T> T Node<T>::getData() {
+template <typename T> 
+requires Common::stl_container_storable<T>
+T Node<T>::getData() {
   return data;
 }
 
-template <typename T> void Node<T>::setData(T data) {
+template <typename T> 
+requires Common::stl_container_storable<T>
+void Node<T>::setData(T data) {
   this->data = data;
 }
 

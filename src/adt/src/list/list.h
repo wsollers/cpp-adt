@@ -26,14 +26,13 @@ struct oogabooga {
 namespace Lists {
 
 template <typename T>
-requires Common::stl_container_storable<T>
 class ListAdt {
 public:
   ListAdt() {}
   virtual ~ListAdt() {}
 
   virtual bool add(T data) = 0;
-  virtual bool add(size_t index, T data) = 0;
+  virtual std::optional<bool> add(size_t index, T data) = 0;
 
   virtual std::optional<T> remove(size_t index) = 0;
   virtual bool remove(T data) = 0;
@@ -69,7 +68,7 @@ public:
   ~SinglyLinkedList();
 
   bool add(T data) override;
-  bool add(size_t index, T data) override;
+  std::optional<bool> add(size_t index, T data) override;
 
   std::optional<T> remove(size_t index) override;
   bool remove(T data) override;
@@ -162,13 +161,13 @@ template <typename T> bool SinglyLinkedList<T>::add(T data) {
 }
 
 // Add an element at a specific index
-template <typename T> bool SinglyLinkedList<T>::add(size_t index, T data) {
+template <typename T> std::optional<bool> SinglyLinkedList<T>::add(size_t index, T data) {
   if (index > size) {
     //throw std::out_of_range("Index out of bounds"); // maybe not do this
     //Error e = {"Index out of bounds", std::experimental::source_location::current()};
-    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
-    report_error(e);
-    return false;
+    Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    Common::report_error(e);
+    return std::nullopt;
   }
 
   Nodes::SingleLinkNode<T> *newNode = new Nodes::SingleLinkNode<T>(data);
@@ -265,8 +264,8 @@ template <typename T> bool SinglyLinkedList<T>::contains(T data) const {
 template <typename T> std::optional<T> SinglyLinkedList<T>::get(size_t index) const {
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");o
-    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
-    report_error(e);
+    Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    Common::report_error(e);
     return std::nullopt;
   }
 
@@ -282,8 +281,8 @@ template <typename T> std::optional<T> SinglyLinkedList<T>::get(size_t index) co
 template <typename T> std::optional<T> SinglyLinkedList<T>::set(size_t index, T data) {
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");
-    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
-    report_error(e);
+    Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    Common::report_error(e);
     return std::nullopt;
   }
 
@@ -365,7 +364,7 @@ public:
   ~DoublyLinkedList();
 
   bool add(T data) override;
-  bool add(size_t index, T data) override;
+  std::optional<bool> add(size_t index, T data) override;
 
   std::optional<T> remove(size_t index) override;
   bool remove(T data) override;
@@ -415,9 +414,11 @@ template <typename T> bool DoublyLinkedList<T>::add(T data) {
 }
 
 // Add an element at a specific index
-template <typename T> bool DoublyLinkedList<T>::add(size_t index, T data) {
+template <typename T> std::optional<bool> DoublyLinkedList<T>::add(size_t index, T data) {
   if (index > size) {
-    throw std::out_of_range("Index out of bounds");
+    Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    Common::report_error(e);
+    return std::nullopt;
   }
 
   Nodes::DoubleLinkNode<T> *newNode = new Nodes::DoubleLinkNode<T>(data);
@@ -455,8 +456,8 @@ template <typename T> bool DoublyLinkedList<T>::add(size_t index, T data) {
 template <typename T> std::optional<T> DoublyLinkedList<T>::remove(size_t index) {
   if (index > size) {
     //throw std::out_of_range("Index out of bounds");
-    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
-    report_error(e);
+    Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    Common::report_error(e);
     return std::nullopt;
   }
 
@@ -541,8 +542,8 @@ template <typename T> bool DoublyLinkedList<T>::contains(T data) const {
 template <typename T> std::optional<T> DoublyLinkedList<T>::get(size_t index) const {
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");
-    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
-    report_error(e);
+    Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    Common::report_error(e);
     return std::nullopt;
   }
 
@@ -558,8 +559,8 @@ template <typename T> std::optional<T> DoublyLinkedList<T>::get(size_t index) co
 template <typename T> std::optional<T> DoublyLinkedList<T>::set(size_t index, T data) {
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");
-    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
-    report_error(e);
+    Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    Common::report_error(e);
     return std::nullopt;
   }
 
@@ -640,7 +641,7 @@ public:
   virtual ~CircularLinkedList();
 
   bool add(T data) override;
-  bool add(size_t index, T data) override;
+  std::optional<bool> add(size_t index, T data) override;
 
   std::optional<T> remove(size_t index) override;
   bool remove(T data) override;
@@ -692,9 +693,11 @@ template <typename T> bool CircularLinkedList<T>::add(T data) {
 }
 
 // Add an element at a specific index
-template <typename T> bool CircularLinkedList<T>::add(size_t index, T data) {
+template <typename T> std::optional<bool> CircularLinkedList<T>::add(size_t index, T data) {
   if (index > size) {
-    throw std::out_of_range("Index out of bounds");
+    Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    Common::report_error(e);
+    return std::nullopt;
   }
 
   Nodes::SingleLinkNode<T> *newNode = new Nodes::SingleLinkNode<T>(data);
@@ -729,8 +732,8 @@ template <typename T> bool CircularLinkedList<T>::add(size_t index, T data) {
 template <typename T> std::optional<T> CircularLinkedList<T>::remove(size_t index) {
   if (index > size) {
     //throw std::out_of_range("Index out of bounds");
-    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
-    report_error(e);
+    Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    Common::report_error(e);
     return std::nullopt;
   }
 
@@ -814,8 +817,8 @@ template <typename T> bool CircularLinkedList<T>::contains(T data) const {
 template <typename T> std::optional<T> CircularLinkedList<T>::get(size_t index) const {
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");
-    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
-    report_error(e);
+    Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    Common::report_error(e);
     return std::nullopt;
   }
 
@@ -831,8 +834,8 @@ template <typename T> std::optional<T> CircularLinkedList<T>::get(size_t index) 
 template <typename T> std::optional<T> CircularLinkedList<T>::set(size_t index, T data) {
   if (index >= size) {
     //throw std::out_of_range("Index out of bounds");
-    Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
-    report_error(e);
+    Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
+    Common::report_error(e);
     return std::nullopt;
   }
 

@@ -5,6 +5,10 @@
 #include <concepts>
 #include <string_view>
 
+void test_common();
+
+namespace Common {
+
 struct Error {
   std::string_view message;
   std::string_view file;
@@ -14,10 +18,6 @@ struct Error {
 };
 
 void report_error(const Error &error);
-
-void test_common();
-
-namespace Common {
 
 //Concept that specifies the requirements for an item to be storable in a STL container
 template <typename T>

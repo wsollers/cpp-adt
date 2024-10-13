@@ -72,8 +72,8 @@ int main(int argc, char *argv[]) {
     std::cout << "List size: " << list.getSize() << std::endl;
   */
 
-  Error e = {"Test error", "main.cpp", "main", 20}; 
-  report_error(e);
+  Common::Error e = {"Test error", "main.cpp", "main", 20}; 
+  Common::report_error(e);
   return EXIT_SUCCESS;
 }
 
