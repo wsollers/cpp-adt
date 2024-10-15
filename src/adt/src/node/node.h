@@ -113,18 +113,20 @@ template <typename T> DoubleLinkNode<T>::~DoubleLinkNode() {
 template <typename T> class BinaryTreeNode : public Node<T> {
 public:
   explicit BinaryTreeNode(T data);
+  virtual ~BinaryTreeNode() = default;
+
   BinaryTreeNode<T> *getLeft();
   BinaryTreeNode<T> *getRight();
   void setLeft(BinaryTreeNode<T> *left);
   void setRight(BinaryTreeNode<T> *right);
-  virtual ~BinaryTreeNode();
-private:
+
   BinaryTreeNode<T> *left;
   BinaryTreeNode<T> *right;
 };
 
 
 template <typename T> BinaryTreeNode<T>::BinaryTreeNode(T data) : Node<T>(data), left(nullptr), right(nullptr) {}
+
 
 template <typename T> BinaryTreeNode<T> *BinaryTreeNode<T>::getLeft() {
   return left;
@@ -146,11 +148,6 @@ template <typename T> void BinaryTreeNode<T>::setLeft(BinaryTreeNode<T> *left) {
     delete this->left;
   }
   this->left = left;
-}
-
-template <typename T> BinaryTreeNode<T>::~BinaryTreeNode() {
-  //delete next;
-  //delete prev;
 }
 
 }

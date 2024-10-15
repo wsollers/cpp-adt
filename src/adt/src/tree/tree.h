@@ -79,6 +79,25 @@ bool BinarySearchTree<T>::isLeaf(Nodes::BinaryTreeNode<T> *node) {
 
 template <typename T> size_t BinarySearchTree<T>::getSize() { return size; }
 
+template <typename T> bool BinarySearchTree<T>::contains(const T &data) {
+  return search(data) != nullptr;
+}
+
+template <typename T> Nodes::BinaryTreeNode<T> *BinarySearchTree<T>::search(T data) {
+  Nodes::BinaryTreeNode<T> *current = root;
+  while (current != nullptr) {
+    if (data == current->data) {
+      return current;
+    } else if (data < current->data) {
+      current = current->left;
+    } else {
+      current = current->right;
+    }
+  }
+  return nullptr;
+}
+
+
 } // namespace Trees
 
 #endif // TREE_H
