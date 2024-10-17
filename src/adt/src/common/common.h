@@ -25,7 +25,6 @@ concept stl_container_storable =
     std::destructible<T> && std::default_initializable<T> &&
     std::move_constructible<T> && std::copy_constructible<T>;
 
-}
 
 // constructible_from
 // default_initializable
@@ -40,4 +39,21 @@ Optionally CopyConstructible and CopyAssignable depending on how you use the
 container EqualityComparable or LessThanComparable
 */
 
+template <typename T> class Comparator {
+public:
+  bool operator()(const T &lhs, const T &rhs) {
+    return lhs < rhs;
+  }
+  int compare(const T &lhs, const T &rhs) {
+    if ( lhs < rhs) {
+      return -1;
+    } else if ( rhs < lhs ) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+};
+
+}
 #endif // COMMON_H

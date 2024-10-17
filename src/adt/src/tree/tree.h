@@ -1,15 +1,26 @@
 #ifndef TREE_H
 #define TREE_H
 
-#include "../node/node.h"
-
 #include <cstdlib>
+#include <string>
+#include <vector>
+#include <functional>
+
+#include "../node/node.h"
+#include "../common/common.h"
+
 
 namespace Trees {
 
-template <typename T> class BinarySearchTree {
+std::vector<int> xxx; 
+
+template <typename T, typename Custom_Comparator_Type = Common::Comparator<T>> class BinarySearchTree {
 public:
+
+  using comparator_type = Custom_Comparator_Type;
+//const Allocator& alloc = Allocator()
   explicit BinarySearchTree();
+  explicit BinarySearchTree(comparator_type comp); 
   explicit BinarySearchTree(T data);
   virtual ~BinarySearchTree();
 
@@ -18,27 +29,33 @@ public:
   bool isEmpty();
   bool contains(const T &data);
 
-  bool isRoot(Nodes::BinaryTreeNode<T> *node);
-  bool isLeaf(Nodes::BinaryTreeNode<T> *node);
-  Nodes::BinaryTreeNode<T> *search(T data);
 
   size_t getSize();
 
 private:
+  bool isRoot(Nodes::BinaryTreeNode<T> *node);
+  bool isLeaf(Nodes::BinaryTreeNode<T> *node);
+
+  Nodes::BinaryTreeNode<T> *search(T data);
+
   Nodes::BinaryTreeNode<T> *root;
   size_t size;
+  comparator_type comparator;
 };
 
-template <typename T>
-BinarySearchTree<T>::BinarySearchTree() : root(nullptr), size(0) {}
+template <typename T,typename Custom_Comparator_Type>
+BinarySearchTree<T,Custom_Comparator_Type>::BinarySearchTree() : root(nullptr), size(0) {}
 
-template <typename T>
-BinarySearchTree<T>::BinarySearchTree(T data)
+
+template <typename T,typename Custom_Comparator_Type>
+BinarySearchTree<T,Custom_Comparator_Type>::BinarySearchTree(T data)
     : root(new Nodes::BinaryTreeNode<T>(data)), size(0) {}
 
-template <typename T> BinarySearchTree<T>::~BinarySearchTree() {}
+template <typename T,typename Custom_Comparator_Type>
+BinarySearchTree<T,Custom_Comparator_Type>::~BinarySearchTree() {}
 
-template <typename T> void BinarySearchTree<T>::insert(T data) {
+template <typename T,typename Custom_Comparator_Type>
+void BinarySearchTree<T, Custom_Comparator_Type>::insert(T data) {
   if (root == nullptr) {
     root = new Nodes::BinaryTreeNode<T>(data);
   } else {
@@ -46,7 +63,7 @@ template <typename T> void BinarySearchTree<T>::insert(T data) {
     Nodes::BinaryTreeNode<T> *parent = nullptr;
     while (current != nullptr) {
       parent = current;
-      if (data < current->data) {
+      if ( comparator(data, current->data) ) {
         current = current->left;
       } else {
         current = current->right;
@@ -61,29 +78,38 @@ template <typename T> void BinarySearchTree<T>::insert(T data) {
   size++;
 }
 
-template <typename T> void BinarySearchTree<T>::remove(T data) { size--; }
+template <typename T,typename Custom_Comparator_Type>
+void BinarySearchTree<T,Custom_Comparator_Type>::remove(T data) {
+  size--;
+}
 
-template <typename T> bool BinarySearchTree<T>::isEmpty() {
+template <typename T,typename Custom_Comparator_Type>
+bool BinarySearchTree<T,Custom_Comparator_Type>::isEmpty() {
   return root == nullptr;
 }
 
-template <typename T>
-bool BinarySearchTree<T>::isRoot(Nodes::BinaryTreeNode<T> *node) {
+template <typename T,typename Custom_Comparator_Type>
+bool BinarySearchTree<T,Custom_Comparator_Type>::isRoot(Nodes::BinaryTreeNode<T> *node) {
   return root == node;
 }
 
-template <typename T>
-bool BinarySearchTree<T>::isLeaf(Nodes::BinaryTreeNode<T> *node) {
+template <typename T,typename Custom_Comparator_Type>
+bool BinarySearchTree<T,Custom_Comparator_Type>::isLeaf(Nodes::BinaryTreeNode<T> *node) {
   return node->left == nullptr && node->right == nullptr;
 }
 
-template <typename T> size_t BinarySearchTree<T>::getSize() { return size; }
+template <typename T,typename Custom_Comparator_Type>
+size_t BinarySearchTree<T,Custom_Comparator_Type>::getSize() {
+  return size;
+}
 
-template <typename T> bool BinarySearchTree<T>::contains(const T &data) {
+template <typename T,typename Custom_Comparator_Type>
+bool BinarySearchTree<T,Custom_Comparator_Type>::contains(const T &data) {
   return search(data) != nullptr;
 }
 
-template <typename T> Nodes::BinaryTreeNode<T> *BinarySearchTree<T>::search(T data) {
+template <typename T,typename Custom_Comparator_Type>
+Nodes::BinaryTreeNode<T> *BinarySearchTree<T,Custom_Comparator_Type>::search(T data) {
   Nodes::BinaryTreeNode<T> *current = root;
   while (current != nullptr) {
     if (data == current->data) {
