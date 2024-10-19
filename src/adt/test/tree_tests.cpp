@@ -27,7 +27,6 @@ TEST(BinarySearchTreeTest, AddARootNode) {
   EXPECT_EQ(bst.getSize(), 1);
 }
 
-
 TEST(BinarySearchTreeTest, FindARootNode) {
   Trees::BinarySearchTree<int> bst;
   bst.insert(1);
@@ -78,13 +77,11 @@ TEST(BinarySearchTreeTest, SpecificCommonComparator) {
 
 template <typename T> class ComparatorX {
 public:
-  bool operator()(const T &lhs, const T &rhs) {
-    return lhs < rhs;
-  }
+  bool operator()(const T &lhs, const T &rhs) { return lhs < rhs; }
   int compare(const T &lhs, const T &rhs) {
-    if ( lhs < rhs) {
+    if (lhs < rhs) {
       return -1;
-    } else if ( rhs < lhs ) {
+    } else if (rhs < lhs) {
       return 1;
     } else {
       return 0;
@@ -99,4 +96,40 @@ TEST(BinarySearchTreeTest, SpecificCustomComparator) {
   EXPECT_TRUE(!bst.isEmpty());
   EXPECT_EQ(bst.getSize(), 3);
   EXPECT_TRUE(bst.contains(3));
+}
+
+TEST(BinarySearchTreeTest, FindMatchingElementsEven) {
+  Trees::BinarySearchTree<int> bst;
+  bst.insert(1);
+  bst.insert(2);
+  bst.insert(3);
+  bst.insert(4);
+  bst.insert(5);
+  bst.insert(6);
+
+  // Define a predicate (find elements greater than 7)
+  auto predicate = [](const int &value) { return value % 2 == 0; };
+
+  // Get all matching elements
+  std::vector<int> result = bst.findMatchingElements(predicate);
+
+  EXPECT_EQ(result.size(), 3);
+}
+
+TEST(BinarySearchTreeTest, FindMatchingElementsMultOfThree) {
+  Trees::BinarySearchTree<int> bst;
+  bst.insert(1);
+  bst.insert(2);
+  bst.insert(3);
+  bst.insert(4);
+  bst.insert(5);
+  bst.insert(6);
+
+  // Define a predicate (find elements greater than 7)
+  auto predicate = [](const int &value) { return value % 3 == 0; };
+
+  // Get all matching elements
+  std::vector<int> result = bst.findMatchingElements(predicate);
+
+  EXPECT_EQ(result.size(), 2);
 }
