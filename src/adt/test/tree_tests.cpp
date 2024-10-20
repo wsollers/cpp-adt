@@ -133,3 +133,65 @@ TEST(BinarySearchTreeTest, FindMatchingElementsMultOfThree) {
 
   EXPECT_EQ(result.size(), 2);
 }
+
+TEST(BinarySearchTreeTest, preOrderTraversalElementsEven) {
+  Trees::BinarySearchTree<int> bst;
+  bst.insert(1);
+  bst.insert(2);
+  bst.insert(3);
+  bst.insert(4);
+  bst.insert(5);
+  bst.insert(6);
+
+  // Define a predicate (find elements greater than 7)
+  auto predicate = [](const int &value) { return value % 2 == 0; };
+
+  // Get all matching elements
+  std::vector<int> result;
+
+  bst.preOrderWithPredicate(predicate, result);
+
+  EXPECT_EQ(result.size(), 3);
+}
+
+TEST(BinarySearchTreeTest, postOrderTraversalElementsEven) {
+  Trees::BinarySearchTree<int> bst;
+  bst.insert(1);
+  bst.insert(2);
+  bst.insert(3);
+  bst.insert(4);
+  bst.insert(5);
+  bst.insert(6);
+
+  // Define a predicate (find elements greater than 7)
+  auto predicate = [](const int &value) { return value % 2 == 0; };
+
+  // Get all matching elements
+  std::vector<int> result;
+
+  bst.postOrderWithPredicate(predicate, result);
+
+  EXPECT_EQ(result.size(), 3);
+}
+
+
+TEST(BinarySearchTreeTest, inOrderTraversalElementsEven) {
+  Trees::BinarySearchTree<int> bst;
+  bst.insert(1);
+  bst.insert(2);
+  bst.insert(3);
+  bst.insert(4);
+  bst.insert(5);
+  bst.insert(6);
+
+  // Define a predicate (find elements greater than 7)
+  auto predicate = [](const int &value) { return value % 2 == 0; };
+
+  // Get all matching elements
+  std::vector<int> result;
+
+  bst.inOrderWithPredicate(predicate, result);
+
+  EXPECT_EQ(result.size(), 3);
+}
+
