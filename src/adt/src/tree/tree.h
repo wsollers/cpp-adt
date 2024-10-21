@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <functional>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -17,7 +18,6 @@ template <typename T, typename Custom_Comparator_Type = Common::Comparator<T>>
 class BinarySearchTree {
 public:
   using comparator_type = Custom_Comparator_Type;
-  // const Allocator& alloc = Allocator()
   explicit BinarySearchTree();
   explicit BinarySearchTree(comparator_type comp);
   explicit BinarySearchTree(T data);
@@ -42,8 +42,9 @@ public:
                               std::vector<T> &result) const;
 
 private:
-  bool isRoot(Nodes::BinaryTreeNode<T> *node);
-  bool isLeaf(Nodes::BinaryTreeNode<T> *node);
+  bool isRoot(Nodes::BinaryTreeNode<T> *node) const;
+  bool isLeaf(Nodes::BinaryTreeNode<T> *node) const;
+  size_t numChildren(Nodes::BinaryTreeNode<T> *node) const;
 
   Nodes::BinaryTreeNode<T> *search(T data) const;
 
@@ -58,6 +59,8 @@ private:
   void postOrderWithPredicateHelper(Nodes::BinaryTreeNode<T> *node,
                                     std::function<bool(const T &)> predicate,
                                     std::vector<T> &result) const;
+
+  Nodes::BinaryTreeNode<T> *findMin(Nodes::BinaryTreeNode<T> *node) const;
 
   Nodes::BinaryTreeNode<T> *root;
   size_t size;
@@ -101,7 +104,94 @@ void BinarySearchTree<T, Custom_Comparator_Type>::insert(T data) {
 
 template <typename T, typename Custom_Comparator_Type>
 void BinarySearchTree<T, Custom_Comparator_Type>::remove(T data) {
-  size--;
+  if (root == nullptr) {
+    std::cout << "Tree is empty" << std::endl;
+    return; // Tree is empty
+  }
+
+  auto current = root;
+  Nodes::BinaryTreeNode<T> *parent = nullptr;
+  // Find the node to be deleted AND its parent
+  while (current != nullptr && current->data != data) {
+    parent = current;
+    if (data < current->data) {
+      current = current->left;
+    } else {
+      current = current->right;
+    }
+  }
+
+  if (current == nullptr) {
+    std::cout << "Current is empty" << std::endl;
+    return; // Data not found
+  }
+
+  // Case 1: Node has no children
+  if (isLeaf(current)) {
+    std::cout << "Current is leaf" << std::endl;
+    if (parent == nullptr) {
+      delete current;
+      root = nullptr;
+      size--;
+      return;
+    } else {
+      if (current == parent->left) {
+        parent->left = nullptr;
+      } else {
+        parent->right = nullptr;
+      }
+      delete current;
+      current = nullptr;
+      size--;
+      return;
+    }
+  }
+
+  // Case 2: Node has one child
+  if (numChildren(current) == 1) {
+    std::cout << "Current has one child" << std::endl;
+    auto child = current->left != nullptr ? current->left : current->right;
+    if (parent == nullptr) {
+      root = child;
+    } else {
+      if (current == parent->left) {
+        parent->left = child;
+      } else {
+        parent->right = child;
+      }
+    }
+    delete current;
+    current = nullptr;
+    size--;
+    return;
+  }
+
+  // Case 3: Node has two children
+  if (numChildren(current) == 2) {
+    std::cout << "Current has two children" << std::endl;
+    // Find the in-order successor (smallest node in the right subtree)
+    auto minParent = current;
+    auto min = current->right;
+
+    while (min->left != nullptr) {
+      minParent = min;
+      min = min->left;
+    }
+
+    // Replace current's data with min's data
+    current->data = min->data;
+
+    // Remove the in-order successor from its original location
+    if (minParent->left == min) {
+      minParent->left = min->right;
+    } else {
+      minParent->right = min->right;
+    }
+
+    delete min;
+    min = nullptr;
+    size--;
+  }
 }
 
 template <typename T, typename Custom_Comparator_Type>
@@ -111,14 +201,20 @@ bool BinarySearchTree<T, Custom_Comparator_Type>::isEmpty() {
 
 template <typename T, typename Custom_Comparator_Type>
 bool BinarySearchTree<T, Custom_Comparator_Type>::isRoot(
-    Nodes::BinaryTreeNode<T> *node) {
+    Nodes::BinaryTreeNode<T> *node) const {
   return root == node;
 }
 
 template <typename T, typename Custom_Comparator_Type>
 bool BinarySearchTree<T, Custom_Comparator_Type>::isLeaf(
-    Nodes::BinaryTreeNode<T> *node) {
+    Nodes::BinaryTreeNode<T> *node) const {
   return node->left == nullptr && node->right == nullptr;
+}
+
+template <typename T, typename Custom_Comparator_Type>
+size_t BinarySearchTree<T, Custom_Comparator_Type>::numChildren(
+    Nodes::BinaryTreeNode<T> *node) const {
+  return (node->left != nullptr) + (node->right != nullptr);
 }
 
 template <typename T, typename Custom_Comparator_Type>
@@ -166,12 +262,13 @@ void BinarySearchTree<T, Custom_Comparator_Type>::preOrderWithPredicateHelper(
   if (node == nullptr) {
     return;
   }
-  preOrderWithPredicateHelper(node->left, predicate, result); // Traverse left subtree
-  if (predicate(node->data)) {                          // Apply predicate
-    result.push_back(node->data); // Add if predicate is true
+  preOrderWithPredicateHelper(node->left, predicate,
+                              result); // Traverse left subtree
+  if (predicate(node->data)) {         // Apply predicate
+    result.push_back(node->data);      // Add if predicate is true
   }
   preOrderWithPredicateHelper(node->right, predicate,
-                        result); // Traverse right subtree
+                              result); // Traverse right subtree
 }
 
 template <typename T, typename Custom_Comparator_Type>
@@ -188,12 +285,12 @@ void BinarySearchTree<T, Custom_Comparator_Type>::postOrderWithPredicateHelper(
     return;
   }
   postOrderWithPredicateHelper(node->left, predicate,
-                         result); // Traverse left subtree
-  if (predicate(node->data)) {    // Apply predicate
-    result.push_back(node->data); // Add if predicate is true
+                               result); // Traverse left subtree
+  if (predicate(node->data)) {          // Apply predicate
+    result.push_back(node->data);       // Add if predicate is true
   }
   postOrderWithPredicateHelper(node->right, predicate,
-                         result); // Traverse right subtree
+                               result); // Traverse right subtree
 }
 
 template <typename T, typename Custom_Comparator_Type>
@@ -203,6 +300,16 @@ BinarySearchTree<T, Custom_Comparator_Type>::findMatchingElements(
   std::vector<T> result;
   inOrderWithPredicate(predicate, result);
   return result;
+}
+
+template <typename T, typename Custom_Comparator_Type>
+Nodes::BinaryTreeNode<T> *BinarySearchTree<T, Custom_Comparator_Type>::findMin(
+    Nodes::BinaryTreeNode<T> *node) const {
+  auto current = node;
+  while (current && current->left != nullptr) {
+    current = current->left;
+  }
+  return current;
 }
 
 template <typename T, typename Custom_Comparator_Type>

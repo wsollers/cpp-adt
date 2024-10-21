@@ -195,3 +195,49 @@ TEST(BinarySearchTreeTest, inOrderTraversalElementsEven) {
   EXPECT_EQ(result.size(), 3);
 }
 
+
+//cmake/cmp to find depss???
+TEST (BinarySearchTreeTest, DeleteRoot) {
+  Trees::BinarySearchTree<int> bst;
+  bst.insert(1);
+  bst.remove(1);
+  EXPECT_TRUE(bst.isEmpty());
+  EXPECT_EQ(bst.getSize(), 0);
+
+}
+
+TEST (BinarySearchTreeTest, DeleteRootLeft) {
+  Trees::BinarySearchTree<int> bst;
+  bst.insert(2);
+  bst.insert(1);
+  bst.remove(1);
+  EXPECT_FALSE(bst.isEmpty());
+  EXPECT_EQ(bst.getSize(), 1);
+
+}
+
+TEST (BinarySearchTreeTest, DeleteRootRight) {
+  Trees::BinarySearchTree<int> bst;
+  bst.insert(1);
+  bst.insert(2);
+  bst.remove(1);
+  EXPECT_FALSE(bst.isEmpty());
+  EXPECT_EQ(bst.getSize(), 1);
+
+}
+
+TEST (BinarySearchTreeTest, DeleteSubTrees) {
+  Trees::BinarySearchTree<int> bst;
+  bst.insert(12);
+  bst.insert(6);
+  bst.insert(4);
+  bst.insert(2);
+  bst.insert(7);
+  bst.insert(5);
+  bst.insert(3);
+  bst.remove(6);
+  bst.remove(7);
+  EXPECT_FALSE(bst.isEmpty());
+  EXPECT_EQ(bst.getSize(), 5);
+
+}
