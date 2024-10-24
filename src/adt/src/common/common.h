@@ -25,7 +25,10 @@ concept stl_container_storable =
     std::destructible<T> && std::default_initializable<T> &&
     std::move_constructible<T> && std::copy_constructible<T>;
 
-
+template <typename T>
+concept hashable = requires(T a) {
+    { std::hash<T>{}(a) } -> std::convertible_to<std::size_t>;
+};
 // constructible_from
 // default_initializable
 // move_constructible

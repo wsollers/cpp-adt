@@ -5,11 +5,15 @@
 #include <stdint.h>
 #include <optional>
 
+#include "../common/common.h"
+
 namespace Maps {
 
 // A map is a collection of key-value pairs
 
-template <typename K, typename V, int32_t capacity> class Map {
+template <typename K, typename V, int32_t capacity> 
+requires Common::hashable<K> && Common::stl_container_storable<K> && Common::stl_container_storable<V>
+class Map {
 public:
   virtual ~Map() = default;
 
@@ -54,22 +58,23 @@ public:
   ArrayMap() : size(0), entries{} {}
 
   void insert(K key, V value) override {
-    if (size == capacity) {
-      return;
+    size_t hashedLocation = std::hash<K>{}(key) % capacity; // all K types must be hashable
+    if ( entries[hashedLocation].has_value() ) {
+      return; //TODO handle collision
     }
-    entries[size++] = MapEntry<K,V>(key, value);
+    entries[hashedLocation] = MapEntry<K,V>(key, value);
+    size++;
   }
 
   void remove(K key) override {
-    for (size_t i = 0; i < size; i++) {
-      if (entries[i].has_value() && entries[i].value().getKey() == key) {
-        for (size_t j = i; j < size - 1; j++) {
-          entries[j] = entries[j + 1];
-        }
-        size--;
-        return;
-      }
+
+    size_t hashedLocation = std::hash<K>{}(key) % capacity;
+
+    if ( entries[hashedLocation].has_value() && entries[hashedLocation].value().getKey() == key) {
+      entries[hashedLocation] = std::nullopt;
     }
+
+    size--;
   }
 
   bool isEmpty() const override {
@@ -81,21 +86,18 @@ public:
   }
 
   bool contains(K key) const override {
-    for (size_t i = 0; i < size; i++) {
-      if (entries[i].has_value() && entries[i].value().getKey() == key) {
-        return true;
-      }
+    size_t hashedLocation = std::hash<K>{}(key) % capacity;
+    if ( entries[hashedLocation].has_value() && entries[hashedLocation].value().getKey() == key) {
+      return true;
     }
     return false;
   }
 
   V get(K key) const override {
-    for (size_t i = 0; i < size; i++) {
-      if (entries[i].has_value()  && entries[i].value().getKey() == key) {
-        return entries[i].value().getValue();
-      }
-    }
-    return V();
+
+    size_t hashedLocation = std::hash<K>{}(key) % capacity;
+
+    return entries[hashedLocation].value().getValue();
   }
 
   void set(K key, V value) override {

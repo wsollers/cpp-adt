@@ -27,3 +27,33 @@ TEST(MapTest, AddEntry) {
   EXPECT_EQ(map.getSize(), 1);
   EXPECT_EQ(map.get(1), 1);
 }
+
+TEST(MapTest, AddRemoveEntry) {
+  Maps::ArrayMap<int, int, 10> map = Maps::ArrayMap<int, int, 10>();
+  map.insert(1, 1);
+  EXPECT_FALSE(map.isEmpty());
+  EXPECT_EQ(map.getSize(), 1);
+  EXPECT_EQ(map.get(1), 1);
+  map.remove(1);
+  EXPECT_TRUE(map.isEmpty());
+  EXPECT_EQ(map.getSize(), 0);
+  EXPECT_FALSE(map.contains(1));
+}
+
+TEST(MapTest, KeysShouldBeHashable) {
+    // Static assertions to check that certain types satisfy the Hashable concept
+    static_assert(Common::hashable<int>, "int should satisfy Hashable concept");
+    static_assert(Common::hashable<std::string>, "std::string should satisfy Hashable concept");
+
+    // Negative test case: static_assert will fail if we uncomment this because float is not hashable
+    // static_assert(Common::hashable<float>, "float should NOT satisfy Hashable concept");
+}
+
+struct TestStruct {
+  int x;
+  int y;
+};
+
+TEST(MapTest, TestStructIsNotHashable) {
+  static_assert(!Common::hashable<TestStruct>, "TestStruct should NOT satisfy Hashable concept");
+}
