@@ -15,7 +15,39 @@ namespace Trees {
 std::vector<int> xxx;
 
 template <typename T, typename Custom_Comparator_Type = Common::Comparator<T>>
-class BinarySearchTree {
+class TreeAdt {
+public:
+  using comparator_type = Custom_Comparator_Type;
+
+  /*
+  explicit TreeAdt() = 0;
+  explicit TreeAdt(comparator_type comp) = 0;
+  explicit TreeAdt(T data) = 0;
+  virtual ~TreeAdt() = 0;
+  */
+
+  virtual void insert(T data) = 0;
+  virtual void remove(T data) = 0;
+  virtual bool isEmpty() const = 0;
+  virtual bool contains(const T &data) const = 0;
+
+  virtual size_t getSize() const = 0;
+
+  virtual std::vector<T>
+  findMatchingElements(std::function<bool(const T &)> predicate) const = 0;
+
+  virtual void inOrderWithPredicate(std::function<bool(const T &)> predicate,
+                                    std::vector<T> &result) const = 0;
+
+  virtual void preOrderWithPredicate(std::function<bool(const T &)> predicate,
+                                     std::vector<T> &result) const = 0;
+
+  virtual void postOrderWithPredicate(std::function<bool(const T &)> predicate,
+                                      std::vector<T> &result) const = 0;
+};
+
+template <typename T, typename Custom_Comparator_Type = Common::Comparator<T>>
+class BinarySearchTree : public TreeAdt<T, Custom_Comparator_Type> {
 public:
   using comparator_type = Custom_Comparator_Type;
   explicit BinarySearchTree();
@@ -25,12 +57,13 @@ public:
 
   void insert(T data);
   void remove(T data);
-  bool isEmpty();
-  bool contains(const T &data);
+  bool isEmpty() const;
+  bool contains(const T &data) const;
 
-  size_t getSize();
+  size_t getSize() const;
 
-  std::vector<T> findMatchingElements(std::function<bool(const T &)> predicate);
+  std::vector<T>
+  findMatchingElements(std::function<bool(const T &)> predicate) const;
 
   void inOrderWithPredicate(std::function<bool(const T &)> predicate,
                             std::vector<T> &result) const;
@@ -195,7 +228,7 @@ void BinarySearchTree<T, Custom_Comparator_Type>::remove(T data) {
 }
 
 template <typename T, typename Custom_Comparator_Type>
-bool BinarySearchTree<T, Custom_Comparator_Type>::isEmpty() {
+bool BinarySearchTree<T, Custom_Comparator_Type>::isEmpty() const {
   return root == nullptr;
 }
 
@@ -218,12 +251,13 @@ size_t BinarySearchTree<T, Custom_Comparator_Type>::numChildren(
 }
 
 template <typename T, typename Custom_Comparator_Type>
-size_t BinarySearchTree<T, Custom_Comparator_Type>::getSize() {
+size_t BinarySearchTree<T, Custom_Comparator_Type>::getSize() const {
   return size;
 }
 
 template <typename T, typename Custom_Comparator_Type>
-bool BinarySearchTree<T, Custom_Comparator_Type>::contains(const T &data) {
+bool BinarySearchTree<T, Custom_Comparator_Type>::contains(
+    const T &data) const {
   return search(data) != nullptr;
 }
 
@@ -296,7 +330,7 @@ void BinarySearchTree<T, Custom_Comparator_Type>::postOrderWithPredicateHelper(
 template <typename T, typename Custom_Comparator_Type>
 std::vector<T>
 BinarySearchTree<T, Custom_Comparator_Type>::findMatchingElements(
-    std::function<bool(const T &)> predicate) {
+    std::function<bool(const T &)> predicate) const {
   std::vector<T> result;
   inOrderWithPredicate(predicate, result);
   return result;
@@ -327,6 +361,11 @@ BinarySearchTree<T, Custom_Comparator_Type>::search(T data) const {
   }
   return nullptr;
 }
+
+template <typename T, typename Custom_Comparator_Type = Common::Comparator<T>>
+class AvlTree : public TreeAdt<T, Custom_Comparator_Type> {
+public:
+};
 
 } // namespace Trees
 

@@ -159,6 +159,17 @@ void BinaryTreeNode<T>::setRight(BinaryTreeNode<T> *right) {
   this->right = right;
 }
 
+template <typename T> class AvlTreeNode : public BinaryTreeNode<T> {
+public:
+  explicit AvlTreeNode(T data);
+  virtual ~AvlTreeNode() = default;
+
+  int getHeight();
+  void setHeight(int height);
+
+  int height;
+};
+
 } // namespace Nodes
 
 // force compiler to generate the class for the types we need
