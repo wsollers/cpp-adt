@@ -19,6 +19,7 @@ add_library(adt SHARED
   src/set/set.cpp
   src/queue/queue.cpp
   src/stack/stack.cpp
+  src/heap/priority_queue.cpp
 )
 
 add_library(adt-static 
@@ -31,6 +32,7 @@ add_library(adt-static
   src/set/set.cpp
   src/queue/queue.cpp
   src/stack/stack.cpp
+  src/heap/priority_queue.cpp
 )
 #target_include_directories(lib2 PUBLIC include)
 
@@ -55,7 +57,7 @@ add_test(NAME adt_test COMMAND bin/adt_test)
 add_executable(adt_sll_test_static test/single_linked_list_test.cpp
 )
 target_include_directories(adt_sll_test_static 
-  PRIVATE src/list src/queue src/stack src/tree src/node src/common)
+  PRIVATE src/list src/queue src/stack src/tree src/node src/common src/heap)
 #target_link_libraries(adt_test_static PRIVATE  adt-static gtest gtest_main)
 target_link_libraries(adt_sll_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
 add_test(NAME adt_sll_test_static COMMAND bin/adt_test_static)
@@ -67,7 +69,7 @@ add_test(NAME adt_sll_test_static COMMAND bin/adt_test_static)
 add_executable(adt_dll_test_static test/double_linked_list_test.cpp
 )
 target_include_directories(adt_dll_test_static 
-  PRIVATE src/list src/queue src/stack src/tree src/node src/common)
+  PRIVATE src/list src/queue src/stack src/tree src/node src/common src/heap)
 #target_link_libraries(adt_dll_test_static PRIVATE  adt-static gtest gtest_main)
 target_link_libraries(adt_dll_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
 add_test(NAME adt_dll_test_static COMMAND bin/adt_test_static)
@@ -78,7 +80,7 @@ add_test(NAME adt_dll_test_static COMMAND bin/adt_test_static)
 add_executable(adt_cll_test_static test/double_linked_list_test.cpp
 )
 target_include_directories(adt_cll_test_static 
-  PRIVATE src/list src/queue src/stack src/tree src/node src/common)
+  PRIVATE src/list src/queue src/stack src/tree src/node src/common src/heap)
 #target_link_libraries(adt_cll_test_static PRIVATE  adt-static gtest gtest_main)
 target_link_libraries(adt_cll_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
 add_test(NAME adt_cll_test_static COMMAND bin/adt_test_static)
@@ -88,7 +90,7 @@ add_test(NAME adt_cll_test_static COMMAND bin/adt_test_static)
 #
 add_executable(adt_stack_test_static test/stack_tests.cpp)
 target_include_directories(adt_stack_test_static 
-  PRIVATE src/list src/queue src/stack src/tree src/map src/node src/common)
+  PRIVATE src/list src/queue src/stack src/tree src/map src/node src/common src/heap)
 target_link_libraries(adt_stack_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
 add_test(NAME adt_stack_test_static COMMAND bin/adt_test_static)
 
@@ -97,7 +99,7 @@ add_test(NAME adt_stack_test_static COMMAND bin/adt_test_static)
 #
 add_executable(adt_queue_test_static test/queue_tests.cpp)
 target_include_directories(adt_queue_test_static 
-  PRIVATE src/list src/queue src/stack src/tree src/map src/node src/common)
+  PRIVATE src/list src/queue src/stack src/tree src/map src/node src/common src/heap)
 target_link_libraries(adt_queue_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
 add_test(NAME adt_queue_test_static COMMAND bin/adt_test_static)
 
@@ -106,7 +108,7 @@ add_test(NAME adt_queue_test_static COMMAND bin/adt_test_static)
 #
 add_executable(adt_tree_test_static test/tree_tests.cpp)
 target_include_directories(adt_tree_test_static 
-  PRIVATE src/list src/queue src/stack src/tree src/map src/node src/common)
+  PRIVATE src/list src/queue src/stack src/tree src/map src/node src/common src/heap)
 target_link_libraries(adt_tree_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
 add_test(NAME adt_tree_test_static COMMAND bin/adt_test_static)
 
@@ -115,10 +117,19 @@ add_test(NAME adt_tree_test_static COMMAND bin/adt_test_static)
 #
 add_executable(adt_map_test_static test/map_tests.cpp)
 target_include_directories(adt_map_test_static 
-  PRIVATE src/list src/queue src/stack src/tree src/map src/node src/common)
+  PRIVATE src/list src/queue src/stack src/tree src/map src/node src/common src/heap)
 target_link_libraries(adt_map_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
 add_test(NAME adt_map_test_static COMMAND bin/adt_test_static)
 
+
+#
+# Testing heap  as static library
+#
+add_executable(adt_heap_test_static test/heap_tests.cpp)
+target_include_directories(adt_heap_test_static 
+  PRIVATE src/list src/queue src/stack src/tree src/map src/node src/common src/heap)
+target_link_libraries(adt_heap_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
+add_test(NAME adt_heap_test_static COMMAND bin/adt_test_static)
 
 
 

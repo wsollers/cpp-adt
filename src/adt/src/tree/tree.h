@@ -1,6 +1,7 @@
 #ifndef TREE_H
 #define TREE_H
 
+#include <cstdint>
 #include <cstdlib>
 #include <functional>
 #include <iostream>
@@ -365,7 +366,112 @@ BinarySearchTree<T, Custom_Comparator_Type>::search(T data) const {
 template <typename T, typename Custom_Comparator_Type = Common::Comparator<T>>
 class AvlTree : public TreeAdt<T, Custom_Comparator_Type> {
 public:
+  using comparator_type = Custom_Comparator_Type;
+  explicit AvlTree();
+  explicit AvlTree(comparator_type comp);
+  explicit AvlTree(T data);
+  virtual ~AvlTree();
+
+  void insert(T data);
+  void remove(T data);
+  bool isEmpty() const;
+  bool contains(const T &data) const;
+  size_t getSize() const;
+
+private:
+  Nodes::AvlTreeNode<T> *root;
+  size_t size;
+  comparator_type comparator;
+
+  uint16_t getHeight(Nodes::AvlTreeNode<T> *node) const;
+  uint16_t getBalance(Nodes::AvlTreeNode<T> *node) const;
+  Nodes::AvlTreeNode<T> rightRotate(Nodes::AvlTreeNode<T> *node);
+  Nodes::AvlTreeNode<T> leftRotate(Nodes::AvlTreeNode<T> *node);
 };
+
+template <typename T, typename Custom_Comparator_Type>
+AvlTree<T, Custom_Comparator_Type>::AvlTree() : root(nullptr), size(0) {}
+
+template <typename T, typename Custom_Comparator_Type>
+AvlTree<T, Custom_Comparator_Type>::AvlTree(comparator_type comp)
+    : root(nullptr), size(0), comparator(comp) {}
+
+template <typename T, typename Custom_Comparator_Type>
+AvlTree<T, Custom_Comparator_Type>::AvlTree(T data)
+    : root(new Nodes::AvlTreeNode<T>(data)), size(1) {}
+
+template <typename T, typename Custom_Comparator_Type>
+AvlTree<T, Custom_Comparator_Type>::~AvlTree() {
+  // Clear the tree
+}
+
+template <typename T, typename Custom_Comparator_Type>
+void AvlTree<T, Custom_Comparator_Type>::insert(T data) {
+  // Insert the data
+}
+
+template <typename T, typename Custom_Comparator_Type>
+void AvlTree<T, Custom_Comparator_Type>::remove(T data) {
+  // Remove the data
+}
+
+template <typename T, typename Custom_Comparator_Type>
+bool AvlTree<T, Custom_Comparator_Type>::isEmpty() const {
+  return size == 0;
+}
+
+template <typename T, typename Custom_Comparator_Type>
+bool AvlTree<T, Custom_Comparator_Type>::contains(const T &data) const {
+  return false;
+}
+
+template <typename T, typename Custom_Comparator_Type>
+size_t AvlTree<T, Custom_Comparator_Type>::getSize() const {
+  return size;
+}
+
+template <typename T, typename Custom_Comparator_Type>
+uint16_t AvlTree<T, Custom_Comparator_Type>::getHeight(
+    Nodes::AvlTreeNode<T> *node) const {
+  return node ? node->height : 0;
+}
+
+template <typename T, typename Custom_Comparator_Type>
+uint16_t AvlTree<T, Custom_Comparator_Type>::getBalance(
+    Nodes::AvlTreeNode<T> *node) const {
+  return node ? getHeight(node->left) - getHeight(node->right) : 0;
+}
+
+template <typename T, typename Custom_Comparator_Type>
+Nodes::AvlTreeNode<T>
+AvlTree<T, Custom_Comparator_Type>::rightRotate(Nodes::AvlTreeNode<T> *node) {
+  Nodes::AvlTreeNode<T> *leftChild = node->left;
+  Nodes::AvlTreeNode<T> *rightChild = leftChild->right;
+
+  leftChild->right = node;
+  node->left = rightChild;
+
+  node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1;
+  leftChild->height = std::max(getHeight(leftChild->left), getHeight(leftChild->right)) + 1;
+
+  return leftChild;
+}
+
+template <typename T, typename Custom_Comparator_Type>
+Nodes::AvlTreeNode<T> *leftRotate(Nodes::AvlTreeNode<T> *x) {
+  Nodes::AvlTreeNode<T> *y = x->right;
+  Nodes::AvlTreeNode<T> *T2 = y->left;
+
+  y->left = x;
+  x->right = T2;
+
+  x->height = std::max(getHeight(x->left), getHeight(x->right)) + 1;
+  y->height = std::max(getHeight(y->left), getHeight(y->right)) + 1;
+
+  return y;
+}
+
+
 
 } // namespace Trees
 

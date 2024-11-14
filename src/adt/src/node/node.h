@@ -2,6 +2,7 @@
 #define NODE_H
 
 #include "../common/common.h"
+#include <cstdint>
 
 namespace Nodes {
 
@@ -161,13 +162,18 @@ void BinaryTreeNode<T>::setRight(BinaryTreeNode<T> *right) {
 
 template <typename T> class AvlTreeNode : public BinaryTreeNode<T> {
 public:
-  explicit AvlTreeNode(T data);
+  explicit AvlTreeNode(T data) : BinaryTreeNode<T>(data), height(1) {};
   virtual ~AvlTreeNode() = default;
 
-  int getHeight();
-  void setHeight(int height);
+  uint16_t getHeight() const {
+    return height;
+  }
 
-  int height;
+  void setHeight(uint16_t height) {
+    this->height = height;
+  }
+
+  uint16_t height;
 };
 
 } // namespace Nodes
