@@ -19,16 +19,18 @@ struct Error {
 
 void report_error(const Error &error);
 
+//Concept that specifies the requirements for an item to be hashable
+template <typename T>
+concept Hashable = requires(T t) {
+    { std::hash<T>{}(t) } -> std::convertible_to<std::size_t>;
+};
+
 //Concept that specifies the requirements for an item to be storable in a STL container
 template <typename T>
 concept stl_container_storable =
     std::destructible<T> && std::default_initializable<T> &&
     std::move_constructible<T> && std::copy_constructible<T>;
 
-template <typename T>
-concept hashable = requires(T a) {
-    { std::hash<T>{}(a) } -> std::convertible_to<std::size_t>;
-};
 // constructible_from
 // default_initializable
 // move_constructible

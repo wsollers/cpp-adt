@@ -132,6 +132,15 @@ target_link_libraries(adt_heap_test_static PRIVATE  gtest gtest_main PUBLIC adt-
 add_test(NAME adt_heap_test_static COMMAND bin/adt_test_static)
 
 
+#
+# Testing graph  as static library
+#
+add_executable(adt_graph_test_static test/graph_tests.cpp)
+target_include_directories(adt_graph_test_static 
+  PRIVATE src/list src/queue src/stack src/tree src/map src/node src/common src/heap src/graph)
+target_link_libraries(adt_graph_test_static PRIVATE  gtest gtest_main PUBLIC adt-static)
+add_test(NAME adt_graph_test_static COMMAND bin/adt_test_static)
+
 
 #
 # Fuzz Testing 

@@ -42,8 +42,8 @@ TEST(MapTest, AddRemoveEntry) {
 
 TEST(MapTest, KeysShouldBeHashable) {
     // Static assertions to check that certain types satisfy the Hashable concept
-    static_assert(Common::hashable<int>, "int should satisfy Hashable concept");
-    static_assert(Common::hashable<std::string>, "std::string should satisfy Hashable concept");
+    static_assert(Common::Hashable<int>, "int should satisfy Hashable concept");
+    static_assert(Common::Hashable<std::string>, "std::string should satisfy Hashable concept");
 
     // Negative test case: static_assert will fail if we uncomment this because float is not hashable
     // static_assert(Common::hashable<float>, "float should NOT satisfy Hashable concept");
@@ -55,5 +55,5 @@ struct TestStruct {
 };
 
 TEST(MapTest, TestStructIsNotHashable) {
-  static_assert(!Common::hashable<TestStruct>, "TestStruct should NOT satisfy Hashable concept");
+  static_assert(!Common::Hashable<TestStruct>, "TestStruct should NOT satisfy Hashable concept");
 }

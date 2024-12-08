@@ -12,7 +12,7 @@ namespace Maps {
 // A map is a collection of key-value pairs
 
 template <typename K, typename V, int32_t capacity>
-  requires Common::hashable<K> && Common::stl_container_storable<K> &&
+  requires Common::Hashable<K> && Common::stl_container_storable<K> &&
            Common::stl_container_storable<V>
 class Map {
 public:
