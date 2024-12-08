@@ -13,22 +13,36 @@ TEST_F(SkipFixture, SkipAllTests) { FAIL() << "This test should not be run"; }
 
 // Test suite for Tree
 
-struct PriorityContainer
-{
-  int priority;
-  int data;
-  int getPriority() const { return priority; }
+template <typename T>
+struct xx {
+  PriorityQueues::Priority priority;
+  T data;
+
+  PriorityQueues::Priority getPriority() const { return priority; }
 
   // Define comparison operators based on priority
-  auto operator<=>(const PriorityContainer& other) const = default;
-  bool operator==(const PriorityContainer& other) const = default;
-};
+  auto operator<=>(const xx &other) const { return priority <=> other.priority; }
 
+};
 // Test the constructor and isEmpty() method
-TEST(HeapTest, ConstructAndIsEmpty) {
-  PriorityQueues::ArrayPriorityQueue<PriorityContainer> pq(10);
+TEST(ArrayPriorityQTest, ConstructAndIsEmpty) {
+  PriorityQueues::ArrayPriorityQueue<xx<int>> pq(10);
   EXPECT_TRUE(pq.isEmpty());
   EXPECT_EQ(pq.getSize(), 0);
 }
 
 
+TEST(LinkedPriorityQTest, ConstructAndIsEmpty) {
+  PriorityQueues::LinkedPriorityQueue<xx<int>> pq;
+  EXPECT_TRUE(pq.isEmpty());
+  EXPECT_EQ(pq.getSize(), 0);
+}
+
+TEST(LinkedPriorityQTest, addElement) {
+  PriorityQueues::LinkedPriorityQueue<xx<int>> pq;
+  EXPECT_TRUE(pq.isEmpty());
+  EXPECT_EQ(pq.getSize(), 0);
+  pq.insert(1, xx<int>{1, 1});
+  EXPECT_FALSE(pq.isEmpty());
+  EXPECT_EQ(pq.getSize(), 1);
+}
