@@ -6,6 +6,29 @@
 
 namespace Graphs {
 
+// Concept for Identifiable types
+template <typename T>
+concept Identifiable = requires(T obj) {
+    // Must have an id() method
+    { obj.id() } -> std::equality_comparable; // ID must be equality comparable
+};
+
+template <typename T>
+concept IdentifiableSortable = Identifiable<T> && requires(T obj) {
+    { obj.id() } -> std::totally_ordered; // ID must support <, <=, >, >=
+};
+
+// Concept for a Vertex
+template <typename T>
+concept Vertex = requires(T vertex) {
+    // Must provide access to in-degree
+    { vertex.inDegree() } -> std::convertible_to<int>;
+    // Must provide access to out-degree
+    { vertex.outDegree() } -> std::convertible_to<int>;
+    // Must provide access to net-degree (out-degree - in-degree)
+    { vertex.netDegree() } -> std::convertible_to<int>;
+};
+
 template <typename T, typename Vertex>
 concept GraphEdge = requires(T edge, Vertex v) {
     // Must provide access to the source and destination vertices
