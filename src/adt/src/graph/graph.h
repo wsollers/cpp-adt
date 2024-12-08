@@ -1,12 +1,16 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <algorithm>
 #include <concepts>
 #include <iostream>
 #include <optional>
+#include <queue>
+#include <stack>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <optional>
 
 #include "../common/common.h"
 
@@ -34,6 +38,9 @@ concept Vertex = requires(T vertex) {
   { vertex.outDegree() } -> std::convertible_to<int32_t>;
   // Must provide access to net-degree (out-degree - in-degree)
   { vertex.netDegree() } -> std::convertible_to<int32_t>;
+
+  // Vertex must support equality comparison
+  { vertex == vertex } -> std::convertible_to<bool>;
 } && Identifiable<T>;
 ;
 
@@ -47,6 +54,9 @@ concept GraphEdge = requires(Vertex v, Edge edge) {
 
   // Weight must be convertible to double
   { edge.weight() } -> std::convertible_to<double>;
+
+  // Edge must support equality comparison
+  { edge == edge } -> std::convertible_to<bool>;
 };
 
 template <typename VertexType, typename EdgeType>
@@ -120,15 +130,181 @@ public:
     return false;
   }
 
+  // Equality operator: Compares two graphs for equality
+  bool operator==(const Graph &other) const {
+    if (directed != other.directed || adjList.size() != other.adjList.size()) {
+      return false;
+    }
+
+    for (const auto &[vertex, edges] : adjList) {
+      // Check if the vertex exists in the other graph
+      auto it = other.adjList.find(vertex);
+      if (it == other.adjList.end()) {
+        return false;
+      }
+
+      // Compare edges for the vertex
+      const auto &otherEdges = it->second;
+      if (edges.size() != otherEdges.size() ||
+          !std::is_permutation(edges.begin(), edges.end(),
+                               otherEdges.begin())) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  Graph transpose() const {
+    if (!directed) {
+      return *this; // For undirected graphs, transpose is the same as the
+                    // original graph
+    }
+    Graph transposedGraph;
+    transposedGraph.setDirected(directed);
+
+    for (const auto &[vertex, edges] : adjList) {
+      transposedGraph.addVertex(
+          vertex); // Add the vertex to the transposed graph
+      for (const auto &edge : edges) {
+        // Reverse the edge: destination becomes source and vice versa
+        transposedGraph.addEdge(
+            EdgeType(edge.destination(), edge.source(), edge.weight()));
+      }
+    }
+
+    return transposedGraph;
+  }
+
+  std::vector<VertexType> FindPathBreadthFirst(VertexType start,
+                                               VertexType destination) const {
+    std::unordered_map<VertexType, VertexType> parent;
+    std::queue<VertexType> queue;
+    std::unordered_set<VertexType> visited;
+
+    queue.push(start);
+    visited.insert(start);
+
+    while (!queue.empty()) {
+      VertexType current = queue.front();
+      queue.pop();
+
+      if (current == destination) {
+        // Reconstruct the path
+        std::vector<VertexType> path;
+        for (VertexType at = destination; at != start; at = parent[at]) {
+          path.push_back(at);
+        }
+        path.push_back(start);
+        std::reverse(path.begin(), path.end());
+        return path;
+      }
+
+      for (const auto &edge : adjList.at(current)) {
+        VertexType neighbor = edge.destination();
+        if (!visited.count(neighbor)) {
+          parent[neighbor] = current;
+          visited.insert(neighbor);
+          queue.push(neighbor);
+        }
+      }
+    }
+
+    return {}; // No path found
+  }
+
+  std::vector<VertexType> FindPathDepthFirst(VertexType start,
+                                             VertexType destination) const {
+    std::unordered_map<VertexType, VertexType> parent;
+    std::stack<VertexType> stack;
+    std::unordered_set<VertexType> visited;
+
+    stack.push(start);
+    visited.insert(start);
+
+    while (!stack.empty()) {
+      VertexType current = stack.top();
+      stack.pop();
+
+      if (current == destination) {
+        // Reconstruct the path
+        std::vector<VertexType> path;
+        for (VertexType at = destination; at != start; at = parent[at]) {
+          path.push_back(at);
+        }
+        path.push_back(start);
+        std::reverse(path.begin(), path.end());
+        return path;
+      }
+
+      for (const auto &edge : adjList.at(current)) {
+        VertexType neighbor = edge.destination();
+        if (!visited.count(neighbor)) {
+          parent[neighbor] = current;
+          visited.insert(neighbor);
+          stack.push(neighbor);
+        }
+      }
+    }
+
+    return {}; // No path found
+  }
+
+std::optional<std::vector<VertexType>> topologicalSort() const {
+    // Topological sort is only valid for directed graphs
+    if (!directed) {
+        return std::nullopt; // Cannot perform topological sort on undirected graphs
+    }
+
+    // Handle directed graphs: Kahn's algorithm
+    std::unordered_map<VertexType, int> inDegree;
+    for (const auto& [vertex, edges] : adjList) {
+        inDegree[vertex]; // Ensure all vertices are in the map
+        for (const auto& edge : edges) {
+            inDegree[edge.destination()]++;
+        }
+    }
+
+    std::queue<VertexType> zeroInDegree;
+    for (const auto& [vertex, degree] : inDegree) {
+        if (degree == 0) {
+            zeroInDegree.push(vertex);
+        }
+    }
+
+    std::vector<VertexType> sortedOrder;
+
+    while (!zeroInDegree.empty()) {
+        VertexType current = zeroInDegree.front();
+        zeroInDegree.pop();
+        sortedOrder.push_back(current);
+
+        for (const auto& edge : adjList.at(current)) {
+            VertexType neighbor = edge.destination();
+            inDegree[neighbor]--;
+            if (inDegree[neighbor] == 0) {
+                zeroInDegree.push(neighbor);
+            }
+        }
+    }
+
+    // Check for cycles in directed graphs
+    if (sortedOrder.size() != adjList.size()) {
+        return std::nullopt; // Cycle detected
+    }
+
+    return sortedOrder;
+}
+  
+
 private:
   AdjacencyList adjList;
   bool directed = false;
-
-  // Create a reverse edge for undirected graphs
-  EdgeType reverseEdge(const EdgeType &edge) const {
+ 
+// Helper function to reverse an edge
+EdgeType reverseEdge(const EdgeType& edge) const {
     return EdgeType(edge.destination(), edge.source(), edge.weight());
-  }
-
+}
   // Helper function for detecting cycles in directed graphs
   bool
   detectCycleDirected(const VertexType &vertex,
