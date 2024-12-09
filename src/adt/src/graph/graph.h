@@ -10,7 +10,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <optional>
 
 #include "../common/common.h"
 
@@ -57,7 +56,7 @@ concept GraphEdge = requires(Vertex v, Edge edge) {
 
   // Edge must support equality comparison
   { edge == edge } -> std::convertible_to<bool>;
-};
+} && Common::stl_container_storable<Edge> && Common::stl_container_storable<Vertex>;
 
 template <typename VertexType, typename EdgeType>
   requires GraphEdge<VertexType, EdgeType>
@@ -250,62 +249,63 @@ public:
     return {}; // No path found
   }
 
-std::optional<std::vector<VertexType>> topologicalSort() const {
+  std::optional<std::vector<VertexType>> topologicalSort() const {
     // Topological sort is only valid for directed graphs
     if (!directed) {
-        return std::nullopt; // Cannot perform topological sort on undirected graphs
+      return std::nullopt; // Cannot perform topological sort on undirected
+                           // graphs
     }
 
     // Handle directed graphs: Kahn's algorithm
     std::unordered_map<VertexType, int> inDegree;
-    for (const auto& [vertex, edges] : adjList) {
-        inDegree[vertex]; // Ensure all vertices are in the map
-        for (const auto& edge : edges) {
-            inDegree[edge.destination()]++;
-        }
+    for (const auto &[vertex, edges] : adjList) {
+      inDegree[vertex]; // Ensure all vertices are in the map
+      for (const auto &edge : edges) {
+        inDegree[edge.destination()]++;
+      }
     }
 
     std::queue<VertexType> zeroInDegree;
-    for (const auto& [vertex, degree] : inDegree) {
-        if (degree == 0) {
-            zeroInDegree.push(vertex);
-        }
+    for (const auto &[vertex, degree] : inDegree) {
+      if (degree == 0) {
+        zeroInDegree.push(vertex);
+      }
     }
 
     std::vector<VertexType> sortedOrder;
 
     while (!zeroInDegree.empty()) {
-        VertexType current = zeroInDegree.front();
-        zeroInDegree.pop();
-        sortedOrder.push_back(current);
+      VertexType current = zeroInDegree.front();
+      zeroInDegree.pop();
+      sortedOrder.push_back(current);
 
-        for (const auto& edge : adjList.at(current)) {
-            VertexType neighbor = edge.destination();
-            inDegree[neighbor]--;
-            if (inDegree[neighbor] == 0) {
-                zeroInDegree.push(neighbor);
-            }
+      for (const auto &edge : adjList.at(current)) {
+        VertexType neighbor = edge.destination();
+        inDegree[neighbor]--;
+        if (inDegree[neighbor] == 0) {
+          zeroInDegree.push(neighbor);
         }
+      }
     }
 
     // Check for cycles in directed graphs
     if (sortedOrder.size() != adjList.size()) {
-        return std::nullopt; // Cycle detected
+      return std::nullopt; // Cycle detected
     }
 
     return sortedOrder;
-}
-  
+  }
 
 private:
   AdjacencyList adjList;
   bool directed = false;
- 
-// Helper function to reverse an edge
-EdgeType reverseEdge(const EdgeType& edge) const {
+
+  // Helper function to reverse an edge
+  EdgeType reverseEdge(const EdgeType &edge) const {
     return EdgeType(edge.destination(), edge.source(), edge.weight());
-}
-  // Helper function for detecting cycles in directed graphs
+  }
+
+  // Helper functin for detecting cycles in directed graphs
   bool
   detectCycleDirected(const VertexType &vertex,
                       std::unordered_set<VertexType> &visited,
