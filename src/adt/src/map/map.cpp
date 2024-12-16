@@ -1,7 +1,3 @@
 #include "map.h"
 
-namespace Maps {
-
-
-
-} // namespace Maps
+namespace Maps {}  // namespace Maps

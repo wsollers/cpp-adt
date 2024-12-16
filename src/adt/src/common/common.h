@@ -19,13 +19,14 @@ struct Error {
 
 void report_error(const Error &error);
 
-//Concept that specifies the requirements for an item to be hashable
+// Concept that specifies the requirements for an item to be hashable
 template <typename T>
 concept Hashable = requires(T t) {
-    { std::hash<T>{}(t) } -> std::convertible_to<std::size_t>;
+  { std::hash<T>{}(t) } -> std::convertible_to<std::size_t>;
 };
 
-//Concept that specifies the requirements for an item to be storable in a STL container
+// Concept that specifies the requirements for an item to be storable in a STL
+// container
 template <typename T>
 concept stl_container_storable =
     std::destructible<T> && std::default_initializable<T> &&
@@ -44,15 +45,14 @@ Optionally CopyConstructible and CopyAssignable depending on how you use the
 container EqualityComparable or LessThanComparable
 */
 
-template <typename T> class Comparator {
-public:
-  bool operator()(const T &lhs, const T &rhs) {
-    return lhs < rhs;
-  }
+template <typename T>
+class Comparator {
+ public:
+  bool operator()(const T &lhs, const T &rhs) { return lhs < rhs; }
   int compare(const T &lhs, const T &rhs) {
-    if ( lhs < rhs) {
+    if (lhs < rhs) {
       return -1;
-    } else if ( rhs < lhs ) {
+    } else if (rhs < lhs) {
       return 1;
     } else {
       return 0;
@@ -60,5 +60,5 @@ public:
   }
 };
 
-}
-#endif // COMMON_H
+}  // namespace Common
+#endif  // COMMON_H

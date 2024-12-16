@@ -1,9 +1,9 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#include <array>
 #include <cstdlib>
 #include <optional>
-#include <array>
 
 #include "../node/node.h"
 
@@ -11,14 +11,12 @@ namespace Queues {
 
 template <typename T>
 class ArrayQueue {
-public:
+ public:
   ArrayQueue(size_t capacity) : capacity(capacity), size(0), front(0), rear(0) {
     queue = new T[capacity];
   }
 
-  ~ArrayQueue() {
-    delete[] queue;
-  }
+  ~ArrayQueue() { delete[] queue; }
 
   std::optional<T> dequeue() {
     if (isEmpty()) {
@@ -46,19 +44,13 @@ public:
     return queue[front];
   }
 
-  bool isEmpty() {
-    return size == 0;
-  }
+  bool isEmpty() { return size == 0; }
 
-  bool isFull() {
-    return size == capacity;
-  }
+  bool isFull() { return size == capacity; }
 
-  size_t getSize() {
-    return size;
-  }
+  size_t getSize() { return size; }
 
-private:
+ private:
   size_t capacity;
   size_t size;
   size_t front;
@@ -66,12 +58,9 @@ private:
   T *queue;
 };
 
-
-
-
 template <typename T>
 class LinkedQueue {
-public:
+ public:
   LinkedQueue() : front(nullptr), rear(nullptr), size(0) {}
 
   ~LinkedQueue() {
@@ -112,20 +101,16 @@ public:
     return front->getData();
   }
 
-  bool isEmpty() {
-    return size == 0;
-  }
+  bool isEmpty() { return size == 0; }
 
-  size_t getSize() {
-    return size;
-  }
+  size_t getSize() { return size; }
 
-private:
+ private:
   Nodes::SingleLinkNode<T> *front;
   Nodes::SingleLinkNode<T> *rear;
   size_t size;
 };
 
-} // namespace Queues 
+}  // namespace Queues
 
-#endif // __QUEUE_H__
+#endif  // __QUEUE_H__

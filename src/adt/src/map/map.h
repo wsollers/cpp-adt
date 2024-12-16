@@ -1,9 +1,10 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <stdint.h>
+
 #include <cstdlib>
 #include <optional>
-#include <stdint.h>
 
 #include "../common/common.h"
 
@@ -14,9 +15,9 @@ namespace Maps {
 template <typename K, typename V, int32_t capacity>
   requires Common::Hashable<K> && Common::stl_container_storable<K> &&
            Common::stl_container_storable<V>
-class Map {
-public:
-  virtual ~Map() = default;
+class MapADT {
+ public:
+  virtual ~MapADT() = default;
 
   // Insert a key-value pair
   virtual void insert(K key, V value) = 0;
@@ -40,8 +41,9 @@ public:
   virtual void set(K key, V value) = 0;
 };
 
-template <typename K, typename V> class MapEntry {
-public:
+template <typename K, typename V>
+class MapEntry {
+ public:
   MapEntry() : key{}, value() {}
   MapEntry(K key, V value) : key(key), value(value) {}
 
@@ -49,28 +51,27 @@ public:
 
   V getValue() const { return value; }
 
-private:
+ private:
   K key;
   V value;
 };
 
 template <typename K, typename V, int32_t capacity>
-class ArrayMap : public Map<K, V, capacity> {
-public:
+class ArrayMap : public MapADT<K, V, capacity> {
+ public:
   ArrayMap() : size(0), entries{} {}
 
   void insert(K key, V value) override {
     size_t hashedLocation =
-        std::hash<K>{}(key) % capacity; // all K types must be hashable
+        std::hash<K>{}(key) % capacity;  // all K types must be hashable
     if (entries[hashedLocation].has_value()) {
-      return; // TODO handle collision
+      return;  // TODO handle collision
     }
     entries[hashedLocation] = MapEntry<K, V>(key, value);
     size++;
   }
 
   void remove(K key) override {
-
     size_t hashedLocation = std::hash<K>{}(key) % capacity;
 
     if (entries[hashedLocation].has_value() &&
@@ -95,7 +96,6 @@ public:
   }
 
   V get(K key) const override {
-
     size_t hashedLocation = std::hash<K>{}(key) % capacity;
 
     return entries[hashedLocation].value().getValue();
@@ -110,20 +110,21 @@ public:
     }
   }
 
-private:
+ private:
   size_t size;
   std::optional<MapEntry<K, V>> entries[capacity];
 };
 
 template <typename K, typename V, int32_t capacity>
-class HashMapArrayBuckets : public Map<K, V, capacity> {
-public:
-
-private:
+  requires Common::Hashable<K> && Common::stl_container_storable<K> &&
+           Common::stl_container_storable<V>
+class HashMapArrayBuckets : public MapADT<K, V, capacity> {
+ public:
+ private:
   size_t size;
   std::optional<MapEntry<K, V>> entries[capacity];
 };
 
-} // namespace Maps
+}  // namespace Maps
 
-#endif // MAP_H
+#endif  // MAP_H

@@ -1,10 +1,9 @@
 #ifndef PRIOIRTY_QUEUE_H
 #define PRIOIRTY_QUEUE_H
 
-#include <cstdlib>
-
 #include <compare>
 #include <concepts>
+#include <cstdlib>
 #include <optional>
 #include <stdexcept>
 
@@ -19,8 +18,8 @@ concept Prioritazable = requires(T a) {
 
 using Priority = int16_t;
 
-template <typename T> struct PriorityContainer {
-
+template <typename T>
+struct PriorityContainer {
   Priority priority;
   T data;
 
@@ -36,8 +35,9 @@ template <typename T> struct PriorityContainer {
   }
 };
 
-template <Prioritazable T> class PriorityQueue {
-public:
+template <Prioritazable T>
+class PriorityQueue {
+ public:
   virtual ~PriorityQueue() = default;
 
   virtual void insert(Priority p, T data) = 0;
@@ -50,8 +50,9 @@ public:
   virtual size_t getSize() const = 0;
 };
 
-template <typename T> class LinkedPriorityQueue : public PriorityQueue<T> {
-public:
+template <typename T>
+class LinkedPriorityQueue : public PriorityQueue<T> {
+ public:
   LinkedPriorityQueue();
 
   virtual ~LinkedPriorityQueue();
@@ -69,7 +70,7 @@ public:
   bool isEmpty() const override;
   size_t getSize() const override;
 
-private:
+ private:
   size_t size;
   Nodes::BinaryTreeNode<PriorityContainer<T>> *head;
 
@@ -81,7 +82,8 @@ private:
 template <typename T>
 LinkedPriorityQueue<T>::LinkedPriorityQueue() : size(0), head(nullptr){};
 
-template <typename T> LinkedPriorityQueue<T>::~LinkedPriorityQueue(){};
+template <typename T>
+LinkedPriorityQueue<T>::~LinkedPriorityQueue(){};
 
 template <typename T>
 LinkedPriorityQueue<T>::LinkedPriorityQueue(const PriorityQueue<T> &other)
@@ -110,8 +112,8 @@ void LinkedPriorityQueue<T>::copyTree(
 };
 
 template <typename T>
-PriorityQueue<T> &
-LinkedPriorityQueue<T>::operator=(const LinkedPriorityQueue<T> &other) {
+PriorityQueue<T> &LinkedPriorityQueue<T>::operator=(
+    const LinkedPriorityQueue<T> &other) {
   if (this == &other) {
     return *this;
   }
@@ -119,7 +121,8 @@ LinkedPriorityQueue<T>::operator=(const LinkedPriorityQueue<T> &other) {
   copyTree(other.head);
 };
 
-template <typename T> void LinkedPriorityQueue<T>::insert(Priority p, T data) {
+template <typename T>
+void LinkedPriorityQueue<T>::insert(Priority p, T data) {
   auto newNode = new Nodes::BinaryTreeNode<PriorityContainer<T>>(
       PriorityContainer<T>{p, data});
   if (head == nullptr) {
@@ -146,14 +149,16 @@ template <typename T> void LinkedPriorityQueue<T>::insert(Priority p, T data) {
   size++;
 };
 
-template <typename T> std::optional<T> LinkedPriorityQueue<T>::peek() const {
+template <typename T>
+std::optional<T> LinkedPriorityQueue<T>::peek() const {
   if (isEmpty()) {
     return std::nullopt;
   }
   return head->data.data;
 };
 
-template <typename T> std::optional<T> LinkedPriorityQueue<T>::min() const {
+template <typename T>
+std::optional<T> LinkedPriorityQueue<T>::min() const {
   if (isEmpty()) {
     return std::nullopt;
   }
@@ -164,7 +169,8 @@ template <typename T> std::optional<T> LinkedPriorityQueue<T>::min() const {
   return current->data.data;
 };
 
-template <typename T> std::optional<T> LinkedPriorityQueue<T>::removeMin() {
+template <typename T>
+std::optional<T> LinkedPriorityQueue<T>::removeMin() {
   if (isEmpty()) {
     return std::nullopt;
   }
@@ -185,24 +191,26 @@ template <typename T> std::optional<T> LinkedPriorityQueue<T>::removeMin() {
   return data;
 };
 
-template <typename T> bool LinkedPriorityQueue<T>::isEmpty() const {
+template <typename T>
+bool LinkedPriorityQueue<T>::isEmpty() const {
   return size == 0;
 };
 
-template <typename T> size_t LinkedPriorityQueue<T>::getSize() const {
+template <typename T>
+size_t LinkedPriorityQueue<T>::getSize() const {
   return size;
 };
 
-template <typename T> class ArrayPriorityQueue : public PriorityQueue<T> {
-public:
+template <typename T>
+class ArrayPriorityQueue : public PriorityQueue<T> {
+ public:
   explicit ArrayPriorityQueue(size_t capacity) : capacity(capacity), size(0) {
     queue = new T[capacity];
   }
 
   ArrayPriorityQueue(const ArrayPriorityQueue<T> &other) = delete;
 
-  ArrayPriorityQueue<T> &
-  operator=(const ArrayPriorityQueue<T> &other) {
+  ArrayPriorityQueue<T> &operator=(const ArrayPriorityQueue<T> &other) {
     if (this == &other) {
       return *this;
     }
@@ -269,7 +277,7 @@ public:
 
   size_t getSize() const override { return size; }
 
-private:
+ private:
   size_t capacity;
   size_t size;
   T *queue;
@@ -277,6 +285,6 @@ private:
   bool isFull() { return size == capacity; }
 };
 
-} // namespace PriorityQueues
+}  // namespace PriorityQueues
 
-#endif // PRIOIRTY_QUEUE_H
+#endif  // PRIOIRTY_QUEUE_H

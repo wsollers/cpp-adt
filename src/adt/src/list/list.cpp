@@ -1,19 +1,19 @@
+#include "list.h"
+
 #include <iostream>
 #include <string>
 
-#include "list.h"
+#include "../node/node.h"
 
-namespace Lists{
+namespace Lists {}
 
-}
-
-/*
-template <typename T> class SinglyLinkedList {
-private:
-  SingleLinkNode<T> *head;
+template <typename T>
+class SinglyLinkedList {
+ private:
+  Nodes::SingleLinkNode<T> *head;
   int size;
 
-public:
+ public:
   SinglyLinkedList();
   ~SinglyLinkedList();
   void add(T data);
@@ -21,14 +21,14 @@ public:
   void print();
   int getSize();
 };
-*/
 
-/*
-template <typename T> SinglyLinkedList<T>::SinglyLinkedList() : head(nullptr), size(0) {}
+template <typename T>
+SinglyLinkedList<T>::SinglyLinkedList() : head(nullptr), size(0) {}
 
-template <typename T> SinglyLinkedList<T>::~SinglyLinkedList() {
-  SingleLinkNode<T> *current = head;
-  SingleLinkNode<T> *next = nullptr;
+template <typename T>
+SinglyLinkedList<T>::~SinglyLinkedList() {
+  Nodes::SingleLinkNode<T> *current = head;
+  Nodes::SingleLinkNode<T> *next = nullptr;
   while (current != nullptr) {
     next = current->getNext();
     delete current;
@@ -36,17 +36,17 @@ template <typename T> SinglyLinkedList<T>::~SinglyLinkedList() {
   }
 }
 
-
-//force compiler to generate the class for the types we need
+// force compiler to generate the class for the types we need
 template class SinglyLinkedList<int>;
 template class SinglyLinkedList<std::string>;
 
-template <typename T> void SinglyLinkedList<T>::add(T data) {
-  SingleLinkNode<T> *newNode = new SingleLinkNode<T>(data);
+template <typename T>
+void SinglyLinkedList<T>::add(T data) {
+  Nodes::SingleLinkNode<T> *newNode = new Nodes::SingleLinkNode<T>(data);
   if (head == nullptr) {
     head = newNode;
   } else {
-    SingleLinkNode<T> *current = head;
+    Nodes::SingleLinkNode<T> *current = head;
     while (current->getNext() != nullptr) {
       current = current->getNext();
     }
@@ -55,9 +55,10 @@ template <typename T> void SinglyLinkedList<T>::add(T data) {
   size++;
 }
 
-template <typename T> void SinglyLinkedList<T>::remove(T data) {
-  SingleLinkNode<T> *current = head;
-  SingleLinkNode<T> *prev = nullptr;
+template <typename T>
+void SinglyLinkedList<T>::remove(T data) {
+  Nodes::SingleLinkNode<T> *current = head;
+  Nodes::SingleLinkNode<T> *prev = nullptr;
   while (current != nullptr) {
     if (current->getData() == data) {
       if (prev == nullptr) {
@@ -74,8 +75,9 @@ template <typename T> void SinglyLinkedList<T>::remove(T data) {
   }
 }
 
-template <typename T> void SinglyLinkedList<T>::print() {
-  SingleLinkNode<T> *current = head;
+template <typename T>
+void SinglyLinkedList<T>::print() {
+  Nodes::SingleLinkNode<T> *current = head;
   while (current != nullptr) {
     std::cout << current->getData() << " ";
     current = current->getNext();
@@ -83,7 +85,7 @@ template <typename T> void SinglyLinkedList<T>::print() {
   std::cout << std::endl;
 }
 
-template <typename T> int SinglyLinkedList<T>::getSize() {
+template <typename T>
+int SinglyLinkedList<T>::getSize() {
   return size;
 }
-*/

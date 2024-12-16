@@ -17,7 +17,7 @@ std::vector<int> xxx;
 
 template <typename T, typename Custom_Comparator_Type = Common::Comparator<T>>
 class TreeAdt {
-public:
+ public:
   using comparator_type = Custom_Comparator_Type;
 
   /*
@@ -34,8 +34,8 @@ public:
 
   virtual size_t getSize() const = 0;
 
-  virtual std::vector<T>
-  findMatchingElements(std::function<bool(const T &)> predicate) const = 0;
+  virtual std::vector<T> findMatchingElements(
+      std::function<bool(const T &)> predicate) const = 0;
 
   virtual void inOrderWithPredicate(std::function<bool(const T &)> predicate,
                                     std::vector<T> &result) const = 0;
@@ -49,7 +49,7 @@ public:
 
 template <typename T, typename Custom_Comparator_Type = Common::Comparator<T>>
 class BinarySearchTree : public TreeAdt<T, Custom_Comparator_Type> {
-public:
+ public:
   using comparator_type = Custom_Comparator_Type;
   explicit BinarySearchTree();
   explicit BinarySearchTree(comparator_type comp);
@@ -63,8 +63,8 @@ public:
 
   size_t getSize() const;
 
-  std::vector<T>
-  findMatchingElements(std::function<bool(const T &)> predicate) const;
+  std::vector<T> findMatchingElements(
+      std::function<bool(const T &)> predicate) const;
 
   void inOrderWithPredicate(std::function<bool(const T &)> predicate,
                             std::vector<T> &result) const;
@@ -75,7 +75,7 @@ public:
   void postOrderWithPredicate(std::function<bool(const T &)> predicate,
                               std::vector<T> &result) const;
 
-private:
+ private:
   bool isRoot(Nodes::BinaryTreeNode<T> *node) const;
   bool isLeaf(Nodes::BinaryTreeNode<T> *node) const;
   size_t numChildren(Nodes::BinaryTreeNode<T> *node) const;
@@ -140,7 +140,7 @@ template <typename T, typename Custom_Comparator_Type>
 void BinarySearchTree<T, Custom_Comparator_Type>::remove(T data) {
   if (root == nullptr) {
     std::cout << "Tree is empty" << std::endl;
-    return; // Tree is empty
+    return;  // Tree is empty
   }
 
   auto current = root;
@@ -157,7 +157,7 @@ void BinarySearchTree<T, Custom_Comparator_Type>::remove(T data) {
 
   if (current == nullptr) {
     std::cout << "Current is empty" << std::endl;
-    return; // Data not found
+    return;  // Data not found
   }
 
   // Case 1: Node has no children
@@ -276,12 +276,12 @@ void BinarySearchTree<T, Custom_Comparator_Type>::inOrderWithPredicateHelper(
     return;
   }
   inOrderWithPredicateHelper(node->left, predicate,
-                             result); // Traverse left subtree
-  if (predicate(node->data)) {        // Apply predicate
-    result.push_back(node->data);     // Add if predicate is true
+                             result);  // Traverse left subtree
+  if (predicate(node->data)) {         // Apply predicate
+    result.push_back(node->data);      // Add if predicate is true
   }
   inOrderWithPredicateHelper(node->right, predicate,
-                             result); // Traverse right subtree
+                             result);  // Traverse right subtree
 }
 
 template <typename T, typename Custom_Comparator_Type>
@@ -298,12 +298,12 @@ void BinarySearchTree<T, Custom_Comparator_Type>::preOrderWithPredicateHelper(
     return;
   }
   preOrderWithPredicateHelper(node->left, predicate,
-                              result); // Traverse left subtree
-  if (predicate(node->data)) {         // Apply predicate
-    result.push_back(node->data);      // Add if predicate is true
+                              result);  // Traverse left subtree
+  if (predicate(node->data)) {          // Apply predicate
+    result.push_back(node->data);       // Add if predicate is true
   }
   preOrderWithPredicateHelper(node->right, predicate,
-                              result); // Traverse right subtree
+                              result);  // Traverse right subtree
 }
 
 template <typename T, typename Custom_Comparator_Type>
@@ -320,12 +320,12 @@ void BinarySearchTree<T, Custom_Comparator_Type>::postOrderWithPredicateHelper(
     return;
   }
   postOrderWithPredicateHelper(node->left, predicate,
-                               result); // Traverse left subtree
-  if (predicate(node->data)) {          // Apply predicate
-    result.push_back(node->data);       // Add if predicate is true
+                               result);  // Traverse left subtree
+  if (predicate(node->data)) {           // Apply predicate
+    result.push_back(node->data);        // Add if predicate is true
   }
   postOrderWithPredicateHelper(node->right, predicate,
-                               result); // Traverse right subtree
+                               result);  // Traverse right subtree
 }
 
 template <typename T, typename Custom_Comparator_Type>
@@ -348,8 +348,8 @@ Nodes::BinaryTreeNode<T> *BinarySearchTree<T, Custom_Comparator_Type>::findMin(
 }
 
 template <typename T, typename Custom_Comparator_Type>
-Nodes::BinaryTreeNode<T> *
-BinarySearchTree<T, Custom_Comparator_Type>::search(T data) const {
+Nodes::BinaryTreeNode<T> *BinarySearchTree<T, Custom_Comparator_Type>::search(
+    T data) const {
   Nodes::BinaryTreeNode<T> *current = root;
   while (current != nullptr) {
     if (data == current->data) {
@@ -365,7 +365,7 @@ BinarySearchTree<T, Custom_Comparator_Type>::search(T data) const {
 
 template <typename T, typename Custom_Comparator_Type = Common::Comparator<T>>
 class AvlTree : public TreeAdt<T, Custom_Comparator_Type> {
-public:
+ public:
   using comparator_type = Custom_Comparator_Type;
   explicit AvlTree();
   explicit AvlTree(comparator_type comp);
@@ -378,7 +378,7 @@ public:
   bool contains(const T &data) const;
   size_t getSize() const;
 
-private:
+ private:
   Nodes::AvlTreeNode<T> *root;
   size_t size;
   comparator_type comparator;
@@ -443,8 +443,8 @@ uint16_t AvlTree<T, Custom_Comparator_Type>::getBalance(
 }
 
 template <typename T, typename Custom_Comparator_Type>
-Nodes::AvlTreeNode<T>
-AvlTree<T, Custom_Comparator_Type>::rightRotate(Nodes::AvlTreeNode<T> *node) {
+Nodes::AvlTreeNode<T> AvlTree<T, Custom_Comparator_Type>::rightRotate(
+    Nodes::AvlTreeNode<T> *node) {
   Nodes::AvlTreeNode<T> *leftChild = node->left;
   Nodes::AvlTreeNode<T> *rightChild = leftChild->right;
 
@@ -452,7 +452,8 @@ AvlTree<T, Custom_Comparator_Type>::rightRotate(Nodes::AvlTreeNode<T> *node) {
   node->left = rightChild;
 
   node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1;
-  leftChild->height = std::max(getHeight(leftChild->left), getHeight(leftChild->right)) + 1;
+  leftChild->height =
+      std::max(getHeight(leftChild->left), getHeight(leftChild->right)) + 1;
 
   return leftChild;
 }
@@ -471,8 +472,6 @@ Nodes::AvlTreeNode<T> *leftRotate(Nodes::AvlTreeNode<T> *x) {
   return y;
 }
 
+}  // namespace Trees
 
-
-} // namespace Trees
-
-#endif // TREE_H
+#endif  // TREE_H

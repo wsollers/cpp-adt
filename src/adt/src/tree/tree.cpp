@@ -1,6 +1,3 @@
 #include "tree.h"
 
-namespace Trees {
-
-}
-
+namespace Trees {}

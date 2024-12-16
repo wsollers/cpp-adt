@@ -1,25 +1,23 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include "../node/node.h"
-#include "../common/common.h"
-#include <cstddef> // For std::ptrdiff_t
+#include <cstddef>  // For std::ptrdiff_t
 #include <ios>
 #include <iostream>
-#include <iterator> // For std::forward_iterator_tag
-#include <ranges>
-#include <stdexcept> // std::out_of_range
+#include <iterator>  // For std::forward_iterator_tag
 #include <optional>
-//#include <experimental/source_location>
-//#include <expected>
+#include <ranges>
+#include <stdexcept>  // std::out_of_range
 
-
+#include "../common/common.h"
+#include "../node/node.h"
+// #include <experimental/source_location>
+// #include <expected>
 
 struct oogabooga {
   int a;
   int b;
 };
-
 
 /*
  */
@@ -27,7 +25,7 @@ namespace Lists {
 
 template <typename T>
 class ListAdt {
-public:
+ public:
   ListAdt() {}
   virtual ~ListAdt() {}
 
@@ -53,15 +51,18 @@ public:
 // template <typename T> class SinglyLinkedListForwardIterator;
 
 // forward declaration
-template <typename T> class SinglyLinkedListForwardIterator;
-template <typename T> class SinglyLinkedListRandomAccessIterator;
+template <typename T>
+class SinglyLinkedListForwardIterator;
+template <typename T>
+class SinglyLinkedListRandomAccessIterator;
 
-template <typename T> class SinglyLinkedList : public ListAdt<T> {
-private:
+template <typename T>
+class SinglyLinkedList : public ListAdt<T> {
+ private:
   Nodes::SingleLinkNode<T> *head;
   size_t size;
 
-public:
+ public:
   SinglyLinkedList();
   explicit SinglyLinkedList(std::ranges::input_range auto &&range);
 
@@ -118,7 +119,8 @@ public:
   }
 };
 
-template <typename T> ListAdt<T> *createSingleLinkList() {
+template <typename T>
+ListAdt<T> *createSingleLinkList() {
   test_common();
   return new SinglyLinkedList<T>();
 }
@@ -137,12 +139,14 @@ SinglyLinkedList<T>::SinglyLinkedList(std::ranges::input_range auto &&range)
 }
 
 // Destructor
-template <typename T> SinglyLinkedList<T>::~SinglyLinkedList() {
+template <typename T>
+SinglyLinkedList<T>::~SinglyLinkedList() {
   Lists::SinglyLinkedList<T>::clear();
 }
 
 // Add an element to the end of the list
-template <typename T> bool SinglyLinkedList<T>::add(T data) {
+template <typename T>
+bool SinglyLinkedList<T>::add(T data) {
   Nodes::SingleLinkNode<T> *newNode = new Nodes::SingleLinkNode<T>(data);
 
   if (isEmpty()) {
@@ -161,10 +165,12 @@ template <typename T> bool SinglyLinkedList<T>::add(T data) {
 }
 
 // Add an element at a specific index
-template <typename T> std::optional<bool> SinglyLinkedList<T>::add(size_t index, T data) {
+template <typename T>
+std::optional<bool> SinglyLinkedList<T>::add(size_t index, T data) {
   if (index > size) {
-    //throw std::out_of_range("Index out of bounds"); // maybe not do this
-    //Error e = {"Index out of bounds", std::experimental::source_location::current()};
+    // throw std::out_of_range("Index out of bounds"); // maybe not do this
+    // Error e = {"Index out of bounds",
+    // std::experimental::source_location::current()};
     Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
     Common::report_error(e);
     return std::nullopt;
@@ -189,9 +195,10 @@ template <typename T> std::optional<bool> SinglyLinkedList<T>::add(size_t index,
 }
 
 // Remove an element at a specific index
-template <typename T> std::optional<T> SinglyLinkedList<T>::remove(size_t index) {
+template <typename T>
+std::optional<T> SinglyLinkedList<T>::remove(size_t index) {
   if (index >= size) {
-    //throw std::out_of_range("Index out of bounds");
+    // throw std::out_of_range("Index out of bounds");
     return std::nullopt;
   }
 
@@ -218,7 +225,8 @@ template <typename T> std::optional<T> SinglyLinkedList<T>::remove(size_t index)
 }
 
 // Remove the first occurrence of an element
-template <typename T> bool SinglyLinkedList<T>::remove(T data) {
+template <typename T>
+bool SinglyLinkedList<T>::remove(T data) {
   if (isEmpty()) {
     return false;
   }
@@ -245,11 +253,12 @@ template <typename T> bool SinglyLinkedList<T>::remove(T data) {
     return true;
   }
 
-  return false; // Element not found
+  return false;  // Element not found
 }
 
 // Check if the list contains an element
-template <typename T> bool SinglyLinkedList<T>::contains(T data) const {
+template <typename T>
+bool SinglyLinkedList<T>::contains(T data) const {
   Nodes::SingleLinkNode<T> *current = head;
   while (current != nullptr) {
     if (current->getData() == data) {
@@ -261,9 +270,10 @@ template <typename T> bool SinglyLinkedList<T>::contains(T data) const {
 }
 
 // Get the element at a specific index
-template <typename T> std::optional<T> SinglyLinkedList<T>::get(size_t index) const {
+template <typename T>
+std::optional<T> SinglyLinkedList<T>::get(size_t index) const {
   if (index >= size) {
-    //throw std::out_of_range("Index out of bounds");o
+    // throw std::out_of_range("Index out of bounds");o
     Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
     Common::report_error(e);
     return std::nullopt;
@@ -278,9 +288,10 @@ template <typename T> std::optional<T> SinglyLinkedList<T>::get(size_t index) co
 }
 
 // Set the element at a specific index and return the old value
-template <typename T> std::optional<T> SinglyLinkedList<T>::set(size_t index, T data) {
+template <typename T>
+std::optional<T> SinglyLinkedList<T>::set(size_t index, T data) {
   if (index >= size) {
-    //throw std::out_of_range("Index out of bounds");
+    // throw std::out_of_range("Index out of bounds");
     Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
     Common::report_error(e);
     return std::nullopt;
@@ -297,7 +308,8 @@ template <typename T> std::optional<T> SinglyLinkedList<T>::set(size_t index, T 
 }
 
 // Get the index of the first occurrence of an element
-template <typename T> size_t SinglyLinkedList<T>::indexOf(T data) const {
+template <typename T>
+size_t SinglyLinkedList<T>::indexOf(T data) const {
   Nodes::SingleLinkNode<T> *current = head;
   size_t index = 0;
 
@@ -309,11 +321,12 @@ template <typename T> size_t SinglyLinkedList<T>::indexOf(T data) const {
     index++;
   }
 
-  return -1; // Element not found
+  return -1;  // Element not found
 }
 
 // Get the index of the last occurrence of an element
-template <typename T> size_t SinglyLinkedList<T>::lastIndexOf(T data) const {
+template <typename T>
+size_t SinglyLinkedList<T>::lastIndexOf(T data) const {
   Nodes::SingleLinkNode<T> *current = head;
   size_t lastIndex = -1;
   size_t index = 0;
@@ -330,36 +343,40 @@ template <typename T> size_t SinglyLinkedList<T>::lastIndexOf(T data) const {
 }
 
 // Check if the list is empty
-template <typename T> bool SinglyLinkedList<T>::isEmpty() const {
+template <typename T>
+bool SinglyLinkedList<T>::isEmpty() const {
   return size == 0;
 }
 
 // Get the size of the list
-template <typename T> size_t SinglyLinkedList<T>::getSize() const {
+template <typename T>
+size_t SinglyLinkedList<T>::getSize() const {
   return size;
 }
 
 // Clear the list
-template <typename T> void SinglyLinkedList<T>::clear() {
+template <typename T>
+void SinglyLinkedList<T>::clear() {
   //  Loop through the list and delete each node
   while (head != nullptr) {
     Nodes::SingleLinkNode<T> *current = head;
-    head = head->getNext(); // Move head to the next node
-    delete current;         // Delete the current node
+    head = head->getNext();  // Move head to the next node
+    delete current;          // Delete the current node
   }
-  size = 0; // Reset the size to 0
+  size = 0;  // Reset the size to 0
 }
 
 /*
  * DoublyLinkedList
  */
-template <typename T> class DoublyLinkedList : public ListAdt<T> {
-private:
+template <typename T>
+class DoublyLinkedList : public ListAdt<T> {
+ private:
   Nodes::DoubleLinkNode<T> *head;
   Nodes::DoubleLinkNode<T> *tail;
   size_t size;
 
-public:
+ public:
   DoublyLinkedList();
   ~DoublyLinkedList();
 
@@ -382,7 +399,8 @@ public:
   void clear() override;
 };
 
-template <typename T> ListAdt<T> *createDoublyLinkedList() {
+template <typename T>
+ListAdt<T> *createDoublyLinkedList() {
   return new DoublyLinkedList<T>();
 }
 
@@ -392,12 +410,14 @@ DoublyLinkedList<T>::DoublyLinkedList()
     : head(nullptr), tail(nullptr), size(0) {}
 
 // Destructor
-template <typename T> DoublyLinkedList<T>::~DoublyLinkedList() {
+template <typename T>
+DoublyLinkedList<T>::~DoublyLinkedList() {
   Lists::DoublyLinkedList<T>::clear();
 }
 
 // Add an element to the end of the list
-template <typename T> bool DoublyLinkedList<T>::add(T data) {
+template <typename T>
+bool DoublyLinkedList<T>::add(T data) {
   Nodes::DoubleLinkNode<T> *newNode = new Nodes::DoubleLinkNode<T>(data);
 
   if (isEmpty()) {
@@ -414,7 +434,8 @@ template <typename T> bool DoublyLinkedList<T>::add(T data) {
 }
 
 // Add an element at a specific index
-template <typename T> std::optional<bool> DoublyLinkedList<T>::add(size_t index, T data) {
+template <typename T>
+std::optional<bool> DoublyLinkedList<T>::add(size_t index, T data) {
   if (index > size) {
     Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
     Common::report_error(e);
@@ -430,10 +451,10 @@ template <typename T> std::optional<bool> DoublyLinkedList<T>::add(size_t index,
     }
     head = newNode;
     if (size == 0) {
-      tail = newNode; // If list was empty
+      tail = newNode;  // If list was empty
     }
   } else if (index == size) {
-    add(data); // Adding at the end
+    add(data);  // Adding at the end
     return true;
   } else {
     Nodes::DoubleLinkNode<T> *current = head;
@@ -453,9 +474,10 @@ template <typename T> std::optional<bool> DoublyLinkedList<T>::add(size_t index,
 }
 
 // Remove an element at a specific index
-template <typename T> std::optional<T> DoublyLinkedList<T>::remove(size_t index) {
+template <typename T>
+std::optional<T> DoublyLinkedList<T>::remove(size_t index) {
   if (index > size) {
-    //throw std::out_of_range("Index out of bounds");
+    // throw std::out_of_range("Index out of bounds");
     Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
     Common::report_error(e);
     return std::nullopt;
@@ -469,7 +491,7 @@ template <typename T> std::optional<T> DoublyLinkedList<T>::remove(size_t index)
     if (head) {
       head->setPrev(nullptr);
     } else {
-      tail = nullptr; // List is now empty
+      tail = nullptr;  // List is now empty
     }
     delete nodeToRemove;
     size--;
@@ -497,7 +519,8 @@ template <typename T> std::optional<T> DoublyLinkedList<T>::remove(size_t index)
 }
 
 // Remove the first occurrence of an element
-template <typename T> bool DoublyLinkedList<T>::remove(T data) {
+template <typename T>
+bool DoublyLinkedList<T>::remove(T data) {
   Nodes::DoubleLinkNode<T> *current = head;
 
   while (current != nullptr) {
@@ -523,11 +546,12 @@ template <typename T> bool DoublyLinkedList<T>::remove(T data) {
     }
     current = current->getNext();
   }
-  return false; // Element not found
+  return false;  // Element not found
 }
 
 // Check if the list contains an element
-template <typename T> bool DoublyLinkedList<T>::contains(T data) const {
+template <typename T>
+bool DoublyLinkedList<T>::contains(T data) const {
   Nodes::DoubleLinkNode<T> *current = head;
   while (current != nullptr) {
     if (current->getData() == data) {
@@ -539,9 +563,10 @@ template <typename T> bool DoublyLinkedList<T>::contains(T data) const {
 }
 
 // Get the element at a specific index
-template <typename T> std::optional<T> DoublyLinkedList<T>::get(size_t index) const {
+template <typename T>
+std::optional<T> DoublyLinkedList<T>::get(size_t index) const {
   if (index >= size) {
-    //throw std::out_of_range("Index out of bounds");
+    // throw std::out_of_range("Index out of bounds");
     Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
     Common::report_error(e);
     return std::nullopt;
@@ -556,9 +581,10 @@ template <typename T> std::optional<T> DoublyLinkedList<T>::get(size_t index) co
 }
 
 // Set the element at a specific index and return the old value
-template <typename T> std::optional<T> DoublyLinkedList<T>::set(size_t index, T data) {
+template <typename T>
+std::optional<T> DoublyLinkedList<T>::set(size_t index, T data) {
   if (index >= size) {
-    //throw std::out_of_range("Index out of bounds");
+    // throw std::out_of_range("Index out of bounds");
     Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
     Common::report_error(e);
     return std::nullopt;
@@ -575,7 +601,8 @@ template <typename T> std::optional<T> DoublyLinkedList<T>::set(size_t index, T 
 }
 
 // Get the index of the first occurrence of an element
-template <typename T> size_t DoublyLinkedList<T>::indexOf(T data) const {
+template <typename T>
+size_t DoublyLinkedList<T>::indexOf(T data) const {
   Nodes::DoubleLinkNode<T> *current = head;
   size_t index = 0;
 
@@ -587,11 +614,12 @@ template <typename T> size_t DoublyLinkedList<T>::indexOf(T data) const {
     index++;
   }
 
-  return -1; // Element not found
+  return -1;  // Element not found
 }
 
 // Get the index of the last occurrence of an element
-template <typename T> size_t DoublyLinkedList<T>::lastIndexOf(T data) const {
+template <typename T>
+size_t DoublyLinkedList<T>::lastIndexOf(T data) const {
   Nodes::DoubleLinkNode<T> *current = tail;
   size_t index = size - 1;
 
@@ -603,40 +631,44 @@ template <typename T> size_t DoublyLinkedList<T>::lastIndexOf(T data) const {
     index--;
   }
 
-  return -1; // Element not found
+  return -1;  // Element not found
 }
 
 // Check if the list is empty
-template <typename T> bool DoublyLinkedList<T>::isEmpty() const {
+template <typename T>
+bool DoublyLinkedList<T>::isEmpty() const {
   return size == 0;
 }
 
 // Get the size of the list
-template <typename T> size_t DoublyLinkedList<T>::getSize() const {
+template <typename T>
+size_t DoublyLinkedList<T>::getSize() const {
   return size;
 }
 
 // Clear the list
-template <typename T> void DoublyLinkedList<T>::clear() {
+template <typename T>
+void DoublyLinkedList<T>::clear() {
   // Loop through the list and delete each node
   while (head != nullptr) {
     Nodes::DoubleLinkNode<T> *current = head;
-    head = head->getNext(); // Move head to the next node
-    delete current;         // Delete the current node
+    head = head->getNext();  // Move head to the next node
+    delete current;          // Delete the current node
   }
-  size = 0; // Reset the size to 0
+  size = 0;  // Reset the size to 0
 }
 
 /*
  * CircularLinkedList
  */
 
-template <typename T> class CircularLinkedList : public ListAdt<T> {
-private:
+template <typename T>
+class CircularLinkedList : public ListAdt<T> {
+ private:
   Nodes::SingleLinkNode<T> *head;
   size_t size;
 
-public:
+ public:
   CircularLinkedList();
   virtual ~CircularLinkedList();
 
@@ -659,7 +691,8 @@ public:
   void clear() override;
 };
 
-template <typename T> ListAdt<T> *createCircularLinkedList() {
+template <typename T>
+ListAdt<T> *createCircularLinkedList() {
   return new CircularLinkedList<T>();
 }
 
@@ -668,24 +701,26 @@ template <typename T>
 CircularLinkedList<T>::CircularLinkedList() : head(nullptr), size(0) {}
 
 // Destructor
-template <typename T> CircularLinkedList<T>::~CircularLinkedList() {
+template <typename T>
+CircularLinkedList<T>::~CircularLinkedList() {
   Lists::CircularLinkedList<T>::clear();
 }
 
 // Add an element to the end of the list
-template <typename T> bool CircularLinkedList<T>::add(T data) {
+template <typename T>
+bool CircularLinkedList<T>::add(T data) {
   Nodes::SingleLinkNode<T> *newNode = new Nodes::SingleLinkNode<T>(data);
 
   if (isEmpty()) {
     head = newNode;
-    newNode->setNext(head); // Circular link
+    newNode->setNext(head);  // Circular link
   } else {
     Nodes::SingleLinkNode<T> *current = head;
     while (current->getNext() != head) {
       current = current->getNext();
     }
     current->setNext(newNode);
-    newNode->setNext(head); // Complete the circle
+    newNode->setNext(head);  // Complete the circle
   }
 
   size++;
@@ -693,7 +728,8 @@ template <typename T> bool CircularLinkedList<T>::add(T data) {
 }
 
 // Add an element at a specific index
-template <typename T> std::optional<bool> CircularLinkedList<T>::add(size_t index, T data) {
+template <typename T>
+std::optional<bool> CircularLinkedList<T>::add(size_t index, T data) {
   if (index > size) {
     Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
     Common::report_error(e);
@@ -705,7 +741,7 @@ template <typename T> std::optional<bool> CircularLinkedList<T>::add(size_t inde
   if (index == 0) {
     if (isEmpty()) {
       head = newNode;
-      newNode->setNext(head); // Point to itself
+      newNode->setNext(head);  // Point to itself
     } else {
       newNode->setNext(head);
       Nodes::SingleLinkNode<T> *current = head;
@@ -713,7 +749,7 @@ template <typename T> std::optional<bool> CircularLinkedList<T>::add(size_t inde
         current = current->getNext();
       }
       current->setNext(newNode);
-      head = newNode; // Update the head
+      head = newNode;  // Update the head
     }
   } else {
     Nodes::SingleLinkNode<T> *current = head;
@@ -729,9 +765,10 @@ template <typename T> std::optional<bool> CircularLinkedList<T>::add(size_t inde
 }
 
 // Remove an element at a specific index
-template <typename T> std::optional<T> CircularLinkedList<T>::remove(size_t index) {
+template <typename T>
+std::optional<T> CircularLinkedList<T>::remove(size_t index) {
   if (index > size) {
-    //throw std::out_of_range("Index out of bounds");
+    // throw std::out_of_range("Index out of bounds");
     Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
     Common::report_error(e);
     return std::nullopt;
@@ -752,7 +789,7 @@ template <typename T> std::optional<T> CircularLinkedList<T>::remove(size_t inde
       }
       nodeToRemove = head;
       head = head->getNext();
-      current->setNext(head); // Update circular link
+      current->setNext(head);  // Update circular link
       delete nodeToRemove;
     }
   } else {
@@ -771,7 +808,8 @@ template <typename T> std::optional<T> CircularLinkedList<T>::remove(size_t inde
 }
 
 // Remove an element by value
-template <typename T> bool CircularLinkedList<T>::remove(T data) {
+template <typename T>
+bool CircularLinkedList<T>::remove(T data) {
   if (isEmpty()) {
     return false;
   }
@@ -793,11 +831,12 @@ template <typename T> bool CircularLinkedList<T>::remove(T data) {
     current = current->getNext();
   } while (current != head);
 
-  return false; // Element not found
+  return false;  // Element not found
 }
 
 // Check if the list contains a specific element
-template <typename T> bool CircularLinkedList<T>::contains(T data) const {
+template <typename T>
+bool CircularLinkedList<T>::contains(T data) const {
   if (isEmpty()) {
     return false;
   }
@@ -814,9 +853,10 @@ template <typename T> bool CircularLinkedList<T>::contains(T data) const {
 }
 
 // Get the element at a specific index
-template <typename T> std::optional<T> CircularLinkedList<T>::get(size_t index) const {
+template <typename T>
+std::optional<T> CircularLinkedList<T>::get(size_t index) const {
   if (index >= size) {
-    //throw std::out_of_range("Index out of bounds");
+    // throw std::out_of_range("Index out of bounds");
     Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
     Common::report_error(e);
     return std::nullopt;
@@ -831,9 +871,10 @@ template <typename T> std::optional<T> CircularLinkedList<T>::get(size_t index) 
 }
 
 // Set the element at a specific index and return the old value
-template <typename T> std::optional<T> CircularLinkedList<T>::set(size_t index, T data) {
+template <typename T>
+std::optional<T> CircularLinkedList<T>::set(size_t index, T data) {
   if (index >= size) {
-    //throw std::out_of_range("Index out of bounds");
+    // throw std::out_of_range("Index out of bounds");
     Common::Error e = {"Index out of bounds", __FILE__, __FUNCTION__, __LINE__};
     Common::report_error(e);
     return std::nullopt;
@@ -850,7 +891,8 @@ template <typename T> std::optional<T> CircularLinkedList<T>::set(size_t index, 
 }
 
 // Get the index of the first occurrence of an element
-template <typename T> size_t CircularLinkedList<T>::indexOf(T data) const {
+template <typename T>
+size_t CircularLinkedList<T>::indexOf(T data) const {
   if (isEmpty()) {
     return -1;
   }
@@ -865,11 +907,12 @@ template <typename T> size_t CircularLinkedList<T>::indexOf(T data) const {
     index++;
   } while (current != head);
 
-  return -1; // Element not found
+  return -1;  // Element not found
 }
 
 // Get the index of the last occurrence of an element
-template <typename T> size_t CircularLinkedList<T>::lastIndexOf(T data) const {
+template <typename T>
+size_t CircularLinkedList<T>::lastIndexOf(T data) const {
   if (isEmpty()) {
     return -1;
   }
@@ -889,19 +932,22 @@ template <typename T> size_t CircularLinkedList<T>::lastIndexOf(T data) const {
 }
 
 // Check if the list is empty
-template <typename T> bool CircularLinkedList<T>::isEmpty() const {
+template <typename T>
+bool CircularLinkedList<T>::isEmpty() const {
   return size == 0;
 }
 
 // Get the size of the list
-template <typename T> size_t CircularLinkedList<T>::getSize() const {
+template <typename T>
+size_t CircularLinkedList<T>::getSize() const {
   return size;
 }
 
 // Clear the list by removing all elements
-template <typename T> void CircularLinkedList<T>::clear() {
+template <typename T>
+void CircularLinkedList<T>::clear() {
   if (head == nullptr) {
-    return; // List is already empty
+    return;  // List is already empty
   }
 
   // Use a pointer to traverse the list
@@ -913,7 +959,7 @@ template <typename T> void CircularLinkedList<T>::clear() {
     nextNode = current->getNext();
     delete current;
     current = nextNode;
-  } while (current != head); // Stop when we've looped back to the head
+  } while (current != head);  // Stop when we've looped back to the head
 
   // After deleting all nodes, reset the list
   head = nullptr;
@@ -926,9 +972,9 @@ template <typename T> void CircularLinkedList<T>::clear() {
  *
  *
  */
-template <typename T> class SinglyLinkedListForwardIterator {
-
-public:
+template <typename T>
+class SinglyLinkedListForwardIterator {
+ public:
   using iterator_category = std::forward_iterator_tag;
   using value_type = T;
   using difference_type = std::ptrdiff_t;
@@ -961,12 +1007,13 @@ public:
     return !(*this == iterator);
   }
 
-private:
+ private:
   Nodes::SingleLinkNode<T> *current;
 };
 
-template <typename T> class SinglyLinkedListRandomAccessIterator {
-public:
+template <typename T>
+class SinglyLinkedListRandomAccessIterator {
+ public:
   using iterator_category = std::random_access_iterator_tag;
   using value_type = T;
   using difference_type = std::ptrdiff_t;
@@ -1088,18 +1135,18 @@ public:
     std::cout << "operator+: + n " << n << std::endl;
     for (difference_type i = 0; i < n; ++i) {
       current = current->getNext();
-      std::cout << "operator+[loop]: " << std::hex << current<< std::endl;
+      std::cout << "operator+[loop]: " << std::hex << current << std::endl;
     }
     return *this;
   }
 
-  friend SinglyLinkedListRandomAccessIterator
-  operator+(difference_type n,
-            const SinglyLinkedListRandomAccessIterator &iterator) {
+  friend SinglyLinkedListRandomAccessIterator operator+(
+      difference_type n, const SinglyLinkedListRandomAccessIterator &iterator) {
     std::cout << "operator+ friend: + n " << n << std::endl;
     for (difference_type i = 0; i < n; ++i) {
       iterator.current = iterator.current->getNext();
-      std::cout << "operator+friend[loop]: " << std::hex << iterator.current<< std::endl;
+      std::cout << "operator+friend[loop]: " << std::hex << iterator.current
+                << std::endl;
     }
     return iterator;
   }
@@ -1142,8 +1189,8 @@ public:
     return *this;
   }
 
-  difference_type
-  operator-(const SinglyLinkedListRandomAccessIterator &iterator) {
+  difference_type operator-(
+      const SinglyLinkedListRandomAccessIterator &iterator) {
     std::cout << "operator-(refT) Top: " << std::endl;
     std::cout << "operator-(refT): current " << current << std::endl;
     std::cout << "operator-(refT): iterator.current " << iterator.current
@@ -1152,9 +1199,10 @@ public:
     Nodes::SingleLinkNode<T> *temp = current;
     while (temp != nullptr && temp != iterator.current) {
       std::cout << "operator-(refT) Loop: " << std::endl;
-      std::cout << "operator-(refT) loop: current " << std::hex << current << std::endl;
-      std::cout << "operator-(refT) loop: iterator.current " << std::hex << iterator.current
+      std::cout << "operator-(refT) loop: current " << std::hex << current
                 << std::endl;
+      std::cout << "operator-(refT) loop: iterator.current " << std::hex
+                << iterator.current << std::endl;
       temp = temp->getNext();
       count++;
     }
@@ -1163,10 +1211,10 @@ public:
     return count;
   }
 
-private:
+ private:
   Nodes::SingleLinkNode<T> *current;
   Nodes::SingleLinkNode<T> *head;
 };
 
-} // namespace Lists
-#endif // LIST_H
+}  // namespace Lists
+#endif  // LIST_H

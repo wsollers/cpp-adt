@@ -1,9 +1,9 @@
 #ifndef STACK_H
 #define STACK_H
 
+#include <array>
 #include <cstdlib>
 #include <optional>
-#include <array>
 
 #include "../node/node.h"
 
@@ -11,29 +11,23 @@ namespace Stacks {
 
 template <typename T>
 class Stack {
+ public:
+  virtual std::optional<T> pop() = 0;
+  virtual std::optional<T> peek() = 0;
+  virtual void push(T data) = 0;
+  virtual bool isEmpty() = 0;
+  virtual size_t getSize() = 0;
 
-public:
-
-virtual std::optional<T> pop() = 0;
-virtual std::optional<T> peek() = 0;
-virtual void push(T data) = 0;
-virtual bool isEmpty() = 0;
-virtual size_t getSize() = 0;
-
-}; // class Stack
-
-
+};  // class Stack
 
 template <typename T>
 class ArrayStack : public Stack<T> {
-public:
+ public:
   ArrayStack(size_t capacity) : capacity(capacity), size(0) {
-    stack = new T[capacity]; 
+    stack = new T[capacity];
   }
 
-  ~ArrayStack() {
-    delete[] stack;
-  }
+  ~ArrayStack() { delete[] stack; }
 
   std::optional<T> pop() override {
     if (isEmpty()) {
@@ -56,24 +50,19 @@ public:
     stack[size++] = data;
   }
 
-  bool isEmpty() override {
-    return size == 0;
-  }
+  bool isEmpty() override { return size == 0; }
 
-  size_t getSize() override {
-    return size;
-  }
+  size_t getSize() override { return size; }
 
-private:
+ private:
   size_t capacity;
   size_t size;
-  T *stack {};
-
+  T *stack{};
 };
 
 template <typename T>
 class LinkedStack : public Stack<T> {
-public:
+ public:
   LinkedStack() : size(0), head(nullptr) {}
 
   ~LinkedStack() {
@@ -112,19 +101,15 @@ public:
     size++;
   }
 
-  bool isEmpty() override {
-    return size == 0;
-  }
+  bool isEmpty() override { return size == 0; }
 
-  size_t getSize() override {
-    return size;
-  }
+  size_t getSize() override { return size; }
 
-private:
+ private:
   size_t size;
   Nodes::SingleLinkNode<T> *head;
 };
 
-} // namespace Stacks
+}  // namespace Stacks
 
-#endif // __STACK_H__
+#endif  // __STACK_H__

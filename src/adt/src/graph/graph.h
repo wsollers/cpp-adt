@@ -19,13 +19,13 @@ template <typename T>
 concept Identifiable = requires(T obj) {
   {
     obj.id()
-  } -> std::equality_comparable; // Must have an id() method that's equality
-                                 // comparable
+  } -> std::equality_comparable;  // Must have an id() method that's equality
+                                  // comparable
 } && Common::stl_container_storable<T> && Common::Hashable<T>;
 
 template <typename T>
 concept IdentifiableSortable = Identifiable<T> && requires(T obj) {
-  { obj.id() } -> std::totally_ordered; // ID must support <, <=, >, >=
+  { obj.id() } -> std::totally_ordered;  // ID must support <, <=, >, >=
 };
 
 // Concept for a Vertex
@@ -44,24 +44,26 @@ concept Vertex = requires(T vertex) {
 ;
 
 template <typename Vertex, typename Edge>
-concept GraphEdge = requires(Vertex v, Edge edge) {
-  //{ src } -> Identifiable;
-  //{ dest } -> Identifiable;
-  // src and dest should be of type Vertex
-  { edge.source() } -> std::convertible_to<const Vertex &>;
-  { edge.destination() } -> std::convertible_to<const Vertex &>;
+concept GraphEdge =
+    requires(Vertex v, Edge edge) {
+      //{ src } -> Identifiable;
+      //{ dest } -> Identifiable;
+      // src and dest should be of type Vertex
+      { edge.source() } -> std::convertible_to<const Vertex &>;
+      { edge.destination() } -> std::convertible_to<const Vertex &>;
 
-  // Weight must be convertible to double
-  { edge.weight() } -> std::convertible_to<double>;
+      // Weight must be convertible to double
+      { edge.weight() } -> std::convertible_to<double>;
 
-  // Edge must support equality comparison
-  { edge == edge } -> std::convertible_to<bool>;
-} && Common::stl_container_storable<Edge> && Common::stl_container_storable<Vertex>;
+      // Edge must support equality comparison
+      { edge == edge } -> std::convertible_to<bool>;
+    } && Common::stl_container_storable<Edge> &&
+    Common::stl_container_storable<Vertex>;
 
 template <typename VertexType, typename EdgeType>
   requires GraphEdge<VertexType, EdgeType>
 class Graph {
-public:
+ public:
   using AdjacencyList = std::unordered_map<VertexType, std::vector<EdgeType>>;
 
   Graph() {
@@ -91,7 +93,7 @@ public:
   // Print the graph's adjacency list
   void printGraph() const {
     for (const auto &[vertex, edges] : adjList) {
-      std::cout << vertex.id() << ": "; // Assuming Vertex has an id() method
+      std::cout << vertex.id() << ": ";  // Assuming Vertex has an id() method
       for (const auto &edge : edges) {
         std::cout << "(" << edge.destination().id()
                   << ", weight: " << edge.weight() << ") ";
@@ -156,15 +158,15 @@ public:
 
   Graph transpose() const {
     if (!directed) {
-      return *this; // For undirected graphs, transpose is the same as the
-                    // original graph
+      return *this;  // For undirected graphs, transpose is the same as the
+                     // original graph
     }
     Graph transposedGraph;
     transposedGraph.setDirected(directed);
 
     for (const auto &[vertex, edges] : adjList) {
       transposedGraph.addVertex(
-          vertex); // Add the vertex to the transposed graph
+          vertex);  // Add the vertex to the transposed graph
       for (const auto &edge : edges) {
         // Reverse the edge: destination becomes source and vice versa
         transposedGraph.addEdge(
@@ -209,7 +211,7 @@ public:
       }
     }
 
-    return {}; // No path found
+    return {};  // No path found
   }
 
   std::vector<VertexType> FindPathDepthFirst(VertexType start,
@@ -246,20 +248,20 @@ public:
       }
     }
 
-    return {}; // No path found
+    return {};  // No path found
   }
 
   std::optional<std::vector<VertexType>> topologicalSort() const {
     // Topological sort is only valid for directed graphs
     if (!directed) {
-      return std::nullopt; // Cannot perform topological sort on undirected
-                           // graphs
+      return std::nullopt;  // Cannot perform topological sort on undirected
+                            // graphs
     }
 
     // Handle directed graphs: Kahn's algorithm
     std::unordered_map<VertexType, int> inDegree;
     for (const auto &[vertex, edges] : adjList) {
-      inDegree[vertex]; // Ensure all vertices are in the map
+      inDegree[vertex];  // Ensure all vertices are in the map
       for (const auto &edge : edges) {
         inDegree[edge.destination()]++;
       }
@@ -290,13 +292,13 @@ public:
 
     // Check for cycles in directed graphs
     if (sortedOrder.size() != adjList.size()) {
-      return std::nullopt; // Cycle detected
+      return std::nullopt;  // Cycle detected
     }
 
     return sortedOrder;
   }
 
-private:
+ private:
   AdjacencyList adjList;
   bool directed = false;
 
@@ -306,10 +308,9 @@ private:
   }
 
   // Helper functin for detecting cycles in directed graphs
-  bool
-  detectCycleDirected(const VertexType &vertex,
-                      std::unordered_set<VertexType> &visited,
-                      std::unordered_set<VertexType> &recursionStack) const {
+  bool detectCycleDirected(
+      const VertexType &vertex, std::unordered_set<VertexType> &visited,
+      std::unordered_set<VertexType> &recursionStack) const {
     if (!visited.count(vertex)) {
       visited.insert(vertex);
       recursionStack.insert(vertex);
@@ -321,7 +322,7 @@ private:
           return true;
         }
         if (recursionStack.count(neighbor)) {
-          return true; // Back edge found
+          return true;  // Back edge found
         }
       }
     }
@@ -343,7 +344,7 @@ private:
           return true;
         }
       } else if (neighbor != parent) {
-        return true; // Found a back edge
+        return true;  // Found a back edge
       }
     }
 
@@ -351,6 +352,6 @@ private:
   }
 };
 
-} // namespace Graphs
+}  // namespace Graphs
 
-#endif // GRAPH_H
+#endif  // GRAPH_H

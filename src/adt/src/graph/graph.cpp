@@ -1,7 +1,3 @@
 #include "graph.h"
 
-namespace Graphs {
-
-
-
-}
+namespace Graphs {}

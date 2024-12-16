@@ -1,21 +1,22 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include "../common/common.h"
 #include <cstdint>
+
+#include "../common/common.h"
 
 namespace Nodes {
 
 template <typename T>
   requires Common::stl_container_storable<T>
 class Node {
-public:
+ public:
   explicit Node(T data);
   T getData();
   void setData(T data);
   virtual ~Node() = default;
 
-public:
+ public:
   T data;
 };
 
@@ -35,35 +36,40 @@ void Node<T>::setData(T data) {
   this->data = data;
 }
 
-template <typename T> class SingleLinkNode : public Node<T> {
-public:
+template <typename T>
+class SingleLinkNode : public Node<T> {
+ public:
   explicit SingleLinkNode(T data);
   SingleLinkNode<T> *getNext();
   void setNext(SingleLinkNode<T> *next);
   virtual ~SingleLinkNode();
 
-public:
+ public:
   SingleLinkNode<T> *next;
 };
 
 template <typename T>
 SingleLinkNode<T>::SingleLinkNode(T data) : Node<T>(data), next(nullptr) {}
 
-template <typename T> SingleLinkNode<T> *SingleLinkNode<T>::getNext() {
+template <typename T>
+SingleLinkNode<T> *SingleLinkNode<T>::getNext() {
   return next;
 }
 
-template <typename T> void SingleLinkNode<T>::setNext(SingleLinkNode<T> *next) {
+template <typename T>
+void SingleLinkNode<T>::setNext(SingleLinkNode<T> *next) {
   // Do we need to delete the next node?
   this->next = next;
 }
 
-template <typename T> SingleLinkNode<T>::~SingleLinkNode() {
+template <typename T>
+SingleLinkNode<T>::~SingleLinkNode() {
   // delete next;
 }
 
-template <typename T> class DoubleLinkNode : public Node<T> {
-public:
+template <typename T>
+class DoubleLinkNode : public Node<T> {
+ public:
   explicit DoubleLinkNode(T data);
   DoubleLinkNode<T> *getNext();
   DoubleLinkNode<T> *getPrev();
@@ -71,7 +77,7 @@ public:
   void setPrev(DoubleLinkNode<T> *next);
   virtual ~DoubleLinkNode();
 
-private:
+ private:
   DoubleLinkNode<T> *next;
   DoubleLinkNode<T> *prev;
 };
@@ -80,35 +86,41 @@ template <typename T>
 DoubleLinkNode<T>::DoubleLinkNode(T data)
     : Node<T>(data), next(nullptr), prev(nullptr) {}
 
-template <typename T> DoubleLinkNode<T> *DoubleLinkNode<T>::getNext() {
+template <typename T>
+DoubleLinkNode<T> *DoubleLinkNode<T>::getNext() {
   return next;
 }
 
-template <typename T> DoubleLinkNode<T> *DoubleLinkNode<T>::getPrev() {
+template <typename T>
+DoubleLinkNode<T> *DoubleLinkNode<T>::getPrev() {
   return prev;
 }
 
-template <typename T> void DoubleLinkNode<T>::setNext(DoubleLinkNode<T> *next) {
+template <typename T>
+void DoubleLinkNode<T>::setNext(DoubleLinkNode<T> *next) {
   if (this->next != nullptr) {
     delete this->next;
   }
   this->next = next;
 }
 
-template <typename T> void DoubleLinkNode<T>::setPrev(DoubleLinkNode<T> *prev) {
+template <typename T>
+void DoubleLinkNode<T>::setPrev(DoubleLinkNode<T> *prev) {
   if (this->prev != nullptr) {
     delete this->prev;
   }
   this->prev = prev;
 }
 
-template <typename T> DoubleLinkNode<T>::~DoubleLinkNode() {
+template <typename T>
+DoubleLinkNode<T>::~DoubleLinkNode() {
   // delete next;
   // delete prev;
 }
 
-template <typename T> class BinaryTreeNode : public Node<T> {
-public:
+template <typename T>
+class BinaryTreeNode : public Node<T> {
+ public:
   explicit BinaryTreeNode(T data);
   virtual ~BinaryTreeNode() = default;
 
@@ -128,15 +140,18 @@ template <typename T>
 BinaryTreeNode<T>::BinaryTreeNode(T data)
     : Node<T>(data), parent(nullptr), left(nullptr), right(nullptr) {}
 
-template <typename T> BinaryTreeNode<T> *BinaryTreeNode<T>::getParent() {
+template <typename T>
+BinaryTreeNode<T> *BinaryTreeNode<T>::getParent() {
   return parent;
 }
 
-template <typename T> BinaryTreeNode<T> *BinaryTreeNode<T>::getLeft() {
+template <typename T>
+BinaryTreeNode<T> *BinaryTreeNode<T>::getLeft() {
   return left;
 }
 
-template <typename T> BinaryTreeNode<T> *BinaryTreeNode<T>::getRight() {
+template <typename T>
+BinaryTreeNode<T> *BinaryTreeNode<T>::getRight() {
   return right;
 }
 
@@ -145,8 +160,9 @@ void BinaryTreeNode<T>::setParent(BinaryTreeNode<T> *parent) {
   this->parent = parent;
 }
 
-template <typename T> void BinaryTreeNode<T>::setLeft(BinaryTreeNode<T> *left) {
-  if (this->left != nullptr) { // this delete is not needed
+template <typename T>
+void BinaryTreeNode<T>::setLeft(BinaryTreeNode<T> *left) {
+  if (this->left != nullptr) {  // this delete is not needed
     delete this->left;
   }
   this->left = left;
@@ -154,32 +170,29 @@ template <typename T> void BinaryTreeNode<T>::setLeft(BinaryTreeNode<T> *left) {
 
 template <typename T>
 void BinaryTreeNode<T>::setRight(BinaryTreeNode<T> *right) {
-  if (this->right != nullptr) { // this delete is not needed
+  if (this->right != nullptr) {  // this delete is not needed
     delete this->right;
   }
   this->right = right;
 }
 
-template <typename T> class AvlTreeNode : public BinaryTreeNode<T> {
-public:
-  explicit AvlTreeNode(T data) : BinaryTreeNode<T>(data), height(1) {};
+template <typename T>
+class AvlTreeNode : public BinaryTreeNode<T> {
+ public:
+  explicit AvlTreeNode(T data) : BinaryTreeNode<T>(data), height(1){};
   virtual ~AvlTreeNode() = default;
 
-  uint16_t getHeight() const {
-    return height;
-  }
+  uint16_t getHeight() const { return height; }
 
-  void setHeight(uint16_t height) {
-    this->height = height;
-  }
+  void setHeight(uint16_t height) { this->height = height; }
 
   uint16_t height;
 };
 
-} // namespace Nodes
+}  // namespace Nodes
 
 // force compiler to generate the class for the types we need
 // template class Node<int>;
 // template class Node<std::string>;
 
-#endif // NODE_H
+#endif  // NODE_H
